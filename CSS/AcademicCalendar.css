@@ -1,0 +1,397 @@
+﻿body {
+	background: #f6f8fc;
+	margin: 0;
+	padding: 0;
+}
+
+.main-header {
+	background: #082653;
+	color: white;
+	padding: 18px 0;
+}
+
+.header-inner {
+	max-width: 1200px;
+	margin: 0 auto;
+	padding: 0 15px;
+}
+
+.site-title {
+	font-size: 24px;
+	font-weight: bold;
+}
+
+.calendar-wrapper {
+	max-width: 1200px;
+	margin: 35px auto;
+	font-family: Arial, sans-serif;
+	color: #0b1f3a;
+	padding: 0 15px;
+}
+
+.page-title {
+	text-align: center;
+	margin-bottom: 25px;
+}
+
+	.page-title h1 {
+		font-size: 42px;
+		margin: 0;
+		color: #0b2e63;
+		font-weight: 700;
+	}
+
+	.page-title p {
+		margin-top: 8px;
+		color: #555;
+		font-size: 16px;
+	}
+
+.view-switch {
+	width: 430px;
+	margin: 0 auto 25px auto;
+	display: flex;
+	border: 2px solid #1f56ad;
+	border-radius: 10px;
+	overflow: hidden;
+	background: white;
+}
+
+.view-btn {
+	width: 50%;
+	padding: 14px;
+	border: none;
+	background: white;
+	color: #0b2e63;
+	font-weight: bold;
+	font-size: 16px;
+	cursor: pointer;
+}
+
+	.view-btn:hover {
+		background: #eef4ff;
+	}
+
+.view-btn-active {
+	background: #1f56ad;
+	color: white;
+}
+
+	.view-btn-active:hover {
+		background: #1f56ad;
+		color: white;
+	}
+
+.filter-box {
+	background: white;
+	border: 1px solid #dbe3ef;
+	border-radius: 10px;
+	padding: 18px 25px;
+	margin-bottom: 25px;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	gap: 35px;
+	flex-wrap: wrap;
+	box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+}
+
+.filter-title {
+	letter-spacing: 8px;
+	color: #4b5563;
+	font-weight: bold;
+}
+
+.filter-link {
+	border: none;
+	background: transparent;
+	font-size: 16px;
+	font-weight: bold;
+	cursor: pointer;
+	color: #111827;
+	padding: 5px;
+	text-decoration: none;
+}
+
+	.filter-link:hover {
+		color: #1f56ad;
+		text-decoration: none;
+	}
+
+.dot {
+	display: inline-block;
+	width: 14px;
+	height: 14px;
+	border-radius: 50%;
+	margin-right: 8px;
+	vertical-align: middle;
+}
+
+.dot-exams {
+	background: #c0392b;
+}
+
+.dot-deadlines {
+	background: #1f56ad;
+}
+
+.dot-registration {
+	background: #9ccab5;
+}
+
+.dot-holidays {
+	background: #8a5a00;
+}
+
+.dot-academic {
+	background: #6c3483;
+}
+
+.dot-all {
+	background: #111827;
+}
+
+.list-card {
+	background: white;
+	border: 1px solid #dbe3ef;
+	border-radius: 10px;
+	overflow: hidden;
+	box-shadow: 0 3px 10px rgba(0,0,0,0.05);
+}
+
+.month-header {
+	background: #082653;
+	color: white;
+	padding: 22px 35px;
+	border-radius: 10px 10px 0 0;
+	font-size: 28px;
+	font-weight: bold;
+}
+
+.list-row {
+	display: grid;
+	grid-template-columns: 90px 45px 1fr;
+	align-items: start;
+	padding: 22px 30px;
+	border-bottom: 1px solid #e5eaf2;
+	font-size: 20px;
+}
+
+	.list-row:last-child {
+		border-bottom: none;
+	}
+
+.event-date {
+	color: #1f56ad;
+	font-weight: bold;
+	font-size: 18px;
+}
+
+.event-title {
+	line-height: 1.45;
+}
+
+.calendar-card {
+	background: white;
+	border: 1px solid #dbe3ef;
+	border-radius: 12px;
+	padding: 25px;
+	box-shadow: 0 3px 10px rgba(0,0,0,0.05);
+}
+
+.calendar-nav {
+	display: flex;
+	align-items: center;
+	gap: 20px;
+	margin-bottom: 15px;
+}
+
+.nav-btn {
+	width: 58px;
+	height: 58px;
+	border-radius: 8px;
+	border: 1px solid #dbe3ef;
+	background: white;
+	color: #082653;
+	font-size: 30px;
+	font-weight: bold;
+	cursor: pointer;
+}
+
+	.nav-btn:hover {
+		background: #eef4ff;
+	}
+
+.calendar-month-title {
+	font-size: 36px;
+	font-weight: bold;
+	color: #082653;
+}
+
+.calendar-year {
+	font-size: 24px;
+	color: #6b7280;
+	margin-left: 12px;
+}
+
+.session-label {
+	display: inline-block;
+	background: #1f56ad;
+	color: white;
+	padding: 10px 20px;
+	border-radius: 6px;
+	letter-spacing: 4px;
+	font-weight: bold;
+	margin-bottom: 20px;
+}
+
+.calendar-table {
+	width: 100%;
+	border-collapse: collapse;
+	table-layout: fixed;
+	background: white;
+}
+
+	.calendar-table th {
+		background: #082653;
+		color: white;
+		padding: 16px;
+		font-size: 17px;
+		letter-spacing: 4px;
+	}
+
+	.calendar-table td {
+		height: 135px;
+		vertical-align: top;
+		border: 1px solid #dbe3ef;
+		padding: 10px;
+		position: relative;
+		background: white;
+	}
+
+.day-number {
+	font-size: 18px;
+	font-weight: bold;
+	color: #0b1f3a;
+	margin-bottom: 8px;
+}
+
+.other-month {
+	color: #b6c0ce;
+}
+
+.today-number {
+	display: inline-block;
+	background: #1f56ad;
+	color: white;
+	width: 34px;
+	height: 34px;
+	border-radius: 50%;
+	text-align: center;
+	line-height: 34px;
+}
+
+.calendar-event {
+	font-size: 13px;
+	line-height: 1.25;
+	padding: 6px 8px;
+	margin-top: 5px;
+	border-radius: 5px;
+	word-break: break-word;
+}
+
+.event-exams {
+	border-left: 4px solid #c0392b;
+	background: #fdecea;
+	color: #922b21;
+}
+
+.event-deadlines {
+	border-left: 4px solid #1f56ad;
+	background: #eaf1ff;
+	color: #174785;
+}
+
+.event-registration {
+	border-left: 4px solid #9ccab5;
+	background: #eef8f3;
+	color: #2f6b50;
+}
+
+.event-holidays {
+	border-left: 4px solid #8a5a00;
+	background: #fff5df;
+	color: #704800;
+}
+
+.event-academic {
+	border-left: 4px solid #6c3483;
+	background: #f3eafa;
+	color: #512e5f;
+}
+
+.message {
+	display: block;
+	text-align: center;
+	padding: 20px;
+	color: #777;
+	font-size: 18px;
+}
+
+.error-message {
+	display: block;
+	text-align: center;
+	padding: 15px;
+	margin-bottom: 15px;
+	color: #b91c1c;
+	background: #fee2e2;
+	border: 1px solid #fecaca;
+	border-radius: 8px;
+	font-weight: bold;
+}
+
+@media(max-width: 768px) {
+	.calendar-wrapper {
+		margin: 20px auto;
+	}
+
+	.page-title h1 {
+		font-size: 32px;
+	}
+
+	.view-switch {
+		width: 100%;
+	}
+
+	.filter-box {
+		justify-content: flex-start;
+		gap: 18px;
+	}
+
+	.list-row {
+		grid-template-columns: 70px 35px 1fr;
+		font-size: 16px;
+		padding: 18px;
+	}
+
+	.event-date {
+		font-size: 15px;
+	}
+
+	.calendar-card {
+		overflow-x: auto;
+	}
+
+	.calendar-table {
+		min-width: 850px;
+	}
+
+		.calendar-table td {
+			height: 110px;
+			padding: 6px;
+		}
+
+	.calendar-event {
+		font-size: 11px;
+	}
+}
