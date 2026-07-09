@@ -200,6 +200,7 @@ Public Class AcademicCalendar
     Private Sub LoadPage()
         Try
             lblError.Text = ""
+            lblError.Visible = False
 
             pnlListView.Visible = CurrentViewMode = "List"
             pnlCalendarView.Visible = CurrentViewMode = "Calendar"
@@ -215,6 +216,7 @@ Public Class AcademicCalendar
 
         Catch ex As Exception
             lblError.Text = ex.Message
+            lblError.Visible = True
         End Try
     End Sub
 

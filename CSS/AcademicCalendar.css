@@ -2,29 +2,66 @@
 	background: #f6f8fc;
 	margin: 0;
 	padding: 0;
+	font-family: Arial, sans-serif;
 }
+
+/* ================= HEADER ================= */
 
 .main-header {
 	background: #082653;
 	color: white;
-	padding: 18px 0;
+	padding: 12px 0;
 }
 
 .header-inner {
 	max-width: 1200px;
 	margin: 0 auto;
 	padding: 0 15px;
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+}
+
+.header-left {
+	display: flex;
+	align-items: center;
+	gap: 15px;
+}
+
+.header-logo {
+	width: 58px;
+	height: 58px;
+	object-fit: contain;
 }
 
 .site-title {
-	font-size: 24px;
+	font-size: 26px;
 	font-weight: bold;
+	line-height: 1.1;
 }
+
+.site-subtitle {
+	font-size: 15px;
+	color: #dbeafe;
+	margin-top: 3px;
+}
+
+.header-session {
+	background: #1f56ad;
+	color: white;
+	padding: 13px 30px;
+	border-radius: 6px;
+	letter-spacing: 6px;
+	font-weight: bold;
+	font-size: 16px;
+	border: 6px solid white;
+}
+
+/* ================= MAIN PAGE ================= */
 
 .calendar-wrapper {
 	max-width: 1200px;
 	margin: 35px auto;
-	font-family: Arial, sans-serif;
 	color: #0b1f3a;
 	padding: 0 15px;
 }
@@ -46,6 +83,8 @@
 		color: #555;
 		font-size: 16px;
 	}
+
+/* ================= VIEW SWITCH ================= */
 
 .view-switch {
 	width: 430px;
@@ -81,6 +120,8 @@
 		background: #1f56ad;
 		color: white;
 	}
+
+/* ================= FILTER ================= */
 
 .filter-box {
 	background: white;
@@ -151,6 +192,8 @@
 	background: #111827;
 }
 
+/* ================= LIST VIEW ================= */
+
 .list-card {
 	background: white;
 	border: 1px solid #dbe3ef;
@@ -191,6 +234,8 @@
 	line-height: 1.45;
 }
 
+/* ================= CALENDAR VIEW ================= */
+
 .calendar-card {
 	background: white;
 	border: 1px solid #dbe3ef;
@@ -203,7 +248,7 @@
 	display: flex;
 	align-items: center;
 	gap: 20px;
-	margin-bottom: 15px;
+	margin-bottom: 25px;
 }
 
 .nav-btn {
@@ -232,17 +277,6 @@
 	font-size: 24px;
 	color: #6b7280;
 	margin-left: 12px;
-}
-
-.session-label {
-	display: inline-block;
-	background: #1f56ad;
-	color: white;
-	padding: 10px 20px;
-	border-radius: 6px;
-	letter-spacing: 4px;
-	font-weight: bold;
-	margin-bottom: 20px;
 }
 
 .calendar-table {
@@ -330,6 +364,8 @@
 	color: #512e5f;
 }
 
+/* ================= MESSAGES ================= */
+
 .message {
 	display: block;
 	text-align: center;
@@ -339,7 +375,7 @@
 }
 
 .error-message {
-	display: block;
+	display: none;
 	text-align: center;
 	padding: 15px;
 	margin-bottom: 15px;
@@ -350,7 +386,29 @@
 	font-weight: bold;
 }
 
+	.error-message:not(:empty) {
+		display: block;
+	}
+
+/* ================= RESPONSIVE ================= */
+
 @media(max-width: 768px) {
+	.header-inner {
+		flex-direction: column;
+		gap: 15px;
+		text-align: center;
+	}
+
+	.header-left {
+		justify-content: center;
+	}
+
+	.header-session {
+		font-size: 13px;
+		letter-spacing: 3px;
+		padding: 10px 15px;
+	}
+
 	.calendar-wrapper {
 		margin: 20px auto;
 	}

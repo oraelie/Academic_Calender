@@ -18,7 +18,20 @@
 
         <header class="main-header">
             <div class="header-inner">
-                <div class="site-title">Academic Calendar</div>
+
+                <div class="header-left">
+                    <img src="<%= ResolveUrl("~/Images/Sagesse-1.png") %>" class="header-logo" alt="Logo" />
+
+                    <div>
+                        <div class="site-title">Academic Calendar</div>
+                        <div class="site-subtitle">Université La Sagesse</div>
+                    </div>
+                </div>
+
+                <div class="header-session">
+                    SUMMER SESSION 2025-2026
+                </div>
+
             </div>
         </header>
 

@@ -96,12 +96,7 @@
 
                     <asp:Button ID="btnNextMonth" runat="server" Text="›" CssClass="nav-btn" />
                 </div>
-
-                <div class="session-label">
-                    SUMMER SESSION 2025-2026
-                </div>
-
-                <asp:Literal ID="litCalendar" runat="server"></asp:Literal>
+             <asp:Literal ID="litCalendar" runat="server"></asp:Literal>
 
             </div>
         </asp:Panel>
