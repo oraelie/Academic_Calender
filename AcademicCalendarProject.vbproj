@@ -115,7 +115,7 @@
     </Compile>
     <Compile Include="AcademicCalendar.aspx.vb">
       <DependentUpon>AcademicCalendar.aspx</DependentUpon>
-      <SubType>ASPXCodebehind</SubType>
+      <SubType>ASPXCodeBehind</SubType>
     </Compile>
     <Compile Include="Global.asax.vb">
       <DependentUpon>Global.asax</DependentUpon>

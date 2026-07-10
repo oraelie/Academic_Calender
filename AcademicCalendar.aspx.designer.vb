@@ -104,22 +104,13 @@ Partial Public Class AcademicCalendar
 	Protected WithEvents pnlListView As Global.System.Web.UI.WebControls.Panel
 
 	'''<summary>
-	'''litListMonthTitle control.
+	'''litListEvents control.
 	'''</summary>
 	'''<remarks>
 	'''Auto-generated field.
 	'''To modify move field declaration from designer file to code-behind file.
 	'''</remarks>
-	Protected WithEvents litListMonthTitle As Global.System.Web.UI.WebControls.Literal
-
-	'''<summary>
-	'''rptListEvents control.
-	'''</summary>
-	'''<remarks>
-	'''Auto-generated field.
-	'''To modify move field declaration from designer file to code-behind file.
-	'''</remarks>
-	Protected WithEvents rptListEvents As Global.System.Web.UI.WebControls.Repeater
+	Protected WithEvents litListEvents As Global.System.Web.UI.WebControls.Literal
 
 	'''<summary>
 	'''lblListMessage control.

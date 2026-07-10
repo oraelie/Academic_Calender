@@ -1,6 +1,7 @@
 ﻿Imports System.Data
 Imports System.IO
 Imports System.Text
+Imports System.Globalization
 Imports ExcelDataReader
 
 Public Class AcademicCalendar
@@ -58,6 +59,7 @@ Public Class AcademicCalendar
         If Not IsPostBack Then
             CurrentViewMode = "List"
             CurrentCategory = "All"
+
             SetDefaultMonthFromExcel()
             LoadPage()
         End If
@@ -68,7 +70,7 @@ Public Class AcademicCalendar
             Dim dt As DataTable = ReadExcelEvents()
 
             If dt.Rows.Count > 0 Then
-                Dim firstDate As Date = Convert.ToDateTime(dt.Rows(0)("StartDate"))
+                Dim firstDate As Date = ParseExcelDate(dt.Rows(0)("StartDate"))
                 CurrentMonth = New Date(firstDate.Year, firstDate.Month, 1)
             Else
                 CurrentMonth = New Date(Date.Today.Year, Date.Today.Month, 1)
@@ -94,6 +96,7 @@ Public Class AcademicCalendar
         End If
 
         Using stream As FileStream = File.Open(ExcelFilePath, FileMode.Open, FileAccess.Read, FileShare.ReadWrite)
+
             Using reader As IExcelDataReader = ExcelReaderFactory.CreateReader(stream)
 
                 Dim dataSet As DataSet = reader.AsDataSet(New ExcelDataSetConfiguration() With {
@@ -130,11 +133,11 @@ Public Class AcademicCalendar
                         Continue For
                     End If
 
-                    Dim startDate As Date = Convert.ToDateTime(row("StartDate"))
+                    Dim startDate As Date = ParseExcelDate(row("StartDate"))
                     Dim endDate As Date = startDate
 
                     If Not IsEmpty(row("EndDate")) Then
-                        endDate = Convert.ToDateTime(row("EndDate"))
+                        endDate = ParseExcelDate(row("EndDate"))
                     End If
 
                     Dim newRow As DataRow = cleanTable.NewRow()
@@ -149,7 +152,9 @@ Public Class AcademicCalendar
                     cleanTable.Rows.Add(newRow)
 
                 Next
+
             End Using
+
         End Using
 
         cleanTable.DefaultView.Sort = "StartDate ASC"
@@ -167,9 +172,11 @@ Public Class AcademicCalendar
         }
 
         For Each columnName As String In requiredColumns
+
             If Not excelTable.Columns.Contains(columnName) Then
                 Throw New Exception("Missing Excel column: " & columnName)
             End If
+
         Next
     End Sub
 
@@ -177,24 +184,35 @@ Public Class AcademicCalendar
         Return value Is Nothing OrElse value Is DBNull.Value OrElse value.ToString().Trim() = ""
     End Function
 
-    Private Function GetFilteredEvents() As DataTable
-        Dim dt As DataTable = ReadExcelEvents()
-
-        Dim view As New DataView(dt)
-
-        Dim firstDay As New Date(CurrentMonth.Year, CurrentMonth.Month, 1)
-        Dim lastDay As Date = firstDay.AddMonths(1).AddDays(-1)
-
-        Dim filter As String = "StartDate >= #" & firstDay.ToString("MM/dd/yyyy") & "# AND StartDate <= #" & lastDay.ToString("MM/dd/yyyy") & "#"
-
-        If CurrentCategory <> "All" Then
-            filter &= " AND Category = '" & CurrentCategory.Replace("'", "''") & "'"
+    Private Function ParseExcelDate(value As Object) As Date
+        If value Is Nothing OrElse value Is DBNull.Value OrElse value.ToString().Trim() = "" Then
+            Throw New Exception("Date value is empty.")
         End If
 
-        view.RowFilter = filter
-        view.Sort = "StartDate ASC"
+        If TypeOf value Is Date Then
+            Return Convert.ToDateTime(value)
+        End If
 
-        Return view.ToTable()
+        Dim textDate As String = value.ToString().Trim()
+        Dim parsedDate As Date
+
+        If Date.TryParseExact(textDate, "dd-MM-yyyy", CultureInfo.InvariantCulture, DateTimeStyles.None, parsedDate) Then
+            Return parsedDate
+        End If
+
+        If Date.TryParseExact(textDate, "d-M-yyyy", CultureInfo.InvariantCulture, DateTimeStyles.None, parsedDate) Then
+            Return parsedDate
+        End If
+
+        If Date.TryParseExact(textDate, "dd/MM/yyyy", CultureInfo.InvariantCulture, DateTimeStyles.None, parsedDate) Then
+            Return parsedDate
+        End If
+
+        If Date.TryParseExact(textDate, "d/M/yyyy", CultureInfo.InvariantCulture, DateTimeStyles.None, parsedDate) Then
+            Return parsedDate
+        End If
+
+        Throw New Exception("Invalid date format: " & textDate & ". Use dd-mm-yyyy, example: 02-07-2026.")
     End Function
 
     Private Sub LoadPage()
@@ -220,47 +238,227 @@ Public Class AcademicCalendar
         End Try
     End Sub
 
+    ' ==========================
+    ' LIST VIEW
+    ' ==========================
+
     Private Sub LoadListView()
-        Dim dt As DataTable = GetFilteredEvents()
+        Dim dt As DataTable = GetFilteredEventsForList()
 
-        litListMonthTitle.Text = CurrentMonth.ToString("MMMM yyyy")
-
-        Dim displayTable As New DataTable()
-        displayTable.Columns.Add("DayText", GetType(String))
-        displayTable.Columns.Add("DotClass", GetType(String))
-        displayTable.Columns.Add("EventTitle", GetType(String))
-
-        For Each row As DataRow In dt.Rows
-            Dim startDate As Date = Convert.ToDateTime(row("StartDate"))
-            Dim category As String = row("Category").ToString()
-
-            Dim displayRow As DataRow = displayTable.NewRow()
-
-            displayRow("DayText") = startDate.ToString("MMM d")
-            displayRow("DotClass") = "dot " & GetDotClass(category)
-            displayRow("EventTitle") = row("EventTitle").ToString()
-
-            displayTable.Rows.Add(displayRow)
-        Next
-
-        rptListEvents.DataSource = displayTable
-        rptListEvents.DataBind()
-
-        If displayTable.Rows.Count = 0 Then
-            lblListMessage.Text = "No events found for this month."
+        If dt.Rows.Count = 0 Then
+            litListEvents.Text = ""
+            lblListMessage.Text = "No events found."
         Else
+            litListEvents.Text = BuildMonthlyListHtml(dt)
             lblListMessage.Text = ""
         End If
     End Sub
+
+    Private Function GetFilteredEventsForList() As DataTable
+        Dim dt As DataTable = ReadExcelEvents()
+        Dim view As New DataView(dt)
+
+        If CurrentCategory <> "All" Then
+            view.RowFilter = "Category = '" & CurrentCategory.Replace("'", "''") & "'"
+        End If
+
+        view.Sort = "StartDate ASC"
+
+        Return view.ToTable()
+    End Function
+
+    Private Function BuildMonthlyListHtml(eventsTable As DataTable) As String
+        Dim html As New StringBuilder()
+        Dim currentMonthKey As String = ""
+
+        For Each row As DataRow In eventsTable.Rows
+
+            Dim startDate As Date = ParseExcelDate(row("StartDate"))
+            Dim endDate As Date = ParseExcelDate(row("EndDate"))
+            Dim monthKey As String = startDate.ToString("yyyy-MM")
+            Dim category As String = row("Category").ToString()
+            Dim title As String = Server.HtmlEncode(row("EventTitle").ToString())
+
+            If monthKey <> currentMonthKey Then
+
+                If currentMonthKey <> "" Then
+                    html.Append("</div>")
+                End If
+
+                currentMonthKey = monthKey
+
+                html.Append("<div class='monthly-list-card'>")
+
+                html.Append("<div class='monthly-list-header'>")
+                html.Append("<span class='monthly-name'>" & startDate.ToString("MMMM") & "</span>")
+                html.Append("<span class='monthly-year'>" & startDate.ToString("yyyy") & "</span>")
+                html.Append("</div>")
+
+                html.Append(BuildHolidayStrip(eventsTable, startDate.Month, startDate.Year))
+
+            End If
+
+            If category.ToLower() <> "holidays" Then
+
+                html.Append("<div class='monthly-list-row'>")
+
+                html.Append("<div class='monthly-date'>")
+                html.Append(FormatListDate(startDate, endDate))
+                html.Append("</div>")
+
+                html.Append("<div class='monthly-dot-cell'>")
+                html.Append("<span class='dot " & GetDotClass(category) & "'></span>")
+                html.Append("</div>")
+
+                html.Append("<div class='monthly-title'>")
+                html.Append(title)
+                html.Append("</div>")
+
+                html.Append("<div class='monthly-category'>")
+                html.Append("<span class='category-badge " & GetCategoryBadgeClass(category) & "'>")
+                html.Append(GetCategoryLabel(category))
+                html.Append("</span>")
+                html.Append("</div>")
+
+                html.Append("</div>")
+
+            End If
+
+        Next
+
+        If currentMonthKey <> "" Then
+            html.Append("</div>")
+        End If
+
+        Return html.ToString()
+    End Function
+
+    Private Function BuildHolidayStrip(eventsTable As DataTable, monthNumber As Integer, yearNumber As Integer) As String
+        Dim html As New StringBuilder()
+        Dim hasHoliday As Boolean = False
+
+        For Each row As DataRow In eventsTable.Rows
+
+            Dim startDate As Date = ParseExcelDate(row("StartDate"))
+            Dim endDate As Date = ParseExcelDate(row("EndDate"))
+            Dim category As String = row("Category").ToString()
+
+            If startDate.Month = monthNumber AndAlso startDate.Year = yearNumber AndAlso category.ToLower() = "holidays" Then
+
+                If Not hasHoliday Then
+                    hasHoliday = True
+                    html.Append("<div class='holiday-strip'>")
+                    html.Append("<span class='holiday-title'>HOLIDAYS</span>")
+                End If
+
+                Dim title As String = Server.HtmlEncode(row("EventTitle").ToString())
+
+                html.Append("<span class='holiday-pill'>")
+                html.Append(FormatListDate(startDate, endDate) & " – " & title)
+                html.Append("</span>")
+
+            End If
+
+        Next
+
+        If hasHoliday Then
+            html.Append("</div>")
+        End If
+
+        Return html.ToString()
+    End Function
+
+    Private Function FormatListDate(startDate As Date, endDate As Date) As String
+        If startDate = endDate Then
+            Return startDate.ToString("MMM d")
+        End If
+
+        If startDate.Month = endDate.Month AndAlso startDate.Year = endDate.Year Then
+            Return startDate.ToString("MMM d") & "–" & endDate.Day.ToString()
+        End If
+
+        Return startDate.ToString("MMM d") & "–" & endDate.ToString("MMM d")
+    End Function
+
+    Private Function GetCategoryBadgeClass(category As String) As String
+        Select Case category.ToLower()
+
+            Case "exams"
+                Return "badge-exams"
+
+            Case "deadlines"
+                Return "badge-deadlines"
+
+            Case "registration"
+                Return "badge-registration"
+
+            Case "holidays"
+                Return "badge-holidays"
+
+            Case "academic"
+                Return "badge-academic"
+
+            Case Else
+                Return "badge-academic"
+
+        End Select
+    End Function
+
+    Private Function GetCategoryLabel(category As String) As String
+        Select Case category.ToLower()
+
+            Case "exams"
+                Return "EXAM"
+
+            Case "deadlines"
+                Return "DEADLINE"
+
+            Case "registration"
+                Return "REGISTRATION"
+
+            Case "holidays"
+                Return "HOLIDAY"
+
+            Case "academic"
+                Return "ACADEMIC"
+
+            Case Else
+                Return category.ToUpper()
+
+        End Select
+    End Function
+
+    ' ==========================
+    ' CALENDAR VIEW
+    ' ==========================
 
     Private Sub LoadCalendarView()
         litCalendarMonth.Text = CurrentMonth.ToString("MMMM")
         litCalendarYear.Text = CurrentMonth.ToString("yyyy")
 
-        Dim dt As DataTable = GetFilteredEvents()
+        Dim dt As DataTable = GetFilteredEventsForCalendar()
 
         litCalendar.Text = BuildCalendarHtml(dt)
     End Sub
+
+    Private Function GetFilteredEventsForCalendar() As DataTable
+        Dim dt As DataTable = ReadExcelEvents()
+        Dim view As New DataView(dt)
+
+        Dim firstDay As New Date(CurrentMonth.Year, CurrentMonth.Month, 1)
+        Dim lastDay As Date = firstDay.AddMonths(1).AddDays(-1)
+
+        Dim filter As String = "StartDate >= #" & firstDay.ToString("MM/dd/yyyy") & "# AND StartDate <= #" & lastDay.ToString("MM/dd/yyyy") & "#"
+
+        If CurrentCategory <> "All" Then
+            filter &= " AND Category = '" & CurrentCategory.Replace("'", "''") & "'"
+        End If
+
+        view.RowFilter = filter
+        view.Sort = "StartDate ASC"
+
+        Return view.ToTable()
+    End Function
 
     Private Function BuildCalendarHtml(eventsTable As DataTable) As String
         Dim html As New StringBuilder()
@@ -285,9 +483,11 @@ Public Class AcademicCalendar
         Dim currentDate As Date = startCalendarDate
 
         For week As Integer = 1 To 6
+
             html.Append("<tr>")
 
             For day As Integer = 1 To 7
+
                 html.Append("<td>")
 
                 Dim dayClass As String = ""
@@ -303,9 +503,11 @@ Public Class AcademicCalendar
                 End If
 
                 For Each row As DataRow In eventsTable.Rows
-                    Dim eventDate As Date = Convert.ToDateTime(row("StartDate"))
+
+                    Dim eventDate As Date = ParseExcelDate(row("StartDate"))
 
                     If eventDate.Date = currentDate.Date Then
+
                         Dim category As String = row("Category").ToString()
                         Dim eventCss As String = GetEventClass(category)
                         Dim title As String = Server.HtmlEncode(row("EventTitle").ToString())
@@ -313,15 +515,19 @@ Public Class AcademicCalendar
                         html.Append("<div class='calendar-event " & eventCss & "'>")
                         html.Append(title)
                         html.Append("</div>")
+
                     End If
+
                 Next
 
                 html.Append("</td>")
 
                 currentDate = currentDate.AddDays(1)
+
             Next
 
             html.Append("</tr>")
+
         Next
 
         html.Append("</tbody>")
@@ -332,37 +538,55 @@ Public Class AcademicCalendar
 
     Private Function GetDotClass(category As String) As String
         Select Case category.ToLower()
+
             Case "exams"
                 Return "dot-exams"
+
             Case "deadlines"
                 Return "dot-deadlines"
+
             Case "registration"
                 Return "dot-registration"
+
             Case "holidays"
                 Return "dot-holidays"
+
             Case "academic"
                 Return "dot-academic"
+
             Case Else
                 Return "dot-academic"
+
         End Select
     End Function
 
     Private Function GetEventClass(category As String) As String
         Select Case category.ToLower()
+
             Case "exams"
                 Return "event-exams"
+
             Case "deadlines"
                 Return "event-deadlines"
+
             Case "registration"
                 Return "event-registration"
+
             Case "holidays"
                 Return "event-holidays"
+
             Case "academic"
                 Return "event-academic"
+
             Case Else
                 Return "event-academic"
+
         End Select
     End Function
+
+    ' ==========================
+    ' BUTTON EVENTS
+    ' ==========================
 
     Protected Sub btnListView_Click(sender As Object, e As EventArgs) Handles btnListView.Click
         CurrentViewMode = "List"

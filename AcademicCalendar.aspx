@@ -48,40 +48,22 @@
 
         <asp:Label ID="lblError" runat="server" CssClass="error-message"></asp:Label>
 
+        <!-- LIST VIEW: monthly cards generated from Excel in AcademicCalendar.aspx.vb -->
         <asp:Panel ID="pnlListView" runat="server">
-            <div class="list-card">
 
-                <div class="month-header">
-                    <asp:Literal ID="litListMonthTitle" runat="server"></asp:Literal>
-                </div>
+            <asp:Literal ID="litListEvents" runat="server"></asp:Literal>
 
-                <asp:Repeater ID="rptListEvents" runat="server">
-                    <ItemTemplate>
-                        <div class="list-row">
-                            <div class="event-date">
-                                <%# Eval("DayText") %>
-                            </div>
+            <asp:Label ID="lblListMessage" runat="server" CssClass="message"></asp:Label>
 
-                            <div>
-                                <span class='<%# Eval("DotClass") %>'></span>
-                            </div>
-
-                            <div class="event-title">
-                                <%# Eval("EventTitle") %>
-                            </div>
-                        </div>
-                    </ItemTemplate>
-                </asp:Repeater>
-
-                <asp:Label ID="lblListMessage" runat="server" CssClass="message"></asp:Label>
-
-            </div>
         </asp:Panel>
 
+        <!-- CALENDAR VIEW -->
         <asp:Panel ID="pnlCalendarView" runat="server">
+
             <div class="calendar-card">
 
                 <div class="calendar-nav">
+
                     <asp:Button ID="btnPrevMonth" runat="server" Text="‹" CssClass="nav-btn" />
 
                     <div>
@@ -95,10 +77,13 @@
                     </div>
 
                     <asp:Button ID="btnNextMonth" runat="server" Text="›" CssClass="nav-btn" />
+
                 </div>
-             <asp:Literal ID="litCalendar" runat="server"></asp:Literal>
+
+                <asp:Literal ID="litCalendar" runat="server"></asp:Literal>
 
             </div>
+
         </asp:Panel>
 
     </div>
