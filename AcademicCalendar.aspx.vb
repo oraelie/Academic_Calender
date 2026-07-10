@@ -1,7 +1,6 @@
 ﻿Imports System.Data
 Imports System.IO
 Imports System.Text
-Imports System.Globalization
 Imports ExcelDataReader
 
 Public Class AcademicCalendar
@@ -70,7 +69,7 @@ Public Class AcademicCalendar
             Dim dt As DataTable = ReadExcelEvents()
 
             If dt.Rows.Count > 0 Then
-                Dim firstDate As Date = ParseExcelDate(dt.Rows(0)("StartDate"))
+                Dim firstDate As Date = Convert.ToDateTime(dt.Rows(0)("StartDate"))
                 CurrentMonth = New Date(firstDate.Year, firstDate.Month, 1)
             Else
                 CurrentMonth = New Date(Date.Today.Year, Date.Today.Month, 1)
@@ -119,9 +118,7 @@ Public Class AcademicCalendar
                         Continue For
                     End If
 
-                    If IsEmpty(row("StartDate")) Then
-                        Continue For
-                    End If
+                    Dim eventTitle As String = row("EventTitle").ToString().Trim()
 
                     Dim isActiveValue As String = "Yes"
 
@@ -133,16 +130,42 @@ Public Class AcademicCalendar
                         Continue For
                     End If
 
-                    Dim startDate As Date = ParseExcelDate(row("StartDate"))
+                    Dim startDate As Date = BuildDateFromExcelParts(
+                        row("StartDay"),
+                        row("StartMonth"),
+                        row("StartYear"),
+                        "Start date",
+                        eventTitle
+                    )
+
                     Dim endDate As Date = startDate
 
-                    If Not IsEmpty(row("EndDate")) Then
-                        endDate = ParseExcelDate(row("EndDate"))
+                    Dim hasEndDate As Boolean =
+                        Not IsEmpty(row("EndDay")) OrElse
+                        Not IsEmpty(row("EndMonth")) OrElse
+                        Not IsEmpty(row("EndYear"))
+
+                    If hasEndDate Then
+                        If IsEmpty(row("EndDay")) OrElse IsEmpty(row("EndMonth")) OrElse IsEmpty(row("EndYear")) Then
+                            Throw New Exception("Incomplete end date for event: " & eventTitle & ". Fill EndDay, EndMonth, and EndYear, or leave all three empty.")
+                        End If
+
+                        endDate = BuildDateFromExcelParts(
+                            row("EndDay"),
+                            row("EndMonth"),
+                            row("EndYear"),
+                            "End date",
+                            eventTitle
+                        )
+
+                        If endDate < startDate Then
+                            Throw New Exception("End date cannot be before start date for event: " & eventTitle)
+                        End If
                     End If
 
                     Dim newRow As DataRow = cleanTable.NewRow()
 
-                    newRow("EventTitle") = row("EventTitle").ToString().Trim()
+                    newRow("EventTitle") = eventTitle
                     newRow("EventDescription") = If(IsEmpty(row("EventDescription")), "", row("EventDescription").ToString().Trim())
                     newRow("StartDate") = startDate
                     newRow("EndDate") = endDate
@@ -165,8 +188,12 @@ Public Class AcademicCalendar
         Dim requiredColumns As String() = {
             "EventTitle",
             "EventDescription",
-            "StartDate",
-            "EndDate",
+            "StartDay",
+            "StartMonth",
+            "StartYear",
+            "EndDay",
+            "EndMonth",
+            "EndYear",
             "Category",
             "IsActive"
         }
@@ -184,35 +211,43 @@ Public Class AcademicCalendar
         Return value Is Nothing OrElse value Is DBNull.Value OrElse value.ToString().Trim() = ""
     End Function
 
-    Private Function ParseExcelDate(value As Object) As Date
-        If value Is Nothing OrElse value Is DBNull.Value OrElse value.ToString().Trim() = "" Then
-            Throw New Exception("Date value is empty.")
+    Private Function ReadInteger(value As Object, fieldName As String, eventTitle As String) As Integer
+        If IsEmpty(value) Then
+            Throw New Exception(fieldName & " is empty for event: " & eventTitle)
         End If
 
-        If TypeOf value Is Date Then
-            Return Convert.ToDateTime(value)
+        Dim textValue As String = value.ToString().Trim()
+        Dim number As Integer
+
+        If Not Integer.TryParse(textValue, number) Then
+            Throw New Exception(fieldName & " must be a number for event: " & eventTitle)
         End If
 
-        Dim textDate As String = value.ToString().Trim()
-        Dim parsedDate As Date
+        Return number
+    End Function
 
-        If Date.TryParseExact(textDate, "dd-MM-yyyy", CultureInfo.InvariantCulture, DateTimeStyles.None, parsedDate) Then
-            Return parsedDate
+    Private Function BuildDateFromExcelParts(dayValue As Object, monthValue As Object, yearValue As Object, dateLabel As String, eventTitle As String) As Date
+        Dim dayNumber As Integer = ReadInteger(dayValue, dateLabel & " day", eventTitle)
+        Dim monthNumber As Integer = ReadInteger(monthValue, dateLabel & " month", eventTitle)
+        Dim yearNumber As Integer = ReadInteger(yearValue, dateLabel & " year", eventTitle)
+
+        If yearNumber < 1900 OrElse yearNumber > 2100 Then
+            Throw New Exception(dateLabel & " year is invalid for event: " & eventTitle & ". Use a year between 1900 and 2100.")
         End If
 
-        If Date.TryParseExact(textDate, "d-M-yyyy", CultureInfo.InvariantCulture, DateTimeStyles.None, parsedDate) Then
-            Return parsedDate
+        If monthNumber < 1 OrElse monthNumber > 12 Then
+            Throw New Exception(dateLabel & " month is invalid for event: " & eventTitle & ". Month must be between 1 and 12.")
         End If
 
-        If Date.TryParseExact(textDate, "dd/MM/yyyy", CultureInfo.InvariantCulture, DateTimeStyles.None, parsedDate) Then
-            Return parsedDate
+        If dayNumber < 1 OrElse dayNumber > 31 Then
+            Throw New Exception(dateLabel & " day is invalid for event: " & eventTitle & ". Day must be between 1 and 31.")
         End If
 
-        If Date.TryParseExact(textDate, "d/M/yyyy", CultureInfo.InvariantCulture, DateTimeStyles.None, parsedDate) Then
-            Return parsedDate
-        End If
-
-        Throw New Exception("Invalid date format: " & textDate & ". Use dd-mm-yyyy, example: 02-07-2026.")
+        Try
+            Return New Date(yearNumber, monthNumber, dayNumber)
+        Catch
+            Throw New Exception(dateLabel & " is invalid for event: " & eventTitle & ". Entered date: " & dayNumber & "-" & monthNumber & "-" & yearNumber)
+        End Try
     End Function
 
     Private Sub LoadPage()
@@ -273,8 +308,8 @@ Public Class AcademicCalendar
 
         For Each row As DataRow In eventsTable.Rows
 
-            Dim startDate As Date = ParseExcelDate(row("StartDate"))
-            Dim endDate As Date = ParseExcelDate(row("EndDate"))
+            Dim startDate As Date = Convert.ToDateTime(row("StartDate"))
+            Dim endDate As Date = Convert.ToDateTime(row("EndDate"))
             Dim monthKey As String = startDate.ToString("yyyy-MM")
             Dim category As String = row("Category").ToString()
             Dim title As String = Server.HtmlEncode(row("EventTitle").ToString())
@@ -339,8 +374,8 @@ Public Class AcademicCalendar
 
         For Each row As DataRow In eventsTable.Rows
 
-            Dim startDate As Date = ParseExcelDate(row("StartDate"))
-            Dim endDate As Date = ParseExcelDate(row("EndDate"))
+            Dim startDate As Date = Convert.ToDateTime(row("StartDate"))
+            Dim endDate As Date = Convert.ToDateTime(row("EndDate"))
             Dim category As String = row("Category").ToString()
 
             If startDate.Month = monthNumber AndAlso startDate.Year = yearNumber AndAlso category.ToLower() = "holidays" Then
@@ -504,7 +539,7 @@ Public Class AcademicCalendar
 
                 For Each row As DataRow In eventsTable.Rows
 
-                    Dim eventDate As Date = ParseExcelDate(row("StartDate"))
+                    Dim eventDate As Date = Convert.ToDateTime(row("StartDate"))
 
                     If eventDate.Date = currentDate.Date Then
 
