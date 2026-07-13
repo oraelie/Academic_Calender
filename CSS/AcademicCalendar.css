@@ -10,12 +10,47 @@
 	color: #10233f;
 }
 
+form {
+	position: relative;
+	z-index: 1;
+}
+
+/*this css for logo not shown aside water mark command fix even scrolling page*/ 
+
+/*.page-logo {
+	position: fixed;
+	top: 35px;
+	left: 155px;
+	width: 250px;
+	height: auto;
+	z-index: 1000;
+	border-radius: 5px;
+	
+}*/
+
+.page-logo {
+	position: fixed;
+	top: 35px;
+	left: 155px;
+	width: 250px;
+	height: auto;
+	z-index: 0;
+	opacity: 0.60;
+	pointer-events: none;
+	border-radius: 5px;
+}
+
+
+
 /* ================= MAIN PAGE ================= */
 
 .calendar-wrapper {
 	max-width: 1200px;
 	margin: 25px auto;
 	padding: 0 15px;
+	padding-top: 20px;
+	position: relative;
+	z-index: 1;
 }
 
 .page-title {

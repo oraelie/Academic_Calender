@@ -6,7 +6,10 @@
 
 <asp:Content ID="ContentMain" ContentPlaceHolderID="MainContent" runat="server">
 
+    <img src="<%= ResolveUrl("~/Images/Sagesse-1.png") %>" class="page-logo" alt="Université La Sagesse Logo" />
+
     <div class="calendar-wrapper">
+
 
         <div class="page-title">
             <h1>Academic Calendar</h1>
