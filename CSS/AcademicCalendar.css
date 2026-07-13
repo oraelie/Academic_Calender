@@ -10,10 +10,28 @@
 	color: #10233f;
 }
 
-form {
-	position: relative;
-	z-index: 1;
+.logo-banner {
+	background: #ffffff;
+	border: 1px solid #d9dde5;
+	border-radius: 10px;
+	padding: 0;
+	margin-bottom: 25px;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+	overflow: hidden;
+	height: 160px;
 }
+
+.page-logo {
+	width: 100%;
+	height: 100%;
+	display: block;
+	object-fit: contain;
+}
+
+
 
 /*this css for logo not shown aside water mark command fix even scrolling page*/ 
 
@@ -28,7 +46,9 @@ form {
 	
 }*/
 
-.page-logo {
+/*css form logo input stop left corner with watermak display*/
+
+/*.page-logo {
 	position: fixed;
 	top: 35px;
 	left: 155px;
@@ -39,6 +59,10 @@ form {
 	pointer-events: none;
 	border-radius: 5px;
 }
+*/
+
+
+
 
 
 
@@ -49,8 +73,6 @@ form {
 	margin: 25px auto;
 	padding: 0 15px;
 	padding-top: 20px;
-	position: relative;
-	z-index: 1;
 }
 
 .page-title {
