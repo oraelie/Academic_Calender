@@ -1,68 +1,20 @@
 ﻿body {
-	background: #f6f8fc;
+	background-image: url('../Images/back_grd.png');
+	background-size: cover;
+	background-position: center center;
+	background-repeat: no-repeat;
+	background-attachment: fixed;
 	margin: 0;
 	padding: 0;
 	font-family: Arial, sans-serif;
-}
-
-/* ================= HEADER ================= */
-
-.main-header {
-	background: #082653;
-	color: white;
-	padding: 12px 0;
-}
-
-.header-inner {
-	max-width: 1200px;
-	margin: 0 auto;
-	padding: 0 15px;
-	display: flex;
-	align-items: center;
-	justify-content: space-between;
-}
-
-.header-left {
-	display: flex;
-	align-items: center;
-	gap: 15px;
-}
-
-.header-logo {
-	width: 58px;
-	height: 58px;
-	object-fit: contain;
-}
-
-.site-title {
-	font-size: 26px;
-	font-weight: bold;
-	line-height: 1.1;
-}
-
-.site-subtitle {
-	font-size: 15px;
-	color: #dbeafe;
-	margin-top: 3px;
-}
-
-.header-session {
-	background: #1f56ad;
-	color: white;
-	padding: 13px 30px;
-	border-radius: 6px;
-	letter-spacing: 6px;
-	font-weight: bold;
-	font-size: 16px;
-	border: 6px solid white;
+	color: #10233f;
 }
 
 /* ================= MAIN PAGE ================= */
 
 .calendar-wrapper {
 	max-width: 1200px;
-	margin: 35px auto;
-	color: #0b1f3a;
+	margin: 25px auto;
 	padding: 0 15px;
 }
 
@@ -74,13 +26,13 @@
 	.page-title h1 {
 		font-size: 42px;
 		margin: 0;
-		color: #0b2e63;
+		color: #444444;
 		font-weight: 700;
 	}
 
 	.page-title p {
 		margin-top: 8px;
-		color: #555;
+		color: #5c6470;
 		font-size: 16px;
 	}
 
@@ -90,7 +42,7 @@
 	width: 430px;
 	margin: 0 auto 25px auto;
 	display: flex;
-	border: 2px solid #1f56ad;
+	border: 2px solid #1f7a4c;
 	border-radius: 10px;
 	overflow: hidden;
 	background: white;
@@ -100,32 +52,32 @@
 	width: 50%;
 	padding: 14px;
 	border: none;
-	background: white;
-	color: #0b2e63;
+	background: #ffffff;
+	color: #1f7a4c;
 	font-weight: bold;
 	font-size: 16px;
 	cursor: pointer;
 }
 
 	.view-btn:hover {
-		background: #eef4ff;
+		background: #e9f6ef;
 	}
 
 .view-btn-active {
-	background: #1f56ad;
+	background: #1f7a4c;
 	color: white;
 }
 
 	.view-btn-active:hover {
-		background: #1f56ad;
+		background: #1f7a4c;
 		color: white;
 	}
 
 /* ================= FILTER ================= */
 
 .filter-box {
-	background: white;
-	border: 1px solid #dbe3ef;
+	background: #ffffff;
+	border: 1px solid #d9dde5;
 	border-radius: 10px;
 	padding: 18px 25px;
 	margin-bottom: 25px;
@@ -139,7 +91,7 @@
 
 .filter-title {
 	letter-spacing: 8px;
-	color: #4b5563;
+	color: #6b7280;
 	font-weight: bold;
 }
 
@@ -149,13 +101,13 @@
 	font-size: 16px;
 	font-weight: bold;
 	cursor: pointer;
-	color: #111827;
+	color: #10233f;
 	padding: 5px;
 	text-decoration: none;
 }
 
 	.filter-link:hover {
-		color: #1f56ad;
+		color: #1f7a4c;
 		text-decoration: none;
 	}
 
@@ -169,34 +121,34 @@
 }
 
 .dot-exams {
-	background: #c0392b;
+	background: #b03a2e;
 }
 
 .dot-deadlines {
-	background: #1f56ad;
+	background: #1d4f91;
 }
 
 .dot-registration {
-	background: #1b7f55;
+	background: #2e8b57;
 }
 
 .dot-holidays {
-	background: #8a5a00;
+	background: #b8860b;
 }
 
 .dot-academic {
-	background: #6c3483;
+	background: #6a3d9a;
 }
 
 .dot-all {
-	background: #111827;
+	background: #10233f;
 }
 
 /* ================= MONTHLY LIST VIEW ================= */
 
 .monthly-list-card {
-	background: white;
-	border: 1px solid #cbd8ea;
+	background: #ffffff;
+	border: 1px solid #d9dde5;
 	border-radius: 10px;
 	overflow: hidden;
 	margin-bottom: 28px;
@@ -204,29 +156,31 @@
 }
 
 .monthly-list-header {
-	background: #082653;
+	background: #1f7a4c;
 	color: white;
 	padding: 18px 28px;
 	display: flex;
 	align-items: baseline;
 	gap: 18px;
+	border-bottom: 3px solid #c8a96b;
 }
 
 .monthly-name {
-	font-size: 30px;
+	font-size: 15px;
 	font-weight: bold;
 	font-family: Georgia, serif;
+	color: #ffffff;
 }
 
 .monthly-year {
-	font-size: 17px;
-	color: #9fb0c9;
+	font-size: 15px;
+	color: #dff3e8;
 	letter-spacing: 2px;
 }
 
 .holiday-strip {
-	background: #fff5e5;
-	border-bottom: 1px solid #e5c88f;
+	background: #f5ecdc;
+	border-bottom: 1px solid #dcc08d;
 	padding: 10px 26px;
 	display: flex;
 	align-items: center;
@@ -235,7 +189,7 @@
 }
 
 .holiday-title {
-	color: #8a5a00;
+	color: #8a6518;
 	font-weight: bold;
 	font-size: 13px;
 	letter-spacing: 5px;
@@ -243,9 +197,9 @@
 }
 
 .holiday-pill {
-	border: 1px solid #d9a441;
-	color: #8a5a00;
-	background: white;
+	border: 1px solid #c8a96b;
+	color: #8a6518;
+	background: #ffffff;
 	padding: 6px 13px;
 	border-radius: 5px;
 	font-size: 14px;
@@ -257,16 +211,21 @@
 	align-items: start;
 	gap: 10px;
 	padding: 18px 28px;
-	border-bottom: 1px solid #e8edf5;
+	border-bottom: 1px solid #ece8df;
 	font-size: 17px;
+	background: #ffffff;
 }
+
+	.monthly-list-row:nth-child(even) {
+		background: #fbfaf7;
+	}
 
 	.monthly-list-row:last-child {
 		border-bottom: none;
 	}
 
 .monthly-date {
-	color: #1f56ad;
+	color: #1f7a4c;
 	font-weight: bold;
 	text-align: right;
 	white-space: nowrap;
@@ -277,7 +236,7 @@
 }
 
 .monthly-title {
-	color: #001b44;
+	color: #10233f;
 	line-height: 1.45;
 }
 
@@ -295,35 +254,35 @@
 }
 
 .badge-exams {
-	background: #fdecea;
+	background: #fbe9e7;
 	color: #922b21;
 }
 
 .badge-deadlines {
-	background: #eaf1ff;
-	color: #174785;
+	background: #e8f0fb;
+	color: #1d4f91;
 }
 
 .badge-registration {
-	background: #eef8f3;
-	color: #0f7a4d;
+	background: #e9f6ef;
+	color: #1f7a4c;
 }
 
 .badge-holidays {
-	background: #fff5df;
-	color: #704800;
+	background: #f9f1df;
+	color: #8a6518;
 }
 
 .badge-academic {
-	background: #f3eafa;
-	color: #512e5f;
+	background: #f1ebf8;
+	color: #5b3a87;
 }
 
 /* ================= CALENDAR VIEW ================= */
 
 .calendar-card {
-	background: white;
-	border: 1px solid #dbe3ef;
+	background: #ffffff;
+	border: 1px solid #d9dde5;
 	border-radius: 12px;
 	padding: 25px;
 	box-shadow: 0 3px 10px rgba(0,0,0,0.05);
@@ -340,27 +299,28 @@
 	width: 58px;
 	height: 58px;
 	border-radius: 8px;
-	border: 1px solid #dbe3ef;
+	border: 1px solid #d9dde5;
 	background: white;
-	color: #082653;
+	color: #1f7a4c;
 	font-size: 30px;
 	font-weight: bold;
 	cursor: pointer;
 }
 
 	.nav-btn:hover {
-		background: #eef4ff;
+		background: #e9f6ef;
 	}
 
 .calendar-month-title {
-	font-size: 36px;
+	font-size: 20px;
 	font-weight: bold;
-	color: #082653;
+	color: #1f7a4c;
+	font-family: Georgia, serif;
 }
 
 .calendar-year {
 	font-size: 24px;
-	color: #6b7280;
+	color: #444444;
 	margin-left: 12px;
 }
 
@@ -372,7 +332,7 @@
 }
 
 	.calendar-table th {
-		background: #082653;
+		background: #1f7a4c;
 		color: white;
 		padding: 16px;
 		font-size: 17px;
@@ -382,32 +342,34 @@
 	.calendar-table td {
 		height: 135px;
 		vertical-align: top;
-		border: 1px solid #dbe3ef;
+		border: 1px solid #d9dde5;
 		padding: 10px;
 		position: relative;
-		background: white;
+		background: #ffffff;
 	}
 
 .day-number {
 	font-size: 18px;
 	font-weight: bold;
-	color: #0b1f3a;
+	color: #10233f;
 	margin-bottom: 8px;
 }
 
 .other-month {
-	color: #b6c0ce;
+	color: #b6b9c0;
+	background: #faf9f6;
 }
 
 .today-number {
 	display: inline-block;
-	background: #1f56ad;
-	color: white;
+	background: #c8a96b;
+	color: #10233f;
 	width: 34px;
 	height: 34px;
 	border-radius: 50%;
 	text-align: center;
 	line-height: 34px;
+	font-weight: bold;
 }
 
 .calendar-event {
@@ -420,33 +382,33 @@
 }
 
 .event-exams {
-	border-left: 4px solid #c0392b;
-	background: #fdecea;
+	border-left: 4px solid #b03a2e;
+	background: #fbe9e7;
 	color: #922b21;
 }
 
 .event-deadlines {
-	border-left: 4px solid #1f56ad;
-	background: #eaf1ff;
+	border-left: 4px solid #1d4f91;
+	background: #e8f0fb;
 	color: #174785;
 }
 
 .event-registration {
-	border-left: 4px solid #1b7f55;
-	background: #eef8f3;
-	color: #0f7a4d;
+	border-left: 4px solid #2e8b57;
+	background: #e9f6ef;
+	color: #1f7a4c;
 }
 
 .event-holidays {
-	border-left: 4px solid #8a5a00;
-	background: #fff5df;
-	color: #704800;
+	border-left: 4px solid #b8860b;
+	background: #f9f1df;
+	color: #8a6518;
 }
 
 .event-academic {
-	border-left: 4px solid #6c3483;
-	background: #f3eafa;
-	color: #512e5f;
+	border-left: 4px solid #6a3d9a;
+	background: #f1ebf8;
+	color: #5b3a87;
 }
 
 /* ================= MESSAGES ================= */
@@ -478,22 +440,6 @@
 /* ================= RESPONSIVE ================= */
 
 @media(max-width: 768px) {
-	.header-inner {
-		flex-direction: column;
-		gap: 15px;
-		text-align: center;
-	}
-
-	.header-left {
-		justify-content: center;
-	}
-
-	.header-session {
-		font-size: 13px;
-		letter-spacing: 3px;
-		padding: 10px 15px;
-	}
-
 	.calendar-wrapper {
 		margin: 20px auto;
 	}

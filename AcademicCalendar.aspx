@@ -10,7 +10,7 @@
 
         <div class="page-title">
             <h1>Academic Calendar</h1>
-            <p>Student Edition · Data loaded from Excel file</p>
+            <%--<p>student edition · data loaded from excel file</p>--%>
         </div>
 
         <div class="view-switch">

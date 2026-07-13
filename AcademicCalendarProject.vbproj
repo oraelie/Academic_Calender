@@ -105,6 +105,7 @@
     <Content Include="AcademicCalendar.aspx" />
     <Content Include="CSS\AcademicCalendar.css" />
     <Content Include="Global.asax" />
+    <Content Include="Images\back_grd.png" />
     <Content Include="Images\Sagesse-1.png" />
     <Content Include="Images\Sagesse.png" />
     <Content Include="Web.config" />
