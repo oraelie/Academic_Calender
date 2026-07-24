@@ -462,18 +462,19 @@ Public Class AcademicCalendar
         Dim html As New StringBuilder()
 
         Dim firstDayOfMonth As New Date(CurrentMonth.Year, CurrentMonth.Month, 1)
-        Dim startCalendarDate As Date = firstDayOfMonth.AddDays(-CInt(firstDayOfMonth.DayOfWeek))
+        Dim daysBack As Integer = (CInt(firstDayOfMonth.DayOfWeek) + 6) Mod 7
+        Dim startCalendarDate As Date = firstDayOfMonth.AddDays(-daysBack)
 
         html.Append("<table class='calendar-table'>")
         html.Append("<thead>")
         html.Append("<tr>")
-        html.Append("<th>SUN</th>")
         html.Append("<th>MON</th>")
         html.Append("<th>TUE</th>")
         html.Append("<th>WED</th>")
         html.Append("<th>THU</th>")
         html.Append("<th>FRI</th>")
         html.Append("<th>SAT</th>")
+        html.Append("<th>SUN</th>")
         html.Append("</tr>")
         html.Append("</thead>")
         html.Append("<tbody>")
