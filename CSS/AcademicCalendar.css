@@ -563,9 +563,9 @@
 		min-width: 850px;
 	}
 
-		.calendar-table td {
-			height: 110px;
-			padding: 6px;
+	.calendar-table td {
+		height: 110px;
+		padding: 6px;
 		}
 
 	.calendar-event {

@@ -19,7 +19,11 @@
 
         <div class="view-switch">
             <asp:Button ID="btnListView" runat="server" Text="☰  List" CssClass="view-btn" />
-            <asp:Button ID="btnCalendarView" runat="server" Text="▣  Calendar" CssClass="view-btn" />
+            <%--<asp:Button ID="btnCalendarView" runat="server" Text="▣  Calendar" CssClass="view-btn" />--%>
+            <%--<asp:Button ID="btnCalendarView" runat="server" Text="📅  Calendar" CssClass="view-btn" />--%>
+            <%--<asp:Button ID="btnCalendarView" runat="server" Text="🟩  Calendar" CssClass="view-btn" />--%>
+            <%--<asp:Button ID="btnCalendarView" runat="server" Text="✅ Calendar" CssClass="view-btn" />--%>
+            <asp:Button ID="btnCalendarView" runat="server" Text="🟢 Calendar" CssClass="view-btn" />
         </div>
 
         <div class="filter-box">
