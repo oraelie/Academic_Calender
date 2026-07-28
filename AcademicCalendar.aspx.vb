@@ -279,7 +279,8 @@ Public Class AcademicCalendar
             Dim endDate As Date = Convert.ToDateTime(row("EndDate"))
             Dim monthKey As String = startDate.ToString("yyyy-MM")
             Dim category As String = row("Category").ToString()
-            Dim title As String = Server.HtmlEncode(row("EventTitle").ToString())
+            'Dim title As String = Server.HtmlEncode(row("EventTitle").ToString())
+            Dim title As String = FormatTextWithLineBreaks(row("EventTitle").ToString())
 
             If monthKey <> currentMonthKey Then
 
@@ -626,5 +627,17 @@ Public Class AcademicCalendar
         CurrentCategory = "Academic"
         LoadPage()
     End Sub
+
+    Private Function FormatTextWithLineBreaks(value As String) As String
+        If value Is Nothing Then
+            Return ""
+        End If
+
+        Dim safeText As String = Server.HtmlEncode(value.Trim())
+
+        safeText = safeText.Replace("*", "<br />")
+
+        Return safeText
+    End Function
 
 End Class

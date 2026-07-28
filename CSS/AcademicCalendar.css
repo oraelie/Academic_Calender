@@ -303,14 +303,13 @@
 .monthly-date {
 	color: #1f7a4c;
 	font-weight: bold;
-	font-size: 22px;
 	text-align: center;
 	white-space: nowrap;
 	display: flex;
 	align-items: center;
 	justify-content: center;
 	font-family: "Times New Roman", Times, serif;
-	font-size: 17px;
+	font-size: 20px;
 }
 
 .monthly-dot-cell {
