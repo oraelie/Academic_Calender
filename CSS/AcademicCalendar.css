@@ -122,12 +122,12 @@
 	}
 
 .view-btn-active {
-	background: #1f7a4c;
+	background: #00896A;
 	color: white;
 }
 
 	.view-btn-active:hover {
-		background: #1f7a4c;
+		background: #00896A;
 		color: white;
 	}
 
@@ -214,26 +214,44 @@
 }
 
 .monthly-list-header {
-	background: #1f7a4c;
+	background: #00896A;
 	color: white;
-	padding: 18px 28px;
+	padding: 16px 28px;
 	display: flex;
-	align-items: baseline;
+	align-items: center;
 	gap: 18px;
 	border-bottom: 3px solid #c8a96b;
 }
 
+/*this align thead the month command thead year input center color-profile thead header*/
+/*.monthly-list-header {
+	background: #00896A;
+	color: white;
+	padding: 18px 28px;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	gap: 18px;
+	border-bottom: 3px solid #c8a96b;
+	text-align: center;
+}
+*/
+
 .monthly-name {
-	font-size: 15px;
-	font-weight: bold;
-	font-family: Georgia, serif;
+	font-size: 22px;
+	font-weight: 700;
+	font-family: "Segoe UI", Times New Roman, sans-serif;
 	color: #ffffff;
+	text-transform: uppercase;
+	letter-spacing: 1px;
 }
 
 .monthly-year {
-	font-size: 15px;
-	color: #dff3e8;
-	letter-spacing: 2px;
+	font-size: 22px;
+	font-weight: 500;
+	font-family: "Segoe UI",Times New Roman , sans-serif;
+	color: #e6fff7;
+	letter-spacing: 3px;
 }
 
 .holiday-strip {
@@ -265,7 +283,7 @@
 
 .monthly-list-row {
 	display: grid;
-	grid-template-columns: 150px 28px 1fr 150px;
+	grid-template-columns: 170px 28px 1fr 150px;
 	align-items: start;
 	gap: 10px;
 	padding: 18px 28px;
@@ -285,8 +303,14 @@
 .monthly-date {
 	color: #1f7a4c;
 	font-weight: bold;
-	text-align: right;
+	font-size: 22px;
+	text-align: center;
 	white-space: nowrap;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	font-family: "Times New Roman", Times, serif;
+	font-size: 17px;
 }
 
 .monthly-dot-cell {
@@ -296,6 +320,8 @@
 .monthly-title {
 	color: #10233f;
 	line-height: 1.45;
+	font-family: "Times New Roman", Times, serif;
+	font-size : 22px;
 }
 
 .monthly-category {
@@ -516,7 +542,7 @@
 	}
 
 	.monthly-list-row {
-		grid-template-columns: 100px 25px 1fr;
+		grid-template-columns: 130px 25px 1fr;
 	}
 
 	.monthly-category {
@@ -526,7 +552,8 @@
 	}
 
 	.monthly-date {
-		text-align: left;
+		text-align: center;
+		justify-content: center;
 	}
 
 	.calendar-card {

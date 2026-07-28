@@ -366,14 +366,14 @@ Public Class AcademicCalendar
 
     Private Function FormatListDate(startDate As Date, endDate As Date) As String
         If startDate = endDate Then
-            Return startDate.ToString("MMM d")
+            Return startDate.ToString("ddd - MMM d")
         End If
 
         If startDate.Month = endDate.Month AndAlso startDate.Year = endDate.Year Then
-            Return startDate.ToString("MMM d") & "–" & endDate.Day.ToString()
+            Return startDate.ToString("ddd - MMM d") & "–" & endDate.ToString("ddd - d")
         End If
 
-        Return startDate.ToString("MMM d") & "–" & endDate.ToString("MMM d")
+        Return startDate.ToString("ddd - MMM d") & "–" & endDate.ToString("ddd - MMM d")
     End Function
 
     Private Function GetCategoryBadgeClass(category As String) As String
