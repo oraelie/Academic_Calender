@@ -296,35 +296,29 @@ Public Class AcademicCalendar
                 html.Append("<span class='monthly-year'>" & startDate.ToString("yyyy") & "</span>")
                 html.Append("</div>")
 
-                html.Append(BuildHolidayStrip(eventsTable, startDate.Month, startDate.Year))
-
             End If
 
-            If category.ToLower() <> "holidays" Then
+            html.Append("<div class='monthly-list-row'>")
 
-                html.Append("<div class='monthly-list-row'>")
+            html.Append("<div class='monthly-date'>")
+            html.Append(FormatListDate(startDate, endDate))
+            html.Append("</div>")
 
-                html.Append("<div class='monthly-date'>")
-                html.Append(FormatListDate(startDate, endDate))
-                html.Append("</div>")
+            html.Append("<div class='monthly-dot-cell'>")
+            html.Append("<span class='dot " & GetDotClass(category) & "'></span>")
+            html.Append("</div>")
 
-                html.Append("<div class='monthly-dot-cell'>")
-                html.Append("<span class='dot " & GetDotClass(category) & "'></span>")
-                html.Append("</div>")
+            html.Append("<div class='monthly-title'>")
+            html.Append(title)
+            html.Append("</div>")
 
-                html.Append("<div class='monthly-title'>")
-                html.Append(title)
-                html.Append("</div>")
+            html.Append("<div class='monthly-category'>")
+            html.Append("<span class='category-badge " & GetCategoryBadgeClass(category) & "'>")
+            html.Append(GetCategoryLabel(category))
+            html.Append("</span>")
+            html.Append("</div>")
 
-                html.Append("<div class='monthly-category'>")
-                html.Append("<span class='category-badge " & GetCategoryBadgeClass(category) & "'>")
-                html.Append(GetCategoryLabel(category))
-                html.Append("</span>")
-                html.Append("</div>")
-
-                html.Append("</div>")
-
-            End If
+            html.Append("</div>")
 
         Next
 
