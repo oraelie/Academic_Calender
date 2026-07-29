@@ -89,7 +89,7 @@
 	}
 
 .view-btn-active {
-	background: #1f7a4c;
+	background: #00896A;
 	color: white;
 }
 
@@ -183,7 +183,7 @@
 .monthly-list-header {
 	background: #00896A;
 	color: white;
-	padding: 14px 28px;
+	padding: 16px 28px;
 	display: flex;
 	align-items: center;
 	gap: 18px;
@@ -200,18 +200,20 @@
 }
 
 .monthly-name {
-	font-size: 25px;
-	font-weight: bolder;
-	font-family: Times New Roman,  serif;
+	font-size: 22px;
+	font-weight: 700;
+	font-family: "Segoe UI", Times New Roman, sans-serif;
 	color: #ffffff;
-	line-height: 1;
+	text-transform: uppercase;
+	letter-spacing: 1px;
 }
 
 .monthly-year {
-	font-size: 25px;
-	color: #dff3e8;
-	letter-spacing: 2px;
-	line-height: 1;
+	font-size: 22px;
+	font-weight: 500;
+	font-family: "Segoe UI",Times New Roman, sans-serif;
+	color: #e6fff7;
+	letter-spacing: 3px;
 }
 
 .collapse-btn {
@@ -278,6 +280,7 @@
 	color: #10233f;
 	line-height: 1.45;
 	font-family: "Times New Roman", Times, serif;
+	font-size: 22px;
 }
 
 .monthly-category {

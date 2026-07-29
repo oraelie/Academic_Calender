@@ -9,7 +9,7 @@
     <div class="calendar-wrapper">
 
         <div class="logo-banner">
-            <img src="<%= ResolveUrl("~/Images/Sagesse-1.png") %>" class="page-logo" alt="Université La Sagesse Logo" />
+            <img src="<%= ResolveUrl("~/Images/Sagesse.png") %>" class="page-logo" alt="Université La Sagesse Logo" />
         </div>
 
         <div class="page-title">
@@ -88,6 +88,8 @@
 
     </div>
 
+    <%--script that collapse all month cards after pressing list button--%>
+
     <%--<script type="text/javascript">
         function toggleMonthCard(bodyId, iconId) {
             var body = document.getElementById(bodyId);
@@ -104,7 +106,7 @@
 	</script>--%>
 
 
-    <%--keeping the state of collapse and expand as the same state when pressinf list buton--%>
+    <%--keeping the state of collapse and expand as the same state when pressing list button--%>
     <script type="text/javascript">
 		function toggleMonthCard(bodyId, iconId) {
 			var body = document.getElementById(bodyId);
