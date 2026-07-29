@@ -171,13 +171,30 @@
 
 /* ================= MONTHLY LIST VIEW ================= */
 
-.monthly-list-card {
+/*.monthly-list-card {
 	background: #ffffff;
 	border: 1px solid #d9dde5;
 	border-radius: 10px;
 	overflow: hidden;
 	margin-bottom: 28px;
 	box-shadow: 0 3px 10px rgba(0,0,0,0.04);
+}*/
+
+.monthly-list-card {
+	background: #ffffff;
+	border: 1px solid #d9dde5;
+	border-radius: 0;
+	overflow: hidden;
+	margin-bottom: 0;
+	box-shadow: none;
+}
+
+.monthly-list-card:first-child {
+	border-radius: 10px 10px 0 0;
+	}
+
+.monthly-list-card:last-child {
+	border-radius: 0 0 10px 10px;
 }
 
 .monthly-list-header {
@@ -374,13 +391,13 @@
 	background: white;
 }
 
-	.calendar-table th {
-		background: #1f7a4c;
-		color: white;
-		padding: 16px;
-		font-size: 17px;
-		letter-spacing: 4px;
-	}
+.calendar-table th {
+	background: #1f7a4c;
+	color: white;
+	padding: 16px;
+	font-size: 17px;
+	letter-spacing: 4px;
+}
 
 	.calendar-table td {
 		height: 135px;
@@ -536,10 +553,10 @@
 		min-width: 850px;
 	}
 
-		.calendar-table td {
-			height: 110px;
-			padding: 6px;
-		}
+	.calendar-table td {
+		height: 110px;
+		padding: 6px;
+	}
 
 	.calendar-event {
 		font-size: 11px;

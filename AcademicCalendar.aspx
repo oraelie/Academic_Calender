@@ -105,52 +105,71 @@
         }
 	</script>--%>
 
+<%--keeping current month expanded by default and other months collapsed by default--%>
+<script type="text/javascript">
+	function toggleMonthCard(bodyId, iconId) {
+		var body = document.getElementById(bodyId);
+		var icon = document.getElementById(iconId);
 
-    <%--keeping the state of collapse and expand as the same state when pressing list button--%>
-    <script type="text/javascript">
-		function toggleMonthCard(bodyId, iconId) {
-			var body = document.getElementById(bodyId);
+		if (!body || !icon) {
+			return;
+		}
+
+		var storageKey = "monthCardState_" + bodyId;
+
+		if (body.style.display === "none") {
+			body.style.display = "block";
+			icon.innerHTML = "−";
+			localStorage.setItem(storageKey, "expanded");
+		} else {
+			body.style.display = "none";
+			icon.innerHTML = "+";
+			localStorage.setItem(storageKey, "collapsed");
+		}
+	}
+
+	function restoreMonthCardStates() {
+		var bodies = document.getElementsByClassName("monthly-list-body");
+
+		for (var i = 0; i < bodies.length; i++) {
+			var body = bodies[i];
+			var bodyId = body.id;
+
+			if (!bodyId) {
+				continue;
+			}
+
+			var iconId = bodyId.replace("monthBody_", "monthIcon_");
 			var icon = document.getElementById(iconId);
 
-			if (!body || !icon) {
-				return;
+			if (!icon) {
+				continue;
 			}
 
 			var storageKey = "monthCardState_" + bodyId;
+			var savedState = localStorage.getItem(storageKey);
+			var defaultState = body.getAttribute("data-default-state");
+			var isCurrentMonth = body.getAttribute("data-current-month");
 
-			if (body.style.display === "none") {
+			/*
+			   Current month should be expanded by default.
+			   We ignore old saved collapsed state for the current month.
+			*/
+			if (isCurrentMonth === "yes") {
 				body.style.display = "block";
 				icon.innerHTML = "−";
 				localStorage.setItem(storageKey, "expanded");
-			} else {
+				continue;
+			}
+
+			if (savedState === "collapsed") {
 				body.style.display = "none";
 				icon.innerHTML = "+";
-				localStorage.setItem(storageKey, "collapsed");
-			}
-		}
-
-		function restoreMonthCardStates() {
-			var bodies = document.getElementsByClassName("monthly-list-body");
-
-			for (var i = 0; i < bodies.length; i++) {
-				var body = bodies[i];
-				var bodyId = body.id;
-
-				if (!bodyId) {
-					continue;
-				}
-
-				var iconId = bodyId.replace("monthBody", "monthIcon");
-				var icon = document.getElementById(iconId);
-
-				if (!icon) {
-					continue;
-				}
-
-				var storageKey = "monthCardState_" + bodyId;
-				var savedState = localStorage.getItem(storageKey);
-
-				if (savedState === "collapsed") {
+			} else if (savedState === "expanded") {
+				body.style.display = "block";
+				icon.innerHTML = "−";
+			} else {
+				if (defaultState === "collapsed") {
 					body.style.display = "none";
 					icon.innerHTML = "+";
 				} else {
@@ -159,11 +178,11 @@
 				}
 			}
 		}
+	}
 
-		window.onload = function () {
-			restoreMonthCardStates();
-		};
-	</script>
-
+	window.onload = function () {
+		restoreMonthCardStates();
+	};
+</script>
 
 </asp:Content>

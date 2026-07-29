@@ -272,7 +272,6 @@ Public Class AcademicCalendar
     Private Function BuildMonthlyListHtml(eventsTable As DataTable) As String
         Dim html As New StringBuilder()
         Dim currentMonthKey As String = ""
-        Dim cardIndex As Integer = 0
 
         For Each row As DataRow In eventsTable.Rows
 
@@ -289,11 +288,18 @@ Public Class AcademicCalendar
                     html.Append("</div>")
                 End If
 
-                cardIndex += 1
                 currentMonthKey = monthKey
 
-                Dim bodyId As String = "monthBody" & cardIndex.ToString()
-                Dim iconId As String = "monthIcon" & cardIndex.ToString()
+                Dim bodyId As String = "monthBody_" & startDate.ToString("yyyyMM")
+                Dim iconId As String = "monthIcon_" & startDate.ToString("yyyyMM")
+
+                Dim isCurrentMonth As Boolean =
+                startDate.Month = Date.Today.Month AndAlso startDate.Year = Date.Today.Year
+
+                Dim defaultDisplay As String = If(isCurrentMonth, "block", "none")
+                Dim defaultIcon As String = If(isCurrentMonth, "−", "+")
+                Dim defaultState As String = If(isCurrentMonth, "expanded", "collapsed")
+                Dim isCurrentMonthText As String = If(isCurrentMonth, "yes", "no")
 
                 html.Append("<div class='monthly-list-card'>")
 
@@ -305,13 +311,12 @@ Public Class AcademicCalendar
                 html.Append("</div>")
 
                 html.Append("<button type='button' class='collapse-btn' onclick=""toggleMonthCard('" & bodyId & "', '" & iconId & "')"">")
-                html.Append("<span id='" & iconId & "'>−</span>")
+                html.Append("<span id='" & iconId & "'>" & defaultIcon & "</span>")
                 html.Append("</button>")
 
                 html.Append("</div>")
 
-                html.Append("<div id='" & bodyId & "' class='monthly-list-body'>")
-
+                html.Append("<div id='" & bodyId & "' class='monthly-list-body' data-default-state='" & defaultState & "' data-current-month='" & isCurrentMonthText & "' style='display:" & defaultDisplay & ";'>")
             End If
 
             html.Append("<div class='monthly-list-row'>")
