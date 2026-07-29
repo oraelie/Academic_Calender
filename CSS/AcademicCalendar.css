@@ -10,6 +10,8 @@
 	color: #10233f;
 }
 
+/* ================= LOGO BANNER ================= */
+
 .logo-banner {
 	background: #ffffff;
 	border: 1px solid #d9dde5;
@@ -30,41 +32,6 @@
 	display: block;
 	object-fit: contain;
 }
-
-
-
-/*this css for logo not shown aside water mark command fix even scrolling page*/ 
-
-/*.page-logo {
-	position: fixed;
-	top: 35px;
-	left: 155px;
-	width: 250px;
-	height: auto;
-	z-index: 1000;
-	border-radius: 5px;
-	
-}*/
-
-/*css form logo input stop left corner with watermak display*/
-
-/*.page-logo {
-	position: fixed;
-	top: 35px;
-	left: 155px;
-	width: 250px;
-	height: auto;
-	z-index: 0;
-	opacity: 0.60;
-	pointer-events: none;
-	border-radius: 5px;
-}
-*/
-
-
-
-
-
 
 /* ================= MAIN PAGE ================= */
 
@@ -122,12 +89,12 @@
 	}
 
 .view-btn-active {
-	background: #00896A;
+	background: #1f7a4c;
 	color: white;
 }
 
 	.view-btn-active:hover {
-		background: #00896A;
+		background: #1f7a4c;
 		color: white;
 	}
 
@@ -216,69 +183,60 @@
 .monthly-list-header {
 	background: #00896A;
 	color: white;
-	padding: 16px 28px;
+	padding: 14px 28px;
 	display: flex;
 	align-items: center;
 	gap: 18px;
 	border-bottom: 3px solid #c8a96b;
 }
 
-/*this align thead the month command thead year input center color-profile thead header*/
-/*.monthly-list-header {
-	background: #00896A;
-	color: white;
-	padding: 18px 28px;
+.monthly-header-title {
 	display: flex;
 	align-items: center;
-	justify-content: center;
+	justify-content: left;
 	gap: 18px;
-	border-bottom: 3px solid #c8a96b;
+	flex: 1;
 	text-align: center;
 }
-*/
 
 .monthly-name {
-	font-size: 22px;
-	font-weight: 700;
-	font-family: "Segoe UI", Times New Roman, sans-serif;
+	font-size: 25px;
+	font-weight: bolder;
+	font-family: Times New Roman,  serif;
 	color: #ffffff;
-	text-transform: uppercase;
-	letter-spacing: 1px;
+	line-height: 1;
 }
 
 .monthly-year {
-	font-size: 22px;
-	font-weight: 500;
-	font-family: "Segoe UI",Times New Roman , sans-serif;
-	color: #e6fff7;
-	letter-spacing: 3px;
+	font-size: 25px;
+	color: #dff3e8;
+	letter-spacing: 2px;
+	line-height: 1;
 }
 
-.holiday-strip {
-	background: #f5ecdc;
-	border-bottom: 1px solid #dcc08d;
-	padding: 10px 26px;
+.collapse-btn {
+	width: 34px;
+	height: 34px;
+	border: 2px solid #ffffff;
+	border-radius: 50%;
+	background: transparent;
+	color: #ffffff;
+	font-size: 24px;
+	font-weight: bold;
+	line-height: 26px;
+	cursor: pointer;
 	display: flex;
 	align-items: center;
-	gap: 8px;
-	flex-wrap: wrap;
+	justify-content: center;
+	padding: 0;
 }
 
-.holiday-title {
-	color: #8a6518;
-	font-weight: bold;
-	font-size: 13px;
-	letter-spacing: 5px;
-	margin-right: 8px;
-}
+	.collapse-btn:hover {
+		background: rgba(255, 255, 255, 0.18);
+	}
 
-.holiday-pill {
-	border: 1px solid #c8a96b;
-	color: #8a6518;
-	background: #ffffff;
-	padding: 6px 13px;
-	border-radius: 5px;
-	font-size: 14px;
+.monthly-list-body {
+	display: block;
 }
 
 .monthly-list-row {
@@ -320,7 +278,6 @@
 	color: #10233f;
 	line-height: 1.45;
 	font-family: "Times New Roman", Times, serif;
-	font-size : 22px;
 }
 
 .monthly-category {
@@ -525,6 +482,11 @@
 @media(max-width: 768px) {
 	.calendar-wrapper {
 		margin: 20px auto;
+		zoom: 100%;
+	}
+
+	.logo-banner {
+		height: 95px;
 	}
 
 	.page-title h1 {
@@ -538,6 +500,14 @@
 	.filter-box {
 		justify-content: flex-start;
 		gap: 18px;
+	}
+
+	.monthly-list-header {
+		padding: 14px 18px;
+	}
+
+	.monthly-header-title {
+		justify-content: flex-start;
 	}
 
 	.monthly-list-row {
@@ -563,9 +533,9 @@
 		min-width: 850px;
 	}
 
-	.calendar-table td {
-		height: 110px;
-		padding: 6px;
+		.calendar-table td {
+			height: 110px;
+			padding: 6px;
 		}
 
 	.calendar-event {

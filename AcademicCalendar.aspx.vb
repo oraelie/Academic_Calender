@@ -272,6 +272,7 @@ Public Class AcademicCalendar
     Private Function BuildMonthlyListHtml(eventsTable As DataTable) As String
         Dim html As New StringBuilder()
         Dim currentMonthKey As String = ""
+        Dim cardIndex As Integer = 0
 
         For Each row As DataRow In eventsTable.Rows
 
@@ -279,23 +280,37 @@ Public Class AcademicCalendar
             Dim endDate As Date = Convert.ToDateTime(row("EndDate"))
             Dim monthKey As String = startDate.ToString("yyyy-MM")
             Dim category As String = row("Category").ToString()
-            'Dim title As String = Server.HtmlEncode(row("EventTitle").ToString())
             Dim title As String = FormatTextWithLineBreaks(row("EventTitle").ToString())
 
             If monthKey <> currentMonthKey Then
 
                 If currentMonthKey <> "" Then
                     html.Append("</div>")
+                    html.Append("</div>")
                 End If
 
+                cardIndex += 1
                 currentMonthKey = monthKey
+
+                Dim bodyId As String = "monthBody" & cardIndex.ToString()
+                Dim iconId As String = "monthIcon" & cardIndex.ToString()
 
                 html.Append("<div class='monthly-list-card'>")
 
                 html.Append("<div class='monthly-list-header'>")
+
+                html.Append("<div class='monthly-header-title'>")
                 html.Append("<span class='monthly-name'>" & startDate.ToString("MMMM") & "</span>")
                 html.Append("<span class='monthly-year'>" & startDate.ToString("yyyy") & "</span>")
                 html.Append("</div>")
+
+                html.Append("<button type='button' class='collapse-btn' onclick=""toggleMonthCard('" & bodyId & "', '" & iconId & "')"">")
+                html.Append("<span id='" & iconId & "'>−</span>")
+                html.Append("</button>")
+
+                html.Append("</div>")
+
+                html.Append("<div id='" & bodyId & "' class='monthly-list-body'>")
 
             End If
 
@@ -324,6 +339,7 @@ Public Class AcademicCalendar
         Next
 
         If currentMonthKey <> "" Then
+            html.Append("</div>")
             html.Append("</div>")
         End If
 

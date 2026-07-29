@@ -8,26 +8,22 @@
 
     <div class="calendar-wrapper">
 
-         <div class="logo-banner">
-            <img src="<%= ResolveUrl("~/Images/Sagesse.png") %>" class="page-logo" alt="Université La Sagesse Logo" />
+        <div class="logo-banner">
+            <img src="<%= ResolveUrl("~/Images/Sagesse-1.png") %>" class="page-logo" alt="Université La Sagesse Logo" />
         </div>
 
         <div class="page-title">
             <h1>Academic Calendar</h1>
-            <%--<p>student edition · data loaded from excel file</p>--%>
+            <p>View academic events, deadlines, exams, registration dates, and holidays</p>
         </div>
 
         <div class="view-switch">
-            <asp:Button ID="btnListView" runat="server" Text="☰  List" CssClass="view-btn" />
-            <%--<asp:Button ID="btnCalendarView" runat="server" Text="▣  Calendar" CssClass="view-btn" />--%>
-            <%--<asp:Button ID="btnCalendarView" runat="server" Text="📅  Calendar" CssClass="view-btn" />--%>
-            <%--<asp:Button ID="btnCalendarView" runat="server" Text="🟩  Calendar" CssClass="view-btn" />--%>
-            <%--<asp:Button ID="btnCalendarView" runat="server" Text="✅ Calendar" CssClass="view-btn" />--%>
-            <asp:Button ID="btnCalendarView" runat="server" Text="🟢 Calendar" CssClass="view-btn" />
+            <asp:Button ID="btnListView" runat="server" Text="☰  List" CssClass="view-btn view-btn-active" />
+            <asp:Button ID="btnCalendarView" runat="server" Text="🟩  Calendar" CssClass="view-btn" />
         </div>
 
         <div class="filter-box">
-            <span class="filter-title">FILTER:</span>
+            <span class="filter-title">FILTER</span>
 
             <asp:LinkButton ID="lnkAll" runat="server" CssClass="filter-link">
                 <span class="dot dot-all"></span>All
@@ -56,7 +52,6 @@
 
         <asp:Label ID="lblError" runat="server" CssClass="error-message"></asp:Label>
 
-        <!-- LIST VIEW: monthly cards generated from Excel in AcademicCalendar.aspx.vb -->
         <asp:Panel ID="pnlListView" runat="server">
 
             <asp:Literal ID="litListEvents" runat="server"></asp:Literal>
@@ -65,13 +60,11 @@
 
         </asp:Panel>
 
-        <!-- CALENDAR VIEW -->
         <asp:Panel ID="pnlCalendarView" runat="server">
 
             <div class="calendar-card">
 
                 <div class="calendar-nav">
-
                     <asp:Button ID="btnPrevMonth" runat="server" Text="‹" CssClass="nav-btn" />
 
                     <div>
@@ -85,7 +78,6 @@
                     </div>
 
                     <asp:Button ID="btnNextMonth" runat="server" Text="›" CssClass="nav-btn" />
-
                 </div>
 
                 <asp:Literal ID="litCalendar" runat="server"></asp:Literal>
@@ -95,5 +87,81 @@
         </asp:Panel>
 
     </div>
+
+    <%--<script type="text/javascript">
+        function toggleMonthCard(bodyId, iconId) {
+            var body = document.getElementById(bodyId);
+            var icon = document.getElementById(iconId);
+
+            if (body.style.display === "none") {
+                body.style.display = "block";
+                icon.innerHTML = "−";
+            } else {
+                body.style.display = "none";
+                icon.innerHTML = "+";
+            }
+        }
+	</script>--%>
+
+
+    <%--keeping the state of collapse and expand as the same state when pressinf list buton--%>
+    <script type="text/javascript">
+		function toggleMonthCard(bodyId, iconId) {
+			var body = document.getElementById(bodyId);
+			var icon = document.getElementById(iconId);
+
+			if (!body || !icon) {
+				return;
+			}
+
+			var storageKey = "monthCardState_" + bodyId;
+
+			if (body.style.display === "none") {
+				body.style.display = "block";
+				icon.innerHTML = "−";
+				localStorage.setItem(storageKey, "expanded");
+			} else {
+				body.style.display = "none";
+				icon.innerHTML = "+";
+				localStorage.setItem(storageKey, "collapsed");
+			}
+		}
+
+		function restoreMonthCardStates() {
+			var bodies = document.getElementsByClassName("monthly-list-body");
+
+			for (var i = 0; i < bodies.length; i++) {
+				var body = bodies[i];
+				var bodyId = body.id;
+
+				if (!bodyId) {
+					continue;
+				}
+
+				var iconId = bodyId.replace("monthBody", "monthIcon");
+				var icon = document.getElementById(iconId);
+
+				if (!icon) {
+					continue;
+				}
+
+				var storageKey = "monthCardState_" + bodyId;
+				var savedState = localStorage.getItem(storageKey);
+
+				if (savedState === "collapsed") {
+					body.style.display = "none";
+					icon.innerHTML = "+";
+				} else {
+					body.style.display = "block";
+					icon.innerHTML = "−";
+				}
+			}
+		}
+
+		window.onload = function () {
+			restoreMonthCardStates();
+		};
+	</script>
+
 
 </asp:Content>
