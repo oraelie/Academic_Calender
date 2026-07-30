@@ -32,6 +32,15 @@ Partial Public Class AcademicCalendar
 	Protected WithEvents btnCalendarView As Global.System.Web.UI.WebControls.Button
 
 	'''<summary>
+	'''btnDownloadICS control.
+	'''</summary>
+	'''<remarks>
+	'''Auto-generated field.
+	'''To modify move field declaration from designer file to code-behind file.
+	'''</remarks>
+	Protected WithEvents btnDownloadICS As Global.System.Web.UI.WebControls.Button
+
+	'''<summary>
 	'''lnkAll control.
 	'''</summary>
 	'''<remarks>

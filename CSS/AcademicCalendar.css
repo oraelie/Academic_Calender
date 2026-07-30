@@ -97,6 +97,26 @@
 		background: #1f7a4c;
 		color: white;
 	}
+.outlook-download-box {
+	text-align: center;
+	margin: -10px auto 25px auto;
+}
+
+.outlook-download-btn {
+	border: none;
+	background: #00896A;
+	color: #ffffff;
+	font-size: 16px;
+	font-weight: bold;
+	padding: 13px 24px;
+	border-radius: 10px;
+	cursor: pointer;
+	box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+}
+
+	.outlook-download-btn:hover {
+		background: #1f7a4c;
+	}
 
 /* ================= FILTER ================= */
 

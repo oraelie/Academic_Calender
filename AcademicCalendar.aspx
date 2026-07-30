@@ -21,6 +21,9 @@
             <asp:Button ID="btnListView" runat="server" Text="☰  List" CssClass="view-btn view-btn-active" />
             <asp:Button ID="btnCalendarView" runat="server" Text="🟩  Calendar" CssClass="view-btn" />
         </div>
+        <div class="outlook-download-box">
+             <asp:Button ID="btnDownloadICS" runat="server" Text="Download to Outlook Calendar" CssClass="outlook-download-btn" />
+        </div>
 
         <div class="filter-box">
             <span class="filter-title">FILTER</span>

@@ -294,7 +294,7 @@ Public Class AcademicCalendar
                 Dim iconId As String = "monthIcon_" & startDate.ToString("yyyyMM")
 
                 Dim isCurrentMonth As Boolean =
-                startDate.Month = Date.Today.Month AndAlso startDate.Year = Date.Today.Year
+                    startDate.Month = Date.Today.Month AndAlso startDate.Year = Date.Today.Year
 
                 Dim defaultDisplay As String = If(isCurrentMonth, "block", "none")
                 Dim defaultIcon As String = If(isCurrentMonth, "−", "+")
@@ -317,6 +317,7 @@ Public Class AcademicCalendar
                 html.Append("</div>")
 
                 html.Append("<div id='" & bodyId & "' class='monthly-list-body' data-default-state='" & defaultState & "' data-current-month='" & isCurrentMonthText & "' style='display:" & defaultDisplay & ";'>")
+
             End If
 
             html.Append("<div class='monthly-list-row'>")
@@ -345,41 +346,6 @@ Public Class AcademicCalendar
 
         If currentMonthKey <> "" Then
             html.Append("</div>")
-            html.Append("</div>")
-        End If
-
-        Return html.ToString()
-    End Function
-
-    Private Function BuildHolidayStrip(eventsTable As DataTable, monthNumber As Integer, yearNumber As Integer) As String
-        Dim html As New StringBuilder()
-        Dim hasHoliday As Boolean = False
-
-        For Each row As DataRow In eventsTable.Rows
-
-            Dim startDate As Date = Convert.ToDateTime(row("StartDate"))
-            Dim endDate As Date = Convert.ToDateTime(row("EndDate"))
-            Dim category As String = row("Category").ToString()
-
-            If startDate.Month = monthNumber AndAlso startDate.Year = yearNumber AndAlso category.ToLower() = "holidays" Then
-
-                If Not hasHoliday Then
-                    hasHoliday = True
-                    html.Append("<div class='holiday-strip'>")
-                    html.Append("<span class='holiday-title'>HOLIDAYS</span>")
-                End If
-
-                Dim title As String = Server.HtmlEncode(row("EventTitle").ToString())
-
-                html.Append("<span class='holiday-pill'>")
-                html.Append(FormatListDate(startDate, endDate) & " – " & title)
-                html.Append("</span>")
-
-            End If
-
-        Next
-
-        If hasHoliday Then
             html.Append("</div>")
         End If
 
@@ -478,6 +444,8 @@ Public Class AcademicCalendar
         Dim html As New StringBuilder()
 
         Dim firstDayOfMonth As New Date(CurrentMonth.Year, CurrentMonth.Month, 1)
+
+        ' Start calendar week on Monday.
         Dim daysBack As Integer = (CInt(firstDayOfMonth.DayOfWeek) + 6) Mod 7
         Dim startCalendarDate As Date = firstDayOfMonth.AddDays(-daysBack)
 
@@ -525,7 +493,7 @@ Public Class AcademicCalendar
 
                         Dim category As String = row("Category").ToString()
                         Dim eventCss As String = GetEventClass(category)
-                        Dim title As String = Server.HtmlEncode(row("EventTitle").ToString())
+                        Dim title As String = FormatTextWithLineBreaks(row("EventTitle").ToString())
 
                         html.Append("<div class='calendar-event " & eventCss & "'>")
                         html.Append(title)
@@ -649,6 +617,72 @@ Public Class AcademicCalendar
         LoadPage()
     End Sub
 
+    Protected Sub btnDownloadICS_Click(sender As Object, e As EventArgs) Handles btnDownloadICS.Click
+
+        Try
+            Dim dt As DataTable = ReadExcelEvents()
+            Dim icsContent As New StringBuilder()
+
+            icsContent.AppendLine("BEGIN:VCALENDAR")
+            icsContent.AppendLine("VERSION:2.0")
+            icsContent.AppendLine("PRODID:-//Academic Calendar Project//Academic Calendar//EN")
+            icsContent.AppendLine("CALSCALE:GREGORIAN")
+            icsContent.AppendLine("METHOD:PUBLISH")
+            icsContent.AppendLine("X-WR-CALNAME:Academic Calendar")
+            icsContent.AppendLine("X-WR-TIMEZONE:Asia/Beirut")
+
+            For Each row As DataRow In dt.Rows
+
+                Dim eventTitle As String = row("EventTitle").ToString()
+                Dim eventDescription As String = row("EventDescription").ToString()
+                Dim category As String = row("Category").ToString()
+
+                Dim startDate As Date = Convert.ToDateTime(row("StartDate"))
+                Dim endDate As Date = Convert.ToDateTime(row("EndDate"))
+
+                ' For all-day ICS events, DTEND is exclusive.
+                ' Example: event ends on 25-07-2026, ICS DTEND should be 26-07-2026.
+                Dim icsEndDate As Date = endDate.AddDays(1)
+
+                Dim uniqueId As String =
+                    startDate.ToString("yyyyMMdd") & "-" &
+                    CleanUidText(eventTitle) & "-" &
+                    Guid.NewGuid().ToString() & "@academiccalendar"
+
+                icsContent.AppendLine("BEGIN:VEVENT")
+                icsContent.AppendLine("UID:" & uniqueId)
+                icsContent.AppendLine("DTSTAMP:" & DateTime.UtcNow.ToString("yyyyMMddTHHmmssZ"))
+                icsContent.AppendLine("DTSTART;VALUE=DATE:" & startDate.ToString("yyyyMMdd"))
+                icsContent.AppendLine("DTEND;VALUE=DATE:" & icsEndDate.ToString("yyyyMMdd"))
+                icsContent.AppendLine("SUMMARY:" & EscapeICS(eventTitle))
+                icsContent.AppendLine("DESCRIPTION:" & EscapeICS(eventDescription))
+                icsContent.AppendLine("CATEGORIES:" & EscapeICS(category))
+                icsContent.AppendLine("END:VEVENT")
+
+            Next
+
+            icsContent.AppendLine("END:VCALENDAR")
+
+            Dim fileBytes As Byte() = Encoding.UTF8.GetBytes(icsContent.ToString())
+
+            Response.Clear()
+            Response.Buffer = True
+            Response.ContentType = "text/calendar"
+            Response.ContentEncoding = Encoding.UTF8
+            Response.AddHeader("Content-Disposition", "attachment; filename=AcademicCalendar.ics")
+            Response.AddHeader("Content-Length", fileBytes.Length.ToString())
+            Response.BinaryWrite(fileBytes)
+            Response.Flush()
+
+            Context.ApplicationInstance.CompleteRequest()
+
+        Catch ex As Exception
+            lblError.Text = "Error creating Outlook calendar file: " & ex.Message
+            lblError.Visible = True
+        End Try
+
+    End Sub
+
     Private Function FormatTextWithLineBreaks(value As String) As String
         If value Is Nothing Then
             Return ""
@@ -659,6 +693,51 @@ Public Class AcademicCalendar
         safeText = safeText.Replace("*", "<br />")
 
         Return safeText
+    End Function
+
+    Private Function EscapeICS(value As String) As String
+
+        If value Is Nothing Then
+            Return ""
+        End If
+
+        Dim cleanValue As String = value.Trim()
+
+        cleanValue = cleanValue.Replace("\", "\\")
+        cleanValue = cleanValue.Replace(";", "\;")
+        cleanValue = cleanValue.Replace(",", "\,")
+        cleanValue = cleanValue.Replace(vbCrLf, "\n")
+        cleanValue = cleanValue.Replace(vbCr, "\n")
+        cleanValue = cleanValue.Replace(vbLf, "\n")
+        cleanValue = cleanValue.Replace("*", "\n")
+
+        Return cleanValue
+
+    End Function
+
+    Private Function CleanUidText(value As String) As String
+
+        If value Is Nothing Then
+            Return "event"
+        End If
+
+        Dim cleanValue As String = value.ToLower().Trim()
+
+        cleanValue = cleanValue.Replace(" ", "-")
+        cleanValue = cleanValue.Replace("/", "-")
+        cleanValue = cleanValue.Replace("\", "-")
+        cleanValue = cleanValue.Replace(":", "-")
+        cleanValue = cleanValue.Replace(";", "-")
+        cleanValue = cleanValue.Replace(",", "-")
+        cleanValue = cleanValue.Replace(".", "-")
+        cleanValue = cleanValue.Replace("*", "-")
+
+        If cleanValue = "" Then
+            cleanValue = "event"
+        End If
+
+        Return cleanValue
+
     End Function
 
 End Class
