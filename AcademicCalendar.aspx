@@ -22,35 +22,19 @@
             <asp:Button ID="btnCalendarView" runat="server" Text="🟩  Calendar" CssClass="view-btn" />
         </div>
         <div class="outlook-download-box">
-             <asp:Button ID="btnDownloadICS" runat="server" Text="Download to Outlook Calendar" CssClass="outlook-download-btn" />
+            <asp:Button ID="btnDownloadICS" runat="server" Text="📅 Download Calendar File" CssClass="outlook-download-btn" />
+            <asp:HyperLink ID="lnkSubscribeOutlook" runat="server" Text="🔄 Subscribe in Outlook Calendar" CssClass="outlook-subscribe-link" Target="_blank" />
         </div>
 
         <div class="filter-box">
             <span class="filter-title">FILTER</span>
 
-            <asp:LinkButton ID="lnkAll" runat="server" CssClass="filter-link">
-                <span class="dot dot-all"></span>All
-            </asp:LinkButton>
-
-            <asp:LinkButton ID="lnkExams" runat="server" CssClass="filter-link">
-                <span class="dot dot-exams"></span>Exams
-            </asp:LinkButton>
-
-            <asp:LinkButton ID="lnkDeadlines" runat="server" CssClass="filter-link">
-                <span class="dot dot-deadlines"></span>Deadlines
-            </asp:LinkButton>
-
-            <asp:LinkButton ID="lnkRegistration" runat="server" CssClass="filter-link">
-                <span class="dot dot-registration"></span>Registration
-            </asp:LinkButton>
-
-            <asp:LinkButton ID="lnkHolidays" runat="server" CssClass="filter-link">
-                <span class="dot dot-holidays"></span>Holidays
-            </asp:LinkButton>
-
-            <asp:LinkButton ID="lnkAcademic" runat="server" CssClass="filter-link">
-                <span class="dot dot-academic"></span>Academic
-            </asp:LinkButton>
+            <asp:LinkButton ID="lnkAll" runat="server" CssClass="filter-link"> <span class="dot dot-all"></span>All </asp:LinkButton>
+            <asp:LinkButton ID="lnkExams" runat="server" CssClass="filter-link"> <span class="dot dot-exams"></span>Exams </asp:LinkButton>
+            <asp:LinkButton ID="lnkDeadlines" runat="server" CssClass="filter-link"> <span class="dot dot-deadlines"></span>Deadlines </asp:LinkButton>
+            <asp:LinkButton ID="lnkRegistration" runat="server" CssClass="filter-link"> <span class="dot dot-registration"></span>Registration</asp:LinkButton>
+            <asp:LinkButton ID="lnkHolidays" runat="server" CssClass="filter-link"> <span class="dot dot-holidays"></span>Holidays</asp:LinkButton>
+			<asp:LinkButton ID="lnkAcademic" runat="server" CssClass="filter-link"> <span class="dot dot-academic"></span>Academic</asp:LinkButton>
         </div>
 
         <asp:Label ID="lblError" runat="server" CssClass="error-message"></asp:Label>

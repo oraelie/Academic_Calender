@@ -97,9 +97,17 @@
 		background: #1f7a4c;
 		color: white;
 	}
+
+/* ================= OUTLOOK BUTTONS ================= */
+
 .outlook-download-box {
 	text-align: center;
 	margin: -10px auto 25px auto;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	gap: 15px;
+	flex-wrap: wrap;
 }
 
 .outlook-download-btn {
@@ -116,6 +124,25 @@
 
 	.outlook-download-btn:hover {
 		background: #1f7a4c;
+	}
+
+.outlook-subscribe-link {
+	display: inline-block;
+	background: #ffffff;
+	color: #00896A;
+	border: 2px solid #00896A;
+	font-size: 16px;
+	font-weight: bold;
+	padding: 11px 22px;
+	border-radius: 10px;
+	text-decoration: none;
+	box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+}
+
+	.outlook-subscribe-link:hover {
+		background: #e9f6ef;
+		color: #1f7a4c;
+		text-decoration: none;
 	}
 
 /* ================= FILTER ================= */
@@ -191,15 +218,6 @@
 
 /* ================= MONTHLY LIST VIEW ================= */
 
-/*.monthly-list-card {
-	background: #ffffff;
-	border: 1px solid #d9dde5;
-	border-radius: 10px;
-	overflow: hidden;
-	margin-bottom: 28px;
-	box-shadow: 0 3px 10px rgba(0,0,0,0.04);
-}*/
-
 .monthly-list-card {
 	background: #ffffff;
 	border: 1px solid #d9dde5;
@@ -209,13 +227,13 @@
 	box-shadow: none;
 }
 
-.monthly-list-card:first-child {
-	border-radius: 10px 10px 0 0;
+	.monthly-list-card:first-child {
+		border-radius: 10px 10px 0 0;
 	}
 
-.monthly-list-card:last-child {
-	border-radius: 0 0 10px 10px;
-}
+	.monthly-list-card:last-child {
+		border-radius: 0 0 10px 10px;
+	}
 
 .monthly-list-header {
 	background: #00896A;
@@ -239,7 +257,7 @@
 .monthly-name {
 	font-size: 22px;
 	font-weight: 700;
-	font-family: "Segoe UI", Times New Roman, sans-serif;
+	font-family: "Segoe UI", "Times New Roman", sans-serif;
 	color: #ffffff;
 	text-transform: uppercase;
 	letter-spacing: 1px;
@@ -248,7 +266,7 @@
 .monthly-year {
 	font-size: 22px;
 	font-weight: 500;
-	font-family: "Segoe UI",Times New Roman, sans-serif;
+	font-family: "Segoe UI", "Times New Roman", sans-serif;
 	color: #e6fff7;
 	letter-spacing: 3px;
 }
@@ -411,13 +429,13 @@
 	background: white;
 }
 
-.calendar-table th {
-	background: #1f7a4c;
-	color: white;
-	padding: 16px;
-	font-size: 17px;
-	letter-spacing: 4px;
-}
+	.calendar-table th {
+		background: #1f7a4c;
+		color: white;
+		padding: 16px;
+		font-size: 17px;
+		letter-spacing: 4px;
+	}
 
 	.calendar-table td {
 		height: 135px;
@@ -537,6 +555,19 @@
 		width: 100%;
 	}
 
+	.outlook-download-box {
+		margin: -5px auto 25px auto;
+		flex-direction: column;
+		gap: 10px;
+	}
+
+	.outlook-download-btn,
+	.outlook-subscribe-link {
+		width: 100%;
+		box-sizing: border-box;
+		text-align: center;
+	}
+
 	.filter-box {
 		justify-content: flex-start;
 		gap: 18px;
@@ -573,10 +604,10 @@
 		min-width: 850px;
 	}
 
-	.calendar-table td {
-		height: 110px;
-		padding: 6px;
-	}
+		.calendar-table td {
+			height: 110px;
+			padding: 6px;
+		}
 
 	.calendar-event {
 		font-size: 11px;

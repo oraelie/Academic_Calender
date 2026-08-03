@@ -56,6 +56,9 @@ Public Class AcademicCalendar
     End Property
 
     Protected Sub Page_Load(ByVal sender As Object, ByVal e As EventArgs) Handles Me.Load
+
+        lnkSubscribeOutlook.NavigateUrl = GetCalendarSubscriptionUrl()
+
         If Not IsPostBack Then
             CurrentViewMode = "List"
             CurrentCategory = "All"
@@ -63,6 +66,7 @@ Public Class AcademicCalendar
             SetDefaultMonthFromExcel()
             LoadPage()
         End If
+
     End Sub
 
     Private Sub SetDefaultMonthFromExcel()
@@ -737,6 +741,24 @@ Public Class AcademicCalendar
         End If
 
         Return cleanValue
+
+    End Function
+    Private Function GetCalendarSubscriptionUrl() As String
+
+        Dim requestUrl As Uri = Request.Url
+        Dim baseUrl As String = requestUrl.GetLeftPart(UriPartial.Authority)
+
+        Dim feedUrl As String = baseUrl & ResolveUrl("~/AcademicCalendarFeed.aspx")
+
+        If feedUrl.StartsWith("https://", StringComparison.OrdinalIgnoreCase) Then
+            Return "webcal://" & feedUrl.Substring("https://".Length)
+        End If
+
+        If feedUrl.StartsWith("http://", StringComparison.OrdinalIgnoreCase) Then
+            Return "webcal://" & feedUrl.Substring("http://".Length)
+        End If
+
+        Return feedUrl
 
     End Function
 

@@ -104,6 +104,7 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="AcademicCalendar.aspx" />
+    <Content Include="AcademicCalendarFeed.aspx" />
     <Content Include="CSS\AcademicCalendar.css" />
     <Content Include="Global.asax" />
     <Content Include="Images\back_grd.png" />
@@ -119,6 +120,13 @@
     <Compile Include="AcademicCalendar.aspx.vb">
       <DependentUpon>AcademicCalendar.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="AcademicCalendarFeed.aspx.designer.vb">
+      <DependentUpon>AcademicCalendarFeed.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="AcademicCalendarFeed.aspx.vb">
+      <DependentUpon>AcademicCalendarFeed.aspx</DependentUpon>
+      <SubType>ASPXCodebehind</SubType>
     </Compile>
     <Compile Include="Global.asax.vb">
       <DependentUpon>Global.asax</DependentUpon>
