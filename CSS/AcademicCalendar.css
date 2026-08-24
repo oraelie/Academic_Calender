@@ -271,6 +271,24 @@
 	letter-spacing: 3px;
 }
 
+.monthly-time {
+	color: #6b7280;
+	font-size: 16px;
+	font-weight: normal;
+}
+
+.monthly-location {
+	color: #6b7280;
+	font-size: 17px;
+	font-style: italic;
+}
+
+.calendar-location {
+	font-size: 11px;
+	font-style: italic;
+	opacity: 0.9;
+}
+
 .collapse-btn {
 	width: 34px;
 	height: 34px;
