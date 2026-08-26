@@ -3,34 +3,28 @@
 <asp:Content ID="ContentHead" ContentPlaceHolderID="HeadContent" runat="server">
     <link href="<%= ResolveUrl("~/CSS/AcademicCalendar.css") %>" rel="stylesheet" />
 </asp:Content>
-<asp:Content ID="Content1" ContentPlaceHolderID="HeaderContent" runat="server">
-	 <div class="logo-banner">
-			<div class="page-title">
-				<h1>Academic Calendar</h1>
-				<p>View academic events, deadlines, exams, registration dates, and holidays</p>
-			</div>
-			<div class="page-test">
-				<h1>Academic Calendar Test</h1>
-				<p>Test Test Test Test</p>
-			</div>
 
-		 <img src="<%= ResolveUrl("~/Images/Sagesse.png") %>" class="page-logo" alt="Université La Sagesse Logo" />
-	 </div>
-</asp:Content>
 <asp:Content ID="ContentMain" ContentPlaceHolderID="MainContent" runat="server">
 
     <div class="calendar-wrapper">
-		<div class="cal-controls">
-			<div class="view-switch">
-				<asp:Button ID="btnListView" runat="server" Text="List" CssClass="view-btn view-btn-active" />
-				<asp:Button ID="btnCalendarView" runat="server" Text="Calendar" CssClass="view-btn" />
-			</div>
-			<div class="outlook-download-box">
-				<asp:Button ID="btnDownloadICS" runat="server" Text="📅 Download Calendar File" CssClass="outlook-download-btn" />
-				<asp:HyperLink ID="lnkSubscribeOutlook" runat="server" Text="🔄 Subscribe in Outlook Calendar" CssClass="outlook-subscribe-link"/>
-			</div>
-		</div>
-        
+
+        <div class="logo-banner">
+            <img src="<%= ResolveUrl("~/Images/Sagesse.png") %>" class="page-logo" alt="Université La Sagesse Logo" />
+        </div>
+
+        <div class="page-title">
+            <h1>Academic Calendar</h1>
+            <p>View academic events, deadlines, exams, registration dates, and holidays</p>
+        </div>
+
+        <div class="view-switch">
+            <asp:Button ID="btnListView" runat="server" Text="☰  List" CssClass="view-btn view-btn-active" />
+            <asp:Button ID="btnCalendarView" runat="server" Text="🟩  Calendar" CssClass="view-btn" />
+        </div>
+        <div class="outlook-download-box">
+            <asp:Button ID="btnDownloadICS" runat="server" Text="📅 Download Calendar File" CssClass="outlook-download-btn" />
+            <asp:HyperLink ID="lnkSubscribeOutlook" runat="server" Text="🔄 Subscribe in Outlook Calendar" CssClass="outlook-subscribe-link"/>
+        </div>
 
         <div class="filter-box">
             <span class="filter-title">FILTER</span>
