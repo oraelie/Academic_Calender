@@ -478,7 +478,7 @@ Public Class AcademicCalendar
             html.Append("<div class='monthly-list-row'>")
 
             html.Append("<div class='monthly-date'>")
-            html.Append(FormatListDate(startDate, endDate, startTime, endTime))
+            html.Append(FormatListDate(startDate, endDate))
             html.Append("</div>")
 
             html.Append("<div class='monthly-dot-cell'>")
@@ -512,28 +512,17 @@ Public Class AcademicCalendar
         Return html.ToString()
 
     End Function
-
-    Private Function FormatListDate(startDate As Date, endDate As Date, startTime As String, endTime As String) As String
-
-        Dim dateText As String
+    Private Function FormatListDate(startDate As Date, endDate As Date) As String
 
         If startDate = endDate Then
-            dateText = startDate.ToString("ddd - MMM d")
-        ElseIf startDate.Month = endDate.Month AndAlso startDate.Year = endDate.Year Then
-            dateText = startDate.ToString("ddd - MMM d") & "–" & endDate.ToString("ddd - d")
-        Else
-            dateText = startDate.ToString("ddd - MMM d") & "–" & endDate.ToString("ddd - MMM d")
+            Return startDate.ToString("ddd - MMM d")
         End If
 
-        If startTime <> "" AndAlso endTime <> "" Then
-            dateText &= "<br /><span class='monthly-time'>" & startTime & " - " & endTime & "</span>"
-        ElseIf startTime <> "" Then
-            dateText &= "<br /><span class='monthly-time'>" & startTime & "</span>"
-        ElseIf endTime <> "" Then
-            dateText &= "<br /><span class='monthly-time'>Until " & endTime & "</span>"
+        If startDate.Month = endDate.Month AndAlso startDate.Year = endDate.Year Then
+            Return startDate.ToString("ddd - MMM d") & "–" & endDate.ToString("ddd - d")
         End If
 
-        Return dateText
+        Return startDate.ToString("ddd - MMM d") & "–" & endDate.ToString("ddd - MMM d")
 
     End Function
 
