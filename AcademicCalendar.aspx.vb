@@ -519,7 +519,7 @@ Public Class AcademicCalendar
         End If
 
         If startDate.Month = endDate.Month AndAlso startDate.Year = endDate.Year Then
-            Return startDate.ToString("ddd - MMM d") & "–" & endDate.ToString("ddd - d")
+            Return startDate.ToString("ddd - MMM d") & "–" & endDate.ToString("ddd - MMM d")
         End If
 
         Return startDate.ToString("ddd - MMM d") & "–" & endDate.ToString("ddd - MMM d")

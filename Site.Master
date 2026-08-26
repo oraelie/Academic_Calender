@@ -15,8 +15,12 @@
 
 <body>
     <form id="form1" runat="server">
-
+    <header>
+            <asp:ContentPlaceHolder ID="HeaderContent" runat="server">
+            </asp:ContentPlaceHolder>
+    </header>
         <main>
+        
             <asp:ContentPlaceHolder ID="MainContent" runat="server">
             </asp:ContentPlaceHolder>
         </main>
