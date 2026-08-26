@@ -21,8 +21,11 @@
 				<asp:Button ID="btnCalendarView" runat="server" Text="Calendar" CssClass="view-btn" />
 			</div>
 			<div class="outlook-download-box">
-				<asp:Button ID="btnDownloadICS" runat="server" Text="📅 Download Calendar File" CssClass="outlook-download-btn" />
-				<asp:HyperLink ID="lnkSubscribeOutlook" runat="server" Text="🔄 Subscribe in Outlook Calendar" CssClass="outlook-subscribe-link"/>
+				<!--<asp:Button ID="btnDownloadICS" runat="server" Text="📅 Download Calendar File" CssClass="outlook-download-btn" />-->
+				<asp:HyperLink ID="lnkSubscribeOutlook" runat="server" Text="Subscribe in Outlook Calendar" CssClass="outlook-subscribe-link">
+					Subscribe in Outlook Calendar
+					<span class="btn-icon" aria-hidden="true">→</span>
+				</asp:HyperLink>
 			</div>
 		</div>
         

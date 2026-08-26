@@ -6,17 +6,35 @@
 	background-attachment: fixed;
 	margin: 0;
 	padding: 0;
-	font-family: Arial, sans-serif;
+	font-family: "Roboto Condensed", Sans-serif;
 	color: #10233f;
 }
 
 /* ================= LOGO BANNER ================= */
 
-header {
+.page-hero {
+	background: linear-gradient(180deg, #faf9f6, #fff);
 	border-bottom: 1px solid #dfdfdf;
 	padding: 2.4rem 0 2.8rem;
+	position: relative;
+	overflow: hidden;
+}
+	.page-hero::before {
+		content: "";
+		pointer-events: none;
+		background: radial-gradient(circle, #2e8b572b, #0000 50%);
+		border-radius: 50%;
+		width: 500px;
+		height: 500px;
+		position: absolute;
+		top: -85%;
+		right: -10%;
+	}
+main {
+	background-color: #fafafa;
 }
 .logo-banner {
+
 	padding: 0 1.5rem;
 	margin-bottom: 1.5rem;
 	display: flex;
@@ -43,7 +61,7 @@ header {
 .cal-controls {
 	display: flex;
 	justify-content: space-between;
-	margin: 2.4rem 0;
+	padding: 2.4rem 0;
 }
 	.page-title {
 		
@@ -67,7 +85,7 @@ header {
 	border: 1.5px solid #dfdfdf;
 	background: #fff;
 	border-radius: 999px;
-	gap: 10px;
+	gap: 0px;
 	padding: 3px;
 	display: inline-flex;
 	height: 38px;
@@ -75,18 +93,18 @@ header {
 }
 
 .view-btn {
-	width: 50%;
 	border: none;
 	cursor: pointer;
 	border-radius: 999px;
-	padding: .45rem 1.1rem;
+	padding: 0.45rem 1.5rem;
 	font-size: .88rem;
-	font-weight: 600;
-	}
+	background-color: transparent;
+	color: #4b5a66;
+}
 
-		.view-btn:hover {
-			background: #e9f6ef;
-		}
+	.view-btn:hover {
+		background: #fafafa;
+	}
 
 	.view-btn-active {
 		background: #00896A;
@@ -94,7 +112,7 @@ header {
 	}
 
 		.view-btn-active:hover {
-			background: #1f7a4c;
+			background: #016952;
 			color: white;
 		}
 	/* ================= OUTLOOK BUTTONS ================= */
@@ -106,6 +124,10 @@ header {
 		justify-content: center;
 		gap: 15px;
 		flex-wrap: wrap;
+	}
+	.outlook-subscribe-link .btn-icon {
+		padding-left: 0.5rem;
+		font-size: 1rem;
 	}
 
 	.outlook-download-btn {

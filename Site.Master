@@ -15,7 +15,7 @@
 
 <body>
     <form id="form1" runat="server">
-    <header>
+    <header class="page-hero">
             <asp:ContentPlaceHolder ID="HeaderContent" runat="server">
             </asp:ContentPlaceHolder>
     </header>
