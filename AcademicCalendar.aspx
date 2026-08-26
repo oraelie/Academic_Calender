@@ -9,6 +9,11 @@
 				<h1>Academic Calendar</h1>
 				<p>View academic events, deadlines, exams, registration dates, and holidays</p>
 			</div>
+			<div class="page-test">
+				<h1>Academic Calendar Test</h1>
+				<p>Test Test Test Test</p>
+			</div>
+
 		 <img src="<%= ResolveUrl("~/Images/Sagesse.png") %>" class="page-logo" alt="Université La Sagesse Logo" />
 	 </div>
 </asp:Content>
