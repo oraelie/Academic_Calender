@@ -54,7 +54,6 @@ Public Class AcademicCalendar
             ViewState("CurrentMonth") = New Date(value.Year, value.Month, 1)
         End Set
     End Property
-
     Protected Sub Page_Load(ByVal sender As Object, ByVal e As EventArgs) Handles Me.Load
 
         lnkSubscribeOutlook.NavigateUrl = GetCalendarSubscriptionUrl()
@@ -76,6 +75,14 @@ Public Class AcademicCalendar
         Dim baseUrl As String = requestUrl.GetLeftPart(UriPartial.Authority)
 
         Dim feedUrl As String = baseUrl & ResolveUrl("~/AcademicCalendarFeed.aspx")
+
+        If feedUrl.StartsWith("https://", StringComparison.OrdinalIgnoreCase) Then
+            Return "webcal://" & feedUrl.Substring("https://".Length)
+        End If
+
+        If feedUrl.StartsWith("http://", StringComparison.OrdinalIgnoreCase) Then
+            Return "webcal://" & feedUrl.Substring("http://".Length)
+        End If
 
         Return feedUrl
 
@@ -138,7 +145,14 @@ Public Class AcademicCalendar
                     Throw New Exception("The Excel file does not contain any sheet.")
                 End If
 
-                Dim excelTable As DataTable = dataSet.Tables(0)
+                Dim excelTable As DataTable = Nothing
+
+                If dataSet.Tables.Contains("Sheet1") Then
+                    excelTable = dataSet.Tables("Sheet1")
+                Else
+                    Throw New Exception("Sheet1 was not found in the Excel file.")
+                End If
+
 
                 ValidateRequiredColumns(excelTable)
 
@@ -257,7 +271,6 @@ Public Class AcademicCalendar
                value.ToString().Trim() = ""
 
     End Function
-
     Private Function ParseExcelDate(value As Object, fieldName As String, eventTitle As String) As Date
 
         If value Is Nothing OrElse value Is DBNull.Value OrElse value.ToString().Trim() = "" Then
@@ -266,6 +279,16 @@ Public Class AcademicCalendar
 
         If TypeOf value Is Date Then
             Return Convert.ToDateTime(value)
+        End If
+
+        If IsNumeric(value) Then
+
+            Dim numericDate As Double = Convert.ToDouble(value)
+
+            If numericDate > 0 Then
+                Return DateTime.FromOADate(numericDate)
+            End If
+
         End If
 
         Dim textDate As String = value.ToString().Trim()
@@ -290,7 +313,6 @@ Public Class AcademicCalendar
         Throw New Exception("Invalid date in " & fieldName & " for event: " & eventTitle & ". Use dd-mm-yyyy, example: 16-08-2026.")
 
     End Function
-
     Private Function ParseExcelTimeText(value As Object, fieldName As String, eventTitle As String) As String
 
         If value Is Nothing OrElse value Is DBNull.Value OrElse value.ToString().Trim() = "" Then
@@ -299,6 +321,16 @@ Public Class AcademicCalendar
 
         If TypeOf value Is Date Then
             Return Convert.ToDateTime(value).ToString("HH:mm")
+        End If
+
+        If IsNumeric(value) Then
+
+            Dim numericTime As Double = Convert.ToDouble(value)
+
+            If numericTime >= 0 AndAlso numericTime < 1 Then
+                Return DateTime.FromOADate(numericTime).ToString("HH:mm")
+            End If
+
         End If
 
         Dim textTime As String = value.ToString().Trim()
@@ -875,8 +907,7 @@ Public Class AcademicCalendar
 
             Dim uniqueId As String =
                 startDate.ToString("yyyyMMdd") & "-" &
-                CleanUidText(eventTitle) & "-" &
-                Guid.NewGuid().ToString() & "@academiccalendar"
+                CleanUidText(eventTitle) & "@academiccalendar"
 
             icsContent.AppendLine("BEGIN:VEVENT")
             icsContent.AppendLine("UID:" & uniqueId)

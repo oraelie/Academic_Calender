@@ -110,7 +110,6 @@ Public Class AcademicCalendarFeed
                     End If
 
                     Dim startDate As Date = ParseExcelDate(row("StartDay"), "StartDay", eventTitle)
-
                     Dim endDate As Date = startDate
 
                     If Not IsEmpty(row("EndDay")) Then
@@ -205,6 +204,16 @@ Public Class AcademicCalendarFeed
             Return Convert.ToDateTime(value)
         End If
 
+        If IsNumeric(value) Then
+
+            Dim numericDate As Double = Convert.ToDouble(value)
+
+            If numericDate > 0 Then
+                Return DateTime.FromOADate(numericDate)
+            End If
+
+        End If
+
         Dim textDate As String = value.ToString().Trim()
         Dim parsedDate As Date
 
@@ -236,6 +245,16 @@ Public Class AcademicCalendarFeed
 
         If TypeOf value Is Date Then
             Return Convert.ToDateTime(value).ToString("HH:mm")
+        End If
+
+        If IsNumeric(value) Then
+
+            Dim numericTime As Double = Convert.ToDouble(value)
+
+            If numericTime >= 0 AndAlso numericTime < 1 Then
+                Return DateTime.FromOADate(numericTime).ToString("HH:mm")
+            End If
+
         End If
 
         Dim textTime As String = value.ToString().Trim()

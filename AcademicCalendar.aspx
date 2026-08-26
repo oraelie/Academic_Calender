@@ -23,7 +23,7 @@
         </div>
         <div class="outlook-download-box">
             <asp:Button ID="btnDownloadICS" runat="server" Text="📅 Download Calendar File" CssClass="outlook-download-btn" />
-            <asp:HyperLink ID="lnkSubscribeOutlook" runat="server" Text="🔄 Subscribe in Outlook Calendar" CssClass="outlook-subscribe-link" Target="_blank" />
+            <asp:HyperLink ID="lnkSubscribeOutlook" runat="server" Text="🔄 Subscribe in Outlook Calendar" CssClass="outlook-subscribe-link"/>
         </div>
 
         <div class="filter-box">
