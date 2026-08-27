@@ -10,7 +10,8 @@
 				<p>View academic events, deadlines, exams, registration dates, and holidays</p>
 			</div>
 		 <!--<img src="<%= ResolveUrl("~/Images/Sagesse.png") %>" class="page-logo" alt="Université La Sagesse Logo" />-->
-		 <img src="<%= ResolveUrl("~/Images/ULS-logo-vertical.png") %>" class="page-logo" alt="Université La Sagesse Logo" />
+		 <img src="<%= ResolveUrl("~/Images/ULS-logo-vertical.png") %>" class="page-logo xs-none" alt="Université La Sagesse Logo" />
+		 <img src="<%= ResolveUrl("~/Images/ULS-logo-mobile.png") %>" class="page-logo xs-block" alt="Université La Sagesse Logo" />
 	 </div>
 </asp:Content>
 <asp:Content ID="ContentMain" ContentPlaceHolderID="MainContent" runat="server">
@@ -57,7 +58,7 @@
                 <div class="calendar-nav">
                     <asp:Button ID="btnPrevMonth" runat="server" Text="‹" CssClass="nav-btn" />
 
-                    <div>
+                    <div class="calendar-date">
                         <span class="calendar-month-title">
                             <asp:Literal ID="litCalendarMonth" runat="server"></asp:Literal>
                         </span>
@@ -100,7 +101,6 @@
 	function toggleMonthCard(bodyId, iconId) {
 		var body = document.getElementById(bodyId);
 		var icon = document.getElementById(iconId);
-		var open_toggle = document.getElementsByClassName("monthly-list-card");
 
 		if (!body || !icon) {
 			return;
@@ -109,7 +109,7 @@
 		var storageKey = "monthCardState_" + bodyId;
 
         if (body.style.display === "none") {
-            body.style.display = "block";
+            body.style.display = "flex";
             icon.innerHTML = "−";
             localStorage.setItem(storageKey, "expanded");
             open_toggle.classList.toggle("open");
@@ -149,7 +149,7 @@
 			   We ignore old saved collapsed state for the current month.
 			*/
 			if (isCurrentMonth === "yes") {
-				body.style.display = "block";
+				body.style.display = "flex";
 				icon.innerHTML = "−";
 				localStorage.setItem(storageKey, "expanded");
 				continue;
@@ -159,14 +159,14 @@
 				body.style.display = "none";
 				icon.innerHTML = "+";
 			} else if (savedState === "expanded") {
-				body.style.display = "block";
+				body.style.display = "flex";
 				icon.innerHTML = "−";
 			} else {
 				if (defaultState === "collapsed") {
 					body.style.display = "none";
 					icon.innerHTML = "+";
 				} else {
-					body.style.display = "block";
+					body.style.display = "flex";
 					icon.innerHTML = "−";
 				}
 			}

@@ -456,7 +456,7 @@ Public Class AcademicCalendar
                 Dim defaultIcon As String = If(isCurrentMonth, "−", "+")
                 Dim defaultState As String = If(isCurrentMonth, "expanded", "collapsed")
                 Dim isCurrentMonthText As String = If(isCurrentMonth, "yes", "no")
-
+                html.Append("<div class='monthly-lists'>")
                 html.Append("<div class='monthly-list-card' onclick=""toggleMonthCard('" & bodyId & "', '" & iconId & "')"">")
 
                 html.Append("<div class='monthly-list-header'>")
@@ -480,9 +480,8 @@ Public Class AcademicCalendar
             html.Append("<div class='monthly-date'>")
             html.Append(FormatListDate(startDate, endDate))
             html.Append("</div>")
-
             html.Append("<div class='monthly-dot-cell'>")
-            html.Append("<span class='dot " & GetDotClass(category) & "'></span>")
+
             html.Append("</div>")
 
             html.Append("<div class='monthly-title'>")
@@ -496,6 +495,7 @@ Public Class AcademicCalendar
 
             html.Append("<div class='monthly-category'>")
             html.Append("<span class='category-badge " & GetCategoryBadgeClass(category) & "'>")
+            html.Append("<span class='dot " & GetDotClass(category) & "'></span>")
             html.Append(GetCategoryLabel(category))
             html.Append("</span>")
             html.Append("</div>")
@@ -507,6 +507,7 @@ Public Class AcademicCalendar
         If currentMonthKey <> "" Then
             html.Append("</div>")
             html.Append("</div>")
+            html.Append("</div>")
         End If
 
         Return html.ToString()
@@ -514,15 +515,28 @@ Public Class AcademicCalendar
     End Function
     Private Function FormatListDate(startDate As Date, endDate As Date) As String
 
+        Dim startHtml As String =
+            "<div class='date start-date'>" &
+        "<span class='event-day'>" & startDate.ToString("ddd") & "</span>" &
+          "<span class='event-date'>" & startDate.ToString("dd") & "</span>" &
+        "<span class='event-month'>" & startDate.ToString("MMM") & "</span>" & "</div>"
+
+
         If startDate = endDate Then
-            Return startDate.ToString("ddd - MMM d")
+            Return startHtml
         End If
 
-        If startDate.Month = endDate.Month AndAlso startDate.Year = endDate.Year Then
-            Return startDate.ToString("ddd - MMM d") & "–" & endDate.ToString("ddd - MMM d")
-        End If
 
-        Return startDate.ToString("ddd - MMM d") & "–" & endDate.ToString("ddd - MMM d")
+        Dim endHtml As String =
+             "<div class='date end-date'>" &
+        "<span class='event-day'>" & endDate.ToString("ddd") & "</span>" &
+        "<span class='event-date'>" & endDate.ToString("dd") & "</span>" &
+        "<span class='event-month'>" & endDate.ToString("MMM") & "</span>" & "</div>"
+
+
+        Return startHtml &
+           "<span class='event-date-separator'>–</span>" &
+           endHtml
 
     End Function
 
@@ -645,7 +659,7 @@ Public Class AcademicCalendar
 
             For day As Integer = 1 To 7
 
-                html.Append("<td>")
+
 
                 Dim dayClass As String = ""
 
@@ -654,14 +668,14 @@ Public Class AcademicCalendar
                 End If
 
                 If currentDate.Date = Date.Today.Date Then
-
+                    html.Append("<td class='today-date'>")
                     html.Append("<div class='day-number'>")
                     html.Append("<span class='today-number'>" & currentDate.Day.ToString() & "</span>")
                     html.Append("</div>")
 
                 Else
-
-                    html.Append("<div class='day-number " & dayClass & "'>")
+                    html.Append("<td class='" & dayClass & "'>")
+                    html.Append("<div class='day-number'>")
                     html.Append(currentDate.Day.ToString())
                     html.Append("</div>")
 
