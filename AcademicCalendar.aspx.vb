@@ -65,7 +65,7 @@ Public Class AcademicCalendar
 
             SetDefaultMonthFromExcel()
             LoadPage()
-
+            UpdateActiveFilter()
         End If
 
     End Sub
@@ -383,6 +383,7 @@ Public Class AcademicCalendar
             lblError.Visible = True
 
         End Try
+        UpdateActiveFilter()
 
     End Sub
 
@@ -790,12 +791,14 @@ Public Class AcademicCalendar
         CurrentViewMode = "List"
         LoadPage()
 
+
     End Sub
 
     Protected Sub btnCalendarView_Click(sender As Object, e As EventArgs) Handles btnCalendarView.Click
 
         CurrentViewMode = "Calendar"
         LoadPage()
+
 
     End Sub
 
@@ -804,6 +807,7 @@ Public Class AcademicCalendar
         CurrentMonth = CurrentMonth.AddMonths(-1)
         LoadPage()
 
+
     End Sub
 
     Protected Sub btnNextMonth_Click(sender As Object, e As EventArgs) Handles btnNextMonth.Click
@@ -811,12 +815,14 @@ Public Class AcademicCalendar
         CurrentMonth = CurrentMonth.AddMonths(1)
         LoadPage()
 
+
     End Sub
 
     Protected Sub lnkAll_Click(sender As Object, e As EventArgs) Handles lnkAll.Click
 
         CurrentCategory = "All"
         LoadPage()
+        UpdateActiveFilter()
 
     End Sub
 
@@ -825,12 +831,14 @@ Public Class AcademicCalendar
         CurrentCategory = "Exams"
         LoadPage()
 
+        UpdateActiveFilter()
     End Sub
 
     Protected Sub lnkDeadlines_Click(sender As Object, e As EventArgs) Handles lnkDeadlines.Click
 
         CurrentCategory = "Deadlines"
         LoadPage()
+        UpdateActiveFilter()
 
     End Sub
 
@@ -838,6 +846,7 @@ Public Class AcademicCalendar
 
         CurrentCategory = "Registration"
         LoadPage()
+        UpdateActiveFilter()
 
     End Sub
 
@@ -845,6 +854,7 @@ Public Class AcademicCalendar
 
         CurrentCategory = "Holidays"
         LoadPage()
+        UpdateActiveFilter()
 
     End Sub
 
@@ -853,8 +863,42 @@ Public Class AcademicCalendar
         CurrentCategory = "Academic"
         LoadPage()
 
+        UpdateActiveFilter()
     End Sub
+    Private Sub UpdateActiveFilter()
 
+        ' Reset all buttons
+        lnkAll.CssClass = "filter-link"
+        lnkExams.CssClass = "filter-link"
+        lnkDeadlines.CssClass = "filter-link"
+        lnkRegistration.CssClass = "filter-link"
+        lnkHolidays.CssClass = "filter-link"
+        lnkAcademic.CssClass = "filter-link"
+
+        ' Add active based on CurrentCategory
+        Select Case CurrentCategory
+
+            Case "All"
+                lnkAll.CssClass &= " active"
+
+            Case "Exams"
+                lnkExams.CssClass &= " active"
+
+            Case "Deadlines"
+                lnkDeadlines.CssClass &= " active"
+
+            Case "Registration"
+                lnkRegistration.CssClass &= " active"
+
+            Case "Holidays"
+                lnkHolidays.CssClass &= " active"
+
+            Case "Academic"
+                lnkAcademic.CssClass &= " active"
+
+        End Select
+
+    End Sub
     Protected Sub btnDownloadICS_Click(sender As Object, e As EventArgs) Handles btnDownloadICS.Click
 
         Try

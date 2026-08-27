@@ -18,7 +18,7 @@
 
     <div class="calendar-wrapper">
 		<div class="cal-controls">
-			<div class="view-switch">
+			<div class="view-switch xs-none">
 				<asp:Button ID="btnListView" runat="server" Text="List" CssClass="view-btn view-btn-active" />
 				<asp:Button ID="btnCalendarView" runat="server" Text="Calendar" CssClass="view-btn" />
 			</div>
@@ -51,7 +51,7 @@
 
         </asp:Panel>
 
-        <asp:Panel ID="pnlCalendarView" runat="server">
+        <asp:Panel ID="pnlCalendarView" runat="server" CssClass="xs-none">
 
             <div class="calendar-card">
 

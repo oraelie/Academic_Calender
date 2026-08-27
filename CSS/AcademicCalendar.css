@@ -228,13 +228,20 @@ main {
 	gap: .5rem;
 	font-weight: 400;
 	display: flex;
+	padding: 5px 14px;
 }
 
-		.filter-link:hover {
-			color: #1f7a4c;
-			text-decoration: none;
-		}
-
+	.filter-link:hover {
+		color: #1f7a4c;
+		text-decoration: none;
+		background-color: #d9ebe2;
+		border-radius: 14px;
+	}
+	.filter-link.active {
+		color: #1f7a4c;
+		background-color: #d9ebe2;
+		border-radius: 14px;
+	}
 .dot {
 	border-radius: 50%;
 	flex: none;
@@ -428,7 +435,13 @@ main {
 	}
 	/* ================= CALENDAR VIEW ================= */
 
+	.desktop-calendar {
+    display: block;
+}
 
+.mobile-calendar {
+    display: none;
+}
 .calendar-nav {
 	display: flex;
 	align-items: center;
@@ -575,6 +588,9 @@ main {
 		.page-logo {
 			width: 25%;
 		}
+		.filter-box {
+			gap: 0.5rem;
+		}
 	}
 	@media(max-width: 768px) {
 		.xs-none {
@@ -628,6 +644,7 @@ main {
 			border: 1px solid #e6e8e9;
 			padding: 5px 18px;
 		}
+		
 		.monthly-list-card {
 			box-shadow: none;
 			border: 0;

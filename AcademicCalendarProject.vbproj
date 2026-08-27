@@ -108,6 +108,7 @@
     <Content Include="CSS\AcademicCalendar.css" />
     <Content Include="Global.asax" />
     <Content Include="Images\back_grd.png" />
+    <Content Include="Images\ULS-logo-mobile.png" />
     <Content Include="Images\Sagesse-1.png" />
     <Content Include="Images\Sagesse2.png" />
     <Content Include="Images\sagesse1.jpg" />

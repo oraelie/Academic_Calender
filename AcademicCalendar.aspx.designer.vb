@@ -13,183 +13,183 @@ Option Explicit On
 
 Partial Public Class AcademicCalendar
 
-	'''<summary>
-	'''btnListView control.
-	'''</summary>
-	'''<remarks>
-	'''Auto-generated field.
-	'''To modify move field declaration from designer file to code-behind file.
-	'''</remarks>
-	Protected WithEvents btnListView As Global.System.Web.UI.WebControls.Button
+    '''<summary>
+    '''btnListView control.
+    '''</summary>
+    '''<remarks>
+    '''Auto-generated field.
+    '''To modify move field declaration from designer file to code-behind file.
+    '''</remarks>
+    Protected WithEvents btnListView As Global.System.Web.UI.WebControls.Button
 
-	'''<summary>
-	'''btnCalendarView control.
-	'''</summary>
-	'''<remarks>
-	'''Auto-generated field.
-	'''To modify move field declaration from designer file to code-behind file.
-	'''</remarks>
-	Protected WithEvents btnCalendarView As Global.System.Web.UI.WebControls.Button
+    '''<summary>
+    '''btnCalendarView control.
+    '''</summary>
+    '''<remarks>
+    '''Auto-generated field.
+    '''To modify move field declaration from designer file to code-behind file.
+    '''</remarks>
+    Protected WithEvents btnCalendarView As Global.System.Web.UI.WebControls.Button
 
-	'''<summary>
-	'''btnDownloadICS control.
-	'''</summary>
-	'''<remarks>
-	'''Auto-generated field.
-	'''To modify move field declaration from designer file to code-behind file.
-	'''</remarks>
-	Protected WithEvents btnDownloadICS As Global.System.Web.UI.WebControls.Button
+    '''<summary>
+    '''btnDownloadICS control.
+    '''</summary>
+    '''<remarks>
+    '''Auto-generated field.
+    '''To modify move field declaration from designer file to code-behind file.
+    '''</remarks>
+    Protected WithEvents btnDownloadICS As Global.System.Web.UI.WebControls.Button
 
-	'''<summary>
-	'''lnkSubscribeOutlook control.
-	'''</summary>
-	'''<remarks>
-	'''Auto-generated field.
-	'''To modify move field declaration from designer file to code-behind file.
-	'''</remarks>
-	Protected WithEvents lnkSubscribeOutlook As Global.System.Web.UI.WebControls.HyperLink
+    '''<summary>
+    '''lnkSubscribeOutlook control.
+    '''</summary>
+    '''<remarks>
+    '''Auto-generated field.
+    '''To modify move field declaration from designer file to code-behind file.
+    '''</remarks>
+    Protected WithEvents lnkSubscribeOutlook As Global.System.Web.UI.WebControls.HyperLink
 
-	'''<summary>
-	'''lnkAll control.
-	'''</summary>
-	'''<remarks>
-	'''Auto-generated field.
-	'''To modify move field declaration from designer file to code-behind file.
-	'''</remarks>
-	Protected WithEvents lnkAll As Global.System.Web.UI.WebControls.LinkButton
+    '''<summary>
+    '''lnkAll control.
+    '''</summary>
+    '''<remarks>
+    '''Auto-generated field.
+    '''To modify move field declaration from designer file to code-behind file.
+    '''</remarks>
+    Protected WithEvents lnkAll As Global.System.Web.UI.WebControls.LinkButton
 
-	'''<summary>
-	'''lnkExams control.
-	'''</summary>
-	'''<remarks>
-	'''Auto-generated field.
-	'''To modify move field declaration from designer file to code-behind file.
-	'''</remarks>
-	Protected WithEvents lnkExams As Global.System.Web.UI.WebControls.LinkButton
+    '''<summary>
+    '''lnkExams control.
+    '''</summary>
+    '''<remarks>
+    '''Auto-generated field.
+    '''To modify move field declaration from designer file to code-behind file.
+    '''</remarks>
+    Protected WithEvents lnkExams As Global.System.Web.UI.WebControls.LinkButton
 
-	'''<summary>
-	'''lnkDeadlines control.
-	'''</summary>
-	'''<remarks>
-	'''Auto-generated field.
-	'''To modify move field declaration from designer file to code-behind file.
-	'''</remarks>
-	Protected WithEvents lnkDeadlines As Global.System.Web.UI.WebControls.LinkButton
+    '''<summary>
+    '''lnkDeadlines control.
+    '''</summary>
+    '''<remarks>
+    '''Auto-generated field.
+    '''To modify move field declaration from designer file to code-behind file.
+    '''</remarks>
+    Protected WithEvents lnkDeadlines As Global.System.Web.UI.WebControls.LinkButton
 
-	'''<summary>
-	'''lnkRegistration control.
-	'''</summary>
-	'''<remarks>
-	'''Auto-generated field.
-	'''To modify move field declaration from designer file to code-behind file.
-	'''</remarks>
-	Protected WithEvents lnkRegistration As Global.System.Web.UI.WebControls.LinkButton
+    '''<summary>
+    '''lnkRegistration control.
+    '''</summary>
+    '''<remarks>
+    '''Auto-generated field.
+    '''To modify move field declaration from designer file to code-behind file.
+    '''</remarks>
+    Protected WithEvents lnkRegistration As Global.System.Web.UI.WebControls.LinkButton
 
-	'''<summary>
-	'''lnkHolidays control.
-	'''</summary>
-	'''<remarks>
-	'''Auto-generated field.
-	'''To modify move field declaration from designer file to code-behind file.
-	'''</remarks>
-	Protected WithEvents lnkHolidays As Global.System.Web.UI.WebControls.LinkButton
+    '''<summary>
+    '''lnkHolidays control.
+    '''</summary>
+    '''<remarks>
+    '''Auto-generated field.
+    '''To modify move field declaration from designer file to code-behind file.
+    '''</remarks>
+    Protected WithEvents lnkHolidays As Global.System.Web.UI.WebControls.LinkButton
 
-	'''<summary>
-	'''lnkAcademic control.
-	'''</summary>
-	'''<remarks>
-	'''Auto-generated field.
-	'''To modify move field declaration from designer file to code-behind file.
-	'''</remarks>
-	Protected WithEvents lnkAcademic As Global.System.Web.UI.WebControls.LinkButton
+    '''<summary>
+    '''lnkAcademic control.
+    '''</summary>
+    '''<remarks>
+    '''Auto-generated field.
+    '''To modify move field declaration from designer file to code-behind file.
+    '''</remarks>
+    Protected WithEvents lnkAcademic As Global.System.Web.UI.WebControls.LinkButton
 
-	'''<summary>
-	'''lblError control.
-	'''</summary>
-	'''<remarks>
-	'''Auto-generated field.
-	'''To modify move field declaration from designer file to code-behind file.
-	'''</remarks>
-	Protected WithEvents lblError As Global.System.Web.UI.WebControls.Label
+    '''<summary>
+    '''lblError control.
+    '''</summary>
+    '''<remarks>
+    '''Auto-generated field.
+    '''To modify move field declaration from designer file to code-behind file.
+    '''</remarks>
+    Protected WithEvents lblError As Global.System.Web.UI.WebControls.Label
 
-	'''<summary>
-	'''pnlListView control.
-	'''</summary>
-	'''<remarks>
-	'''Auto-generated field.
-	'''To modify move field declaration from designer file to code-behind file.
-	'''</remarks>
-	Protected WithEvents pnlListView As Global.System.Web.UI.WebControls.Panel
+    '''<summary>
+    '''pnlListView control.
+    '''</summary>
+    '''<remarks>
+    '''Auto-generated field.
+    '''To modify move field declaration from designer file to code-behind file.
+    '''</remarks>
+    Protected WithEvents pnlListView As Global.System.Web.UI.WebControls.Panel
 
-	'''<summary>
-	'''litListEvents control.
-	'''</summary>
-	'''<remarks>
-	'''Auto-generated field.
-	'''To modify move field declaration from designer file to code-behind file.
-	'''</remarks>
-	Protected WithEvents litListEvents As Global.System.Web.UI.WebControls.Literal
+    '''<summary>
+    '''litListEvents control.
+    '''</summary>
+    '''<remarks>
+    '''Auto-generated field.
+    '''To modify move field declaration from designer file to code-behind file.
+    '''</remarks>
+    Protected WithEvents litListEvents As Global.System.Web.UI.WebControls.Literal
 
-	'''<summary>
-	'''lblListMessage control.
-	'''</summary>
-	'''<remarks>
-	'''Auto-generated field.
-	'''To modify move field declaration from designer file to code-behind file.
-	'''</remarks>
-	Protected WithEvents lblListMessage As Global.System.Web.UI.WebControls.Label
+    '''<summary>
+    '''lblListMessage control.
+    '''</summary>
+    '''<remarks>
+    '''Auto-generated field.
+    '''To modify move field declaration from designer file to code-behind file.
+    '''</remarks>
+    Protected WithEvents lblListMessage As Global.System.Web.UI.WebControls.Label
 
-	'''<summary>
-	'''pnlCalendarView control.
-	'''</summary>
-	'''<remarks>
-	'''Auto-generated field.
-	'''To modify move field declaration from designer file to code-behind file.
-	'''</remarks>
-	Protected WithEvents pnlCalendarView As Global.System.Web.UI.WebControls.Panel
+    '''<summary>
+    '''pnlCalendarView control.
+    '''</summary>
+    '''<remarks>
+    '''Auto-generated field.
+    '''To modify move field declaration from designer file to code-behind file.
+    '''</remarks>
+    Protected WithEvents pnlCalendarView As Global.System.Web.UI.WebControls.Panel
 
-	'''<summary>
-	'''btnPrevMonth control.
-	'''</summary>
-	'''<remarks>
-	'''Auto-generated field.
-	'''To modify move field declaration from designer file to code-behind file.
-	'''</remarks>
-	Protected WithEvents btnPrevMonth As Global.System.Web.UI.WebControls.Button
+    '''<summary>
+    '''btnPrevMonth control.
+    '''</summary>
+    '''<remarks>
+    '''Auto-generated field.
+    '''To modify move field declaration from designer file to code-behind file.
+    '''</remarks>
+    Protected WithEvents btnPrevMonth As Global.System.Web.UI.WebControls.Button
 
-	'''<summary>
-	'''litCalendarMonth control.
-	'''</summary>
-	'''<remarks>
-	'''Auto-generated field.
-	'''To modify move field declaration from designer file to code-behind file.
-	'''</remarks>
-	Protected WithEvents litCalendarMonth As Global.System.Web.UI.WebControls.Literal
+    '''<summary>
+    '''litCalendarMonth control.
+    '''</summary>
+    '''<remarks>
+    '''Auto-generated field.
+    '''To modify move field declaration from designer file to code-behind file.
+    '''</remarks>
+    Protected WithEvents litCalendarMonth As Global.System.Web.UI.WebControls.Literal
 
-	'''<summary>
-	'''litCalendarYear control.
-	'''</summary>
-	'''<remarks>
-	'''Auto-generated field.
-	'''To modify move field declaration from designer file to code-behind file.
-	'''</remarks>
-	Protected WithEvents litCalendarYear As Global.System.Web.UI.WebControls.Literal
+    '''<summary>
+    '''litCalendarYear control.
+    '''</summary>
+    '''<remarks>
+    '''Auto-generated field.
+    '''To modify move field declaration from designer file to code-behind file.
+    '''</remarks>
+    Protected WithEvents litCalendarYear As Global.System.Web.UI.WebControls.Literal
 
-	'''<summary>
-	'''btnNextMonth control.
-	'''</summary>
-	'''<remarks>
-	'''Auto-generated field.
-	'''To modify move field declaration from designer file to code-behind file.
-	'''</remarks>
-	Protected WithEvents btnNextMonth As Global.System.Web.UI.WebControls.Button
+    '''<summary>
+    '''btnNextMonth control.
+    '''</summary>
+    '''<remarks>
+    '''Auto-generated field.
+    '''To modify move field declaration from designer file to code-behind file.
+    '''</remarks>
+    Protected WithEvents btnNextMonth As Global.System.Web.UI.WebControls.Button
 
-	'''<summary>
-	'''litCalendar control.
-	'''</summary>
-	'''<remarks>
-	'''Auto-generated field.
-	'''To modify move field declaration from designer file to code-behind file.
-	'''</remarks>
-	Protected WithEvents litCalendar As Global.System.Web.UI.WebControls.Literal
+    '''<summary>
+    '''litCalendar control.
+    '''</summary>
+    '''<remarks>
+    '''Auto-generated field.
+    '''To modify move field declaration from designer file to code-behind file.
+    '''</remarks>
+    Protected WithEvents litCalendar As Global.System.Web.UI.WebControls.Literal
 End Class
