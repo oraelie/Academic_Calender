@@ -9,7 +9,8 @@
 				<h1>Academic Calendar</h1>
 				<p>View academic events, deadlines, exams, registration dates, and holidays</p>
 			</div>
-		 <img src="<%= ResolveUrl("~/Images/Sagesse.png") %>" class="page-logo" alt="Université La Sagesse Logo" />
+		 <!--<img src="<%= ResolveUrl("~/Images/Sagesse.png") %>" class="page-logo" alt="Université La Sagesse Logo" />-->
+		 <img src="<%= ResolveUrl("~/Images/ULS-logo-vertical.png") %>" class="page-logo" alt="Université La Sagesse Logo" />
 	 </div>
 </asp:Content>
 <asp:Content ID="ContentMain" ContentPlaceHolderID="MainContent" runat="server">
@@ -31,8 +32,6 @@
         
 
         <div class="filter-box">
-            <span class="filter-title">FILTER</span>
-
             <asp:LinkButton ID="lnkAll" runat="server" CssClass="filter-link"> <span class="dot dot-all"></span>All </asp:LinkButton>
             <asp:LinkButton ID="lnkExams" runat="server" CssClass="filter-link"> <span class="dot dot-exams"></span>Exams </asp:LinkButton>
             <asp:LinkButton ID="lnkDeadlines" runat="server" CssClass="filter-link"> <span class="dot dot-deadlines"></span>Deadlines </asp:LinkButton>
@@ -101,6 +100,7 @@
 	function toggleMonthCard(bodyId, iconId) {
 		var body = document.getElementById(bodyId);
 		var icon = document.getElementById(iconId);
+		var open_toggle = document.getElementsByClassName("monthly-list-card");
 
 		if (!body || !icon) {
 			return;
@@ -108,12 +108,14 @@
 
 		var storageKey = "monthCardState_" + bodyId;
 
-		if (body.style.display === "none") {
-			body.style.display = "block";
-			icon.innerHTML = "−";
-			localStorage.setItem(storageKey, "expanded");
-		} else {
-			body.style.display = "none";
+        if (body.style.display === "none") {
+            body.style.display = "block";
+            icon.innerHTML = "−";
+            localStorage.setItem(storageKey, "expanded");
+            open_toggle.classList.toggle("open");
+        } else {
+            body.style.display = "none";
+          
 			icon.innerHTML = "+";
 			localStorage.setItem(storageKey, "collapsed");
 		}

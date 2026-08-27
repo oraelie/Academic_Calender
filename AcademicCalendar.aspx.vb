@@ -457,7 +457,7 @@ Public Class AcademicCalendar
                 Dim defaultState As String = If(isCurrentMonth, "expanded", "collapsed")
                 Dim isCurrentMonthText As String = If(isCurrentMonth, "yes", "no")
 
-                html.Append("<div class='monthly-list-card'>")
+                html.Append("<div class='monthly-list-card' onclick=""toggleMonthCard('" & bodyId & "', '" & iconId & "')"">")
 
                 html.Append("<div class='monthly-list-header'>")
                 html.Append("<div class='monthly-header-title'>")
@@ -465,7 +465,7 @@ Public Class AcademicCalendar
                 html.Append("<span class='monthly-year'>" & startDate.ToString("yyyy") & "</span>")
                 html.Append("</div>")
 
-                html.Append("<button type='button' class='collapse-btn' onclick=""toggleMonthCard('" & bodyId & "', '" & iconId & "')"">")
+                html.Append("<button type='button' class='collapse-btn' >")
                 html.Append("<span id='" & iconId & "'>" & defaultIcon & "</span>")
                 html.Append("</button>")
 

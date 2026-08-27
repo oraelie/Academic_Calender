@@ -1,4 +1,36 @@
-﻿body {
+﻿@font-face {
+	font-family: 'MyFont';
+	src: url('../fonts/MyFont-Light.otf') format('woff');
+	font-weight: 200;
+	font-style: normal;
+	font-display: swap;
+}
+
+@font-face {
+	font-family: 'DINPro-Regular';
+	src: url('../fonts/DINPro-Regular.otf') format('woff');
+	font-weight: 400;
+	font-style: normal;
+	font-display: swap;
+}
+
+@font-face {
+	font-family: 'DINPro-Medium';
+	src: url('../fonts/DINPro-Medium.otf') format('woff');
+	font-weight: 600;
+	font-style: normal;
+	font-display: swap;
+}
+@font-face {
+	font-family: 'DINPro-Bold';
+	src: url('../fonts/DINPro-Bold.otf') format('woff');
+	font-weight: 800;
+	font-style: normal;
+	font-display: swap;
+}
+
+
+body {
 	/*background-image: url('../Images/back_grd.png');*/
 	background-size: cover;
 	background-position: center center;
@@ -6,15 +38,15 @@
 	background-attachment: fixed;
 	margin: 0;
 	padding: 0;
-	font-family: "Roboto Condensed", Sans-serif;
-	color: #10233f;
+	font-family: "DINPro-Regular", Arial, sans-serif;
+	font-size: 1rem;
 }
 
 /* ================= LOGO BANNER ================= */
 
 .page-hero {
 	background: linear-gradient(180deg, #faf9f6, #fff);
-	border-bottom: 1px solid #dfdfdf;
+	border-bottom: 1px solid #4c596624;
 	padding: 2.4rem 0 2.8rem;
 	position: relative;
 	overflow: hidden;
@@ -31,20 +63,20 @@
 		right: -10%;
 	}
 main {
-	background-color: #fafafa;
+	background-color: #f7f9f8;
 }
 .logo-banner {
-
 	padding: 0 1.5rem;
 	margin-bottom: 1.5rem;
 	display: flex;
 	justify-content: space-between;
+	align-items: center;
 	max-width: 1200px;
 	margin: 0 auto;
 }
 
 .page-logo {
-	width: 30%;
+	width: 16%;
 	height: 100%;
 	display: block;
 	object-fit: contain;
@@ -71,7 +103,7 @@ main {
 			font-size: 42px;
 			margin: 0;
 			color: #00896A;
-			font-weight: 700;
+			font-family: "DINPro-Bold", Arial, sans-serif;
 		}
 
 		.page-title p {
@@ -82,7 +114,7 @@ main {
 	/* ================= VIEW SWITCH ================= */
 
 .view-switch {
-	border: 1.5px solid #dfdfdf;
+	border: 1.5px solid #4c596624;
 	background: #fff;
 	border-radius: 999px;
 	gap: 0px;
@@ -128,6 +160,7 @@ main {
 	.outlook-subscribe-link .btn-icon {
 		padding-left: 0.5rem;
 		font-size: 1rem;
+	
 	}
 
 	.outlook-download-btn {
@@ -137,48 +170,44 @@ main {
 		font-size: 16px;
 		font-weight: bold;
 		padding: 13px 24px;
-		border-radius: 10px;
+		border-radius: 999px;
 		cursor: pointer;
-		box-shadow: 0 2px 8px rgba(0,0,0,0.08);
 	}
 
 		.outlook-download-btn:hover {
 			background: #1f7a4c;
 		}
 
-	.outlook-subscribe-link {
-		display: inline-block;
-		background: #ffffff;
-		color: #00896A;
-		border: 2px solid #00896A;
-		font-size: 16px;
-		font-weight: bold;
-		padding: 11px 22px;
-		border-radius: 10px;
-		text-decoration: none;
-		box-shadow: 0 2px 8px rgba(0,0,0,0.08);
-	}
+.outlook-subscribe-link {
+	display: inline-block;
+	background: #ffffff;
+	color: #00896A;
+	border: 1px solid #4c596624;
+	font-size: 16px;
+	font-family: "DINPro-Bold", Arial, sans-serif;
+	padding: 0.8rem 1.8rem;
+	border-radius: 999px;
+	text-decoration: none;
+}
 
-		.outlook-subscribe-link:hover {
-			background: #e9f6ef;
-			color: #1f7a4c;
-			text-decoration: none;
-		}
+.outlook-subscribe-link:hover {
+	background: #00896a1a;
+	color: #00896a;
+	border-color: #00896a;
+}
 	/* ================= FILTER ================= */
 
-	.filter-box {
-		background: #ffffff;
-		border: 1px solid #d9dde5;
-		border-radius: 10px;
-		padding: 18px 25px;
-		margin-bottom: 25px;
-		display: flex;
-		align-items: center;
-		justify-content: center;
-		gap: 35px;
-		flex-wrap: wrap;
-		box-shadow: 0 2px 8px rgba(0,0,0,0.04);
-	}
+.filter-box {
+	background: #ffffff;
+	border: 1px solid #e6e8e9;
+	border-radius: 18px;
+	padding: 1rem;
+	margin-bottom: 2.4rem;
+	display: flex;
+	align-items: center;
+	gap: 1.5rem;
+	flex-wrap: wrap;
+}
 
 	.filter-title {
 		letter-spacing: 8px;
@@ -186,30 +215,29 @@ main {
 		font-weight: bold;
 	}
 
-	.filter-link {
-		border: none;
-		background: transparent;
-		font-size: 16px;
-		font-weight: bold;
-		cursor: pointer;
-		color: #10233f;
-		padding: 5px;
-		text-decoration: none;
-	}
+.filter-link {
+	cursor: pointer;
+	color: #476063;
+	padding: 5px;
+	text-decoration: none;
+	align-items: center;
+	gap: .5rem;
+	font-weight: 400;
+	display: flex;
+}
 
 		.filter-link:hover {
 			color: #1f7a4c;
 			text-decoration: none;
 		}
 
-	.dot {
-		display: inline-block;
-		width: 14px;
-		height: 14px;
-		border-radius: 50%;
-		margin-right: 8px;
-		vertical-align: middle;
-	}
+.dot {
+	border-radius: 50%;
+	flex: none;
+	width: 12px;
+	height: 12px;
+	display: inline-block;
+}
 
 	.dot-exams {
 		background: #b03a2e;
@@ -275,7 +303,7 @@ main {
 	.monthly-name {
 		font-size: 22px;
 		font-weight: 700;
-		font-family: "Segoe UI", "Times New Roman", sans-serif;
+		
 		color: #ffffff;
 		text-transform: uppercase;
 		letter-spacing: 1px;
@@ -284,7 +312,7 @@ main {
 	.monthly-year {
 		font-size: 22px;
 		font-weight: 500;
-		font-family: "Segoe UI", "Times New Roman", sans-serif;
+	
 		color: #e6fff7;
 		letter-spacing: 3px;
 	}
@@ -359,7 +387,7 @@ main {
 		display: flex;
 		align-items: center;
 		justify-content: center;
-		font-family: "Times New Roman", Times, serif;
+	
 		font-size: 20px;
 	}
 
@@ -370,7 +398,7 @@ main {
 	.monthly-title {
 		color: #10233f;
 		line-height: 1.45;
-		font-family: "Times New Roman", Times, serif;
+	
 		font-size: 22px;
 	}
 
@@ -448,7 +476,7 @@ main {
 		font-size: 20px;
 		font-weight: bold;
 		color: #1f7a4c;
-		font-family: Georgia, serif;
+		
 	}
 
 	.calendar-year {
