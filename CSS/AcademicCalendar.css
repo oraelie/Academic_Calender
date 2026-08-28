@@ -663,16 +663,22 @@ main {
 		}
 
 		.monthly-list-row {
-			grid-template-columns: 105px 0 1fr 130px;
+			grid-template-columns: 105px 0 1fr;
 			box-shadow: none;
+			padding: .6rem .6rem .6rem 0;
+			gap: 6px;
 		}
 
-
+		.monthly-title {
+			font-size: .8rem;
+		}
 		.monthly-date {
 			text-align: center;
 			justify-content: center;
 		}
-
+		.monthly-category {
+			grid-column: 3;
+		}
 		.calendar-card {
 			overflow-x: auto;
 		}
