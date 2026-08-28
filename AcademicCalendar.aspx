@@ -51,7 +51,7 @@
 
         </asp:Panel>
 
-        <asp:Panel ID="pnlCalendarView" runat="server" CssClass="xs-none">
+        <asp:Panel ID="pnlCalendarView" runat="server">
 
             <div class="calendar-card">
 
