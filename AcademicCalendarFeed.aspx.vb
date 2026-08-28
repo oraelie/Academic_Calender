@@ -21,16 +21,27 @@ Public Class AcademicCalendarFeed
             Dim icsContent As String = BuildICSContent(dt)
             Dim fileBytes As Byte() = Encoding.UTF8.GetBytes(icsContent)
 
+
+            Dim excelLastModifiedUtc As DateTime = File.GetLastWriteTimeUtc(ExcelFilePath)
+
             Response.Clear()
             Response.Buffer = True
             Response.ContentType = "text/calendar"
             Response.ContentEncoding = Encoding.UTF8
+
             Response.AddHeader("Content-Disposition", "inline; filename=AcademicCalendar.ics")
-            Response.AddHeader("Cache-Control", "no-cache, no-store, must-revalidate")
+            Response.AddHeader("Cache-Control", "no-cache, no-store, must-revalidate, max-age=0")
             Response.AddHeader("Pragma", "no-cache")
-            Response.AddHeader("Expires", "0")
+            Response.AddHeader("Expires", "-1")
+            Response.AddHeader("Last-Modified", excelLastModifiedUtc.ToString("R"))
+            Response.AddHeader("ETag", """" & excelLastModifiedUtc.Ticks.ToString() & """")
+
+            Response.Cache.SetCacheability(HttpCacheability.NoCache)
+            Response.Cache.SetNoStore()
+            Response.Cache.SetExpires(DateTime.UtcNow.AddMinutes(-1))
+            Response.Cache.SetRevalidation(HttpCacheRevalidation.AllCaches)
+
             Response.BinaryWrite(fileBytes)
-            Response.Flush()
 
             Context.ApplicationInstance.CompleteRequest()
 
@@ -59,6 +70,7 @@ Public Class AcademicCalendarFeed
         cleanTable.Columns.Add("Category", GetType(String))
         cleanTable.Columns.Add("IsActive", GetType(String))
         cleanTable.Columns.Add("ReminderMinutes", GetType(String))
+        cleanTable.Columns.Add("EventID", GetType(String))
 
         If Not File.Exists(ExcelFilePath) Then
             Throw New FileNotFoundException("Excel file not found. Please put AcademicCalendar.xlsm inside App_Data folder.")
@@ -88,7 +100,11 @@ Public Class AcademicCalendarFeed
 
                 ValidateRequiredColumns(excelTable)
 
+                Dim excelRowNumber As Integer = 1
+
                 For Each row As DataRow In excelTable.Rows
+
+                    excelRowNumber += 1
 
                     If IsEmpty(row("EventTitle")) Then
                         Continue For
@@ -179,6 +195,7 @@ Public Class AcademicCalendarFeed
                     newRow("Category") = If(IsEmpty(row("Category")), "", row("Category").ToString().Trim())
                     newRow("IsActive") = "Yes"
                     newRow("ReminderMinutes") = reminderMinutesText
+                    newRow("EventID") = "excel-row-" & excelRowNumber.ToString()
 
                     cleanTable.Rows.Add(newRow)
 
@@ -309,20 +326,25 @@ Public Class AcademicCalendarFeed
     Private Function BuildICSContent(eventsTable As DataTable) As String
 
         Dim icsContent As New StringBuilder()
-
         icsContent.AppendLine("BEGIN:VCALENDAR")
         icsContent.AppendLine("VERSION:2.0")
         icsContent.AppendLine("PRODID:-//Academic Calendar Project//Academic Calendar Feed//EN")
         icsContent.AppendLine("CALSCALE:GREGORIAN")
         icsContent.AppendLine("METHOD:PUBLISH")
 
+        'Calendar display name in Outlook
         icsContent.AppendLine("X-WR-CALNAME:Academic Calendar")
         icsContent.AppendLine("NAME:Academic Calendar")
+
+        'Stable calendar identifier
         icsContent.AppendLine("X-WR-RELCALID:academic-calendar-project")
+
+        'Timezone
         icsContent.AppendLine("X-WR-TIMEZONE:Asia/Beirut")
+
+        'Suggested refresh interval
         icsContent.AppendLine("REFRESH-INTERVAL;VALUE=DURATION:PT1H")
         icsContent.AppendLine("X-PUBLISHED-TTL:PT1H")
-
         For Each row As DataRow In eventsTable.Rows
 
             Dim eventTitle As String = row("EventTitle").ToString()
@@ -340,7 +362,7 @@ Public Class AcademicCalendarFeed
 
             Dim excelLastModifiedUtc As DateTime = File.GetLastWriteTimeUtc(ExcelFilePath)
             Dim sequenceNumber As Integer = CInt(Math.Min(Integer.MaxValue, excelLastModifiedUtc.Subtract(New DateTime(2000, 1, 1)).TotalMinutes))
-            Dim uniqueId As String = startDate.ToString("yyyyMMdd") & "-" & CleanUidText(eventTitle) & "@academiccalendar"
+            Dim uniqueId As String = row("EventID").ToString() & "@academiccalendar"
 
             icsContent.AppendLine("BEGIN:VEVENT")
             icsContent.AppendLine("UID:" & uniqueId)

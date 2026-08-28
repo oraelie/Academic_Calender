@@ -18,12 +18,26 @@
         </div>
 
         <div class="view-switch">
-            <asp:Button ID="btnListView" runat="server" Text="☰  List" CssClass="view-btn view-btn-active" />
-            <asp:Button ID="btnCalendarView" runat="server" Text="🟩  Calendar" CssClass="view-btn" />
+            <asp:Button
+                ID="btnListView"
+                runat="server"
+                Text="☰  List"
+                CssClass="view-btn view-btn-active" />
+
+            <asp:Button
+                ID="btnCalendarView"
+                runat="server"
+                Text="🟩  Calendar"
+                CssClass="view-btn" />
         </div>
 
         <div class="outlook-download-box">
-            <asp:Button ID="btnDownloadICS" runat="server" Text="📅 Download Calendar File" CssClass="outlook-download-btn" />
+
+            <asp:Button
+                ID="btnDownloadICS"
+                runat="server"
+                Text="📅 Download Calendar File"
+                CssClass="outlook-download-btn" />
 
             <asp:HyperLink
                 ID="lnkSubscribeOutlook"
@@ -31,6 +45,7 @@
                 Text="🔄 Subscribe to Academic Calendar in Outlook"
                 CssClass="outlook-subscribe-link"
                 ToolTip="Add this Academic Calendar to Outlook and receive future calendar updates" />
+
         </div>
 
         <div class="filter-box">
@@ -61,13 +76,24 @@
             </asp:LinkButton>
         </div>
 
-        <asp:Label ID="lblError" runat="server" CssClass="error-message"></asp:Label>
+        <asp:Label
+            ID="lblError"
+            runat="server"
+            CssClass="error-message">
+        </asp:Label>
 
         <asp:Panel ID="pnlListView" runat="server">
 
-            <asp:Literal ID="litListEvents" runat="server"></asp:Literal>
+            <asp:Literal
+                ID="litListEvents"
+                runat="server">
+            </asp:Literal>
 
-            <asp:Label ID="lblListMessage" runat="server" CssClass="message"></asp:Label>
+            <asp:Label
+                ID="lblListMessage"
+                runat="server"
+                CssClass="message">
+            </asp:Label>
 
         </asp:Panel>
 
@@ -76,22 +102,41 @@
             <div class="calendar-card">
 
                 <div class="calendar-nav">
-                    <asp:Button ID="btnPrevMonth" runat="server" Text="‹" CssClass="nav-btn" />
+
+                    <asp:Button
+                        ID="btnPrevMonth"
+                        runat="server"
+                        Text="‹"
+                        CssClass="nav-btn" />
 
                     <div>
                         <span class="calendar-month-title">
-                            <asp:Literal ID="litCalendarMonth" runat="server"></asp:Literal>
+                            <asp:Literal
+                                ID="litCalendarMonth"
+                                runat="server">
+                            </asp:Literal>
                         </span>
 
                         <span class="calendar-year">
-                            <asp:Literal ID="litCalendarYear" runat="server"></asp:Literal>
+                            <asp:Literal
+                                ID="litCalendarYear"
+                                runat="server">
+                            </asp:Literal>
                         </span>
                     </div>
 
-                    <asp:Button ID="btnNextMonth" runat="server" Text="›" CssClass="nav-btn" />
+                    <asp:Button
+                        ID="btnNextMonth"
+                        runat="server"
+                        Text="›"
+                        CssClass="nav-btn" />
+
                 </div>
 
-                <asp:Literal ID="litCalendar" runat="server"></asp:Literal>
+                <asp:Literal
+                    ID="litCalendar"
+                    runat="server">
+                </asp:Literal>
 
             </div>
 
@@ -99,7 +144,7 @@
 
     </div>
 
-    <%--keeping current month expanded by default and other months collapsed by default--%>
+    <%-- keeping current month expanded by default and other months collapsed by default --%>
     <script type="text/javascript">
 		function toggleMonthCard(bodyId, iconId) {
 			var body = document.getElementById(bodyId);
