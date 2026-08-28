@@ -21,20 +21,44 @@
             <asp:Button ID="btnListView" runat="server" Text="☰  List" CssClass="view-btn view-btn-active" />
             <asp:Button ID="btnCalendarView" runat="server" Text="🟩  Calendar" CssClass="view-btn" />
         </div>
+
         <div class="outlook-download-box">
             <asp:Button ID="btnDownloadICS" runat="server" Text="📅 Download Calendar File" CssClass="outlook-download-btn" />
-            <asp:HyperLink ID="lnkSubscribeOutlook" runat="server" Text="🔄 Subscribe in Outlook Calendar" CssClass="outlook-subscribe-link"/>
+
+            <asp:HyperLink
+                ID="lnkSubscribeOutlook"
+                runat="server"
+                Text="🔄 Subscribe to Academic Calendar in Outlook"
+                CssClass="outlook-subscribe-link"
+                ToolTip="Add this Academic Calendar to Outlook and receive future calendar updates" />
         </div>
 
         <div class="filter-box">
             <span class="filter-title">FILTER</span>
 
-            <asp:LinkButton ID="lnkAll" runat="server" CssClass="filter-link"> <span class="dot dot-all"></span>All </asp:LinkButton>
-            <asp:LinkButton ID="lnkExams" runat="server" CssClass="filter-link"> <span class="dot dot-exams"></span>Exams </asp:LinkButton>
-            <asp:LinkButton ID="lnkDeadlines" runat="server" CssClass="filter-link"> <span class="dot dot-deadlines"></span>Deadlines </asp:LinkButton>
-            <asp:LinkButton ID="lnkRegistration" runat="server" CssClass="filter-link"> <span class="dot dot-registration"></span>Registration</asp:LinkButton>
-            <asp:LinkButton ID="lnkHolidays" runat="server" CssClass="filter-link"> <span class="dot dot-holidays"></span>Holidays</asp:LinkButton>
-			<asp:LinkButton ID="lnkAcademic" runat="server" CssClass="filter-link"> <span class="dot dot-academic"></span>Academic</asp:LinkButton>
+            <asp:LinkButton ID="lnkAll" runat="server" CssClass="filter-link">
+                <span class="dot dot-all"></span>All
+            </asp:LinkButton>
+
+            <asp:LinkButton ID="lnkExams" runat="server" CssClass="filter-link">
+                <span class="dot dot-exams"></span>Exams
+            </asp:LinkButton>
+
+            <asp:LinkButton ID="lnkDeadlines" runat="server" CssClass="filter-link">
+                <span class="dot dot-deadlines"></span>Deadlines
+            </asp:LinkButton>
+
+            <asp:LinkButton ID="lnkRegistration" runat="server" CssClass="filter-link">
+                <span class="dot dot-registration"></span>Registration
+            </asp:LinkButton>
+
+            <asp:LinkButton ID="lnkHolidays" runat="server" CssClass="filter-link">
+                <span class="dot dot-holidays"></span>Holidays
+            </asp:LinkButton>
+
+            <asp:LinkButton ID="lnkAcademic" runat="server" CssClass="filter-link">
+                <span class="dot dot-academic"></span>Academic
+            </asp:LinkButton>
         </div>
 
         <asp:Label ID="lblError" runat="server" CssClass="error-message"></asp:Label>
@@ -75,101 +99,80 @@
 
     </div>
 
-    <%--script that collapse all month cards after pressing list button--%>
-
-    <%--<script type="text/javascript">
-        function toggleMonthCard(bodyId, iconId) {
-            var body = document.getElementById(bodyId);
-            var icon = document.getElementById(iconId);
-
-            if (body.style.display === "none") {
-                body.style.display = "block";
-                icon.innerHTML = "−";
-            } else {
-                body.style.display = "none";
-                icon.innerHTML = "+";
-            }
-        }
-	</script>--%>
-
-<%--keeping current month expanded by default and other months collapsed by default--%>
-<script type="text/javascript">
-	function toggleMonthCard(bodyId, iconId) {
-		var body = document.getElementById(bodyId);
-		var icon = document.getElementById(iconId);
-
-		if (!body || !icon) {
-			return;
-		}
-
-		var storageKey = "monthCardState_" + bodyId;
-
-		if (body.style.display === "none") {
-			body.style.display = "block";
-			icon.innerHTML = "−";
-			localStorage.setItem(storageKey, "expanded");
-		} else {
-			body.style.display = "none";
-			icon.innerHTML = "+";
-			localStorage.setItem(storageKey, "collapsed");
-		}
-	}
-
-	function restoreMonthCardStates() {
-		var bodies = document.getElementsByClassName("monthly-list-body");
-
-		for (var i = 0; i < bodies.length; i++) {
-			var body = bodies[i];
-			var bodyId = body.id;
-
-			if (!bodyId) {
-				continue;
-			}
-
-			var iconId = bodyId.replace("monthBody_", "monthIcon_");
+    <%--keeping current month expanded by default and other months collapsed by default--%>
+    <script type="text/javascript">
+		function toggleMonthCard(bodyId, iconId) {
+			var body = document.getElementById(bodyId);
 			var icon = document.getElementById(iconId);
 
-			if (!icon) {
-				continue;
+			if (!body || !icon) {
+				return;
 			}
 
 			var storageKey = "monthCardState_" + bodyId;
-			var savedState = localStorage.getItem(storageKey);
-			var defaultState = body.getAttribute("data-default-state");
-			var isCurrentMonth = body.getAttribute("data-current-month");
 
-			/*
-			   Current month should be expanded by default.
-			   We ignore old saved collapsed state for the current month.
-			*/
-			if (isCurrentMonth === "yes") {
+			if (body.style.display === "none") {
 				body.style.display = "block";
 				icon.innerHTML = "−";
 				localStorage.setItem(storageKey, "expanded");
-				continue;
-			}
-
-			if (savedState === "collapsed") {
+			} else {
 				body.style.display = "none";
 				icon.innerHTML = "+";
-			} else if (savedState === "expanded") {
-				body.style.display = "block";
-				icon.innerHTML = "−";
-			} else {
-				if (defaultState === "collapsed") {
-					body.style.display = "none";
-					icon.innerHTML = "+";
-				} else {
+				localStorage.setItem(storageKey, "collapsed");
+			}
+		}
+
+		function restoreMonthCardStates() {
+			var bodies = document.getElementsByClassName("monthly-list-body");
+
+			for (var i = 0; i < bodies.length; i++) {
+				var body = bodies[i];
+				var bodyId = body.id;
+
+				if (!bodyId) {
+					continue;
+				}
+
+				var iconId = bodyId.replace("monthBody_", "monthIcon_");
+				var icon = document.getElementById(iconId);
+
+				if (!icon) {
+					continue;
+				}
+
+				var storageKey = "monthCardState_" + bodyId;
+				var savedState = localStorage.getItem(storageKey);
+				var defaultState = body.getAttribute("data-default-state");
+				var isCurrentMonth = body.getAttribute("data-current-month");
+
+				if (isCurrentMonth === "yes") {
 					body.style.display = "block";
 					icon.innerHTML = "−";
+					localStorage.setItem(storageKey, "expanded");
+					continue;
+				}
+
+				if (savedState === "collapsed") {
+					body.style.display = "none";
+					icon.innerHTML = "+";
+				} else if (savedState === "expanded") {
+					body.style.display = "block";
+					icon.innerHTML = "−";
+				} else {
+					if (defaultState === "collapsed") {
+						body.style.display = "none";
+						icon.innerHTML = "+";
+					} else {
+						body.style.display = "block";
+						icon.innerHTML = "−";
+					}
 				}
 			}
 		}
-	}
 
-	window.onload = function () {
-		restoreMonthCardStates();
-	};
-</script>
+		window.onload = function () {
+			restoreMonthCardStates();
+		};
+	</script>
 
 </asp:Content>

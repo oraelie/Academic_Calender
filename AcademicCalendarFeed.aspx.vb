@@ -58,6 +58,7 @@ Public Class AcademicCalendarFeed
         cleanTable.Columns.Add("Location", GetType(String))
         cleanTable.Columns.Add("Category", GetType(String))
         cleanTable.Columns.Add("IsActive", GetType(String))
+        cleanTable.Columns.Add("ReminderMinutes", GetType(String))
 
         If Not File.Exists(ExcelFilePath) Then
             Throw New FileNotFoundException("Excel file not found. Please put AcademicCalendar.xlsm inside App_Data folder.")
@@ -110,6 +111,7 @@ Public Class AcademicCalendarFeed
                     End If
 
                     Dim startDate As Date = ParseExcelDate(row("StartDay"), "StartDay", eventTitle)
+
                     Dim endDate As Date = startDate
 
                     If Not IsEmpty(row("EndDay")) Then
@@ -145,6 +147,26 @@ Public Class AcademicCalendarFeed
 
                     End If
 
+                    Dim reminderMinutesText As String = ""
+
+                    If Not IsEmpty(row("ReminderMinutes")) Then
+
+                        reminderMinutesText = row("ReminderMinutes").ToString().Trim()
+
+                        Dim reminderMinutesValue As Integer
+
+                        If Not Integer.TryParse(reminderMinutesText, reminderMinutesValue) Then
+                            Throw New Exception("ReminderMinutes must be a number for event: " & eventTitle)
+                        End If
+
+                        If reminderMinutesValue < 0 Then
+                            Throw New Exception("ReminderMinutes cannot be negative for event: " & eventTitle)
+                        End If
+
+                        reminderMinutesText = reminderMinutesValue.ToString()
+
+                    End If
+
                     Dim newRow As DataRow = cleanTable.NewRow()
 
                     newRow("EventTitle") = eventTitle
@@ -156,6 +178,7 @@ Public Class AcademicCalendarFeed
                     newRow("Location") = If(IsEmpty(row("Location")), "", row("Location").ToString().Trim())
                     newRow("Category") = If(IsEmpty(row("Category")), "", row("Category").ToString().Trim())
                     newRow("IsActive") = "Yes"
+                    newRow("ReminderMinutes") = reminderMinutesText
 
                     cleanTable.Rows.Add(newRow)
 
@@ -181,7 +204,8 @@ Public Class AcademicCalendarFeed
             "EndTime",
             "Location",
             "Category",
-            "IsActive"
+            "IsActive",
+            "ReminderMinutes"
         }
 
         For Each columnName As String In requiredColumns
@@ -291,8 +315,13 @@ Public Class AcademicCalendarFeed
         icsContent.AppendLine("PRODID:-//Academic Calendar Project//Academic Calendar Feed//EN")
         icsContent.AppendLine("CALSCALE:GREGORIAN")
         icsContent.AppendLine("METHOD:PUBLISH")
+
         icsContent.AppendLine("X-WR-CALNAME:Academic Calendar")
+        icsContent.AppendLine("NAME:Academic Calendar")
+        icsContent.AppendLine("X-WR-RELCALID:academic-calendar-project")
         icsContent.AppendLine("X-WR-TIMEZONE:Asia/Beirut")
+        icsContent.AppendLine("REFRESH-INTERVAL;VALUE=DURATION:PT1H")
+        icsContent.AppendLine("X-PUBLISHED-TTL:PT1H")
 
         For Each row As DataRow In eventsTable.Rows
 
@@ -307,21 +336,28 @@ Public Class AcademicCalendarFeed
             Dim startTime As String = row("StartTime").ToString()
             Dim endTime As String = row("EndTime").ToString()
 
-            Dim uniqueId As String =
-                startDate.ToString("yyyyMMdd") & "-" &
-                CleanUidText(eventTitle) & "@academiccalendar"
+            Dim reminderMinutesText As String = row("ReminderMinutes").ToString().Trim()
+
+            Dim excelLastModifiedUtc As DateTime = File.GetLastWriteTimeUtc(ExcelFilePath)
+            Dim sequenceNumber As Integer = CInt(Math.Min(Integer.MaxValue, excelLastModifiedUtc.Subtract(New DateTime(2000, 1, 1)).TotalMinutes))
+            Dim uniqueId As String = startDate.ToString("yyyyMMdd") & "-" & CleanUidText(eventTitle) & "@academiccalendar"
 
             icsContent.AppendLine("BEGIN:VEVENT")
             icsContent.AppendLine("UID:" & uniqueId)
-            icsContent.AppendLine("DTSTAMP:" & DateTime.UtcNow.ToString("yyyyMMddTHHmmssZ"))
+            icsContent.AppendLine("DTSTAMP:" & excelLastModifiedUtc.ToString("yyyyMMddTHHmmssZ"))
+            icsContent.AppendLine("LAST-MODIFIED:" & excelLastModifiedUtc.ToString("yyyyMMddTHHmmssZ"))
+            icsContent.AppendLine("SEQUENCE:" & sequenceNumber.ToString())
+            icsContent.AppendLine("STATUS:CONFIRMED")
+            icsContent.AppendLine("TRANSP:OPAQUE")
+
 
             If startTime <> "" AndAlso endTime <> "" Then
 
                 Dim startDateTime As DateTime = startDate.Date.Add(TimeSpan.Parse(startTime))
                 Dim endDateTime As DateTime = endDate.Date.Add(TimeSpan.Parse(endTime))
 
-                icsContent.AppendLine("DTSTART:" & startDateTime.ToUniversalTime().ToString("yyyyMMddTHHmmssZ"))
-                icsContent.AppendLine("DTEND:" & endDateTime.ToUniversalTime().ToString("yyyyMMddTHHmmssZ"))
+                icsContent.AppendLine("DTSTART;TZID=Asia/Beirut:" & startDateTime.ToString("yyyyMMddTHHmmss"))
+                icsContent.AppendLine("DTEND;TZID=Asia/Beirut:" & endDateTime.ToString("yyyyMMddTHHmmss"))
 
             Else
 
@@ -336,6 +372,21 @@ Public Class AcademicCalendarFeed
             icsContent.AppendLine("LOCATION:" & EscapeICS(eventLocation))
             icsContent.AppendLine("DESCRIPTION:" & EscapeICS(eventDescription))
             icsContent.AppendLine("CATEGORIES:" & EscapeICS(category))
+
+            If reminderMinutesText <> "" Then
+
+                Dim reminderMinutes As Integer = Convert.ToInt32(reminderMinutesText)
+
+                icsContent.AppendLine("X-MICROSOFT-CDO-REMINDERENABLED:TRUE")
+                icsContent.AppendLine("X-MICROSOFT-CDO-REMINDERMINUTESBEFORESTART:" & reminderMinutes.ToString())
+                icsContent.AppendLine("BEGIN:VALARM")
+                icsContent.AppendLine("ACTION:DISPLAY")
+                icsContent.AppendLine("DESCRIPTION:" & EscapeICS("Reminder: " & eventTitle))
+                icsContent.AppendLine("TRIGGER:-PT" & reminderMinutes.ToString() & "M")
+                icsContent.AppendLine("END:VALARM")
+
+            End If
+
             icsContent.AppendLine("END:VEVENT")
 
         Next
