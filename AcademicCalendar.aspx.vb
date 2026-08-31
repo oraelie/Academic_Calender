@@ -572,19 +572,19 @@ Public Class AcademicCalendar
         Select Case category.ToLower()
 
             Case "exams"
-                Return "EXAM"
+                Return "exam"
 
             Case "deadlines"
-                Return "DEADLINE"
+                Return "deadline"
 
             Case "registration"
-                Return "REGISTRATION"
+                Return "registration"
 
             Case "holidays"
-                Return "HOLIDAY"
+                Return "holiday"
 
             Case "academic"
-                Return "ACADEMIC"
+                Return "academic"
 
             Case Else
                 Return category.ToUpper()
