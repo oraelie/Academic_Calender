@@ -15,12 +15,12 @@
 	 </div>
 </asp:Content>
 <asp:Content ID="ContentMain" ContentPlaceHolderID="MainContent" runat="server">
-
+	<asp:HiddenField ID="hfViewportWidth" runat="server" />
     <div class="calendar-wrapper">
 		<div class="cal-controls">
-			<div class="view-switch xs-none">
-				<asp:Button ID="btnListView" runat="server" Text="List" CssClass="view-btn view-btn-active" />
-				<asp:Button ID="btnCalendarView" runat="server" Text="Calendar" CssClass="view-btn" />
+			<div class="view-switch">
+				<asp:Button ID="btnListView" runat="server" Text="List" CssClass="view-btn list-view-btn view-btn-active" />
+				<asp:Button ID="btnCalendarView" runat="server" Text="Calendar" CssClass="view-btn calendar-view-btn" />
 			</div>
 			<div class="outlook-download-box">
 				<!--<asp:Button ID="btnDownloadICS" runat="server" Text="📅 Download Calendar File" CssClass="outlook-download-btn" />-->
@@ -43,7 +43,7 @@
 
         <asp:Label ID="lblError" runat="server" CssClass="error-message"></asp:Label>
 
-        <asp:Panel ID="pnlListView" runat="server">
+        <asp:Panel ID="pnlListView" runat="server" CssClass="list-view-panel is-active-view">
 
             <asp:Literal ID="litListEvents" runat="server"></asp:Literal>
 
@@ -51,7 +51,7 @@
 
         </asp:Panel>
 
-        <asp:Panel ID="pnlCalendarView" runat="server">
+        <asp:Panel ID="pnlCalendarView" runat="server" CssClass="calendar-view-panel">
 
             <div class="calendar-card">
 
@@ -76,7 +76,15 @@
             </div>
 
         </asp:Panel>
-
+		
+    <div class="app-popup-backdrop" onclick="closeAppPopup()"></div>
+    <div class="app-popup-card" role="dialog" aria-modal="true" aria-labelledby="appPopupMessage">
+        <p id="appPopupMessage" class="app-popup-message">
+            <asp:Literal ID="litPopupMessage" runat="server"></asp:Literal>
+        </p>
+        <button type="button" class="app-popup-btn" onclick="closeAppPopup()">OK</button>
+    </div>
+</asp:Panel>
     </div>
 
     <%--script that collapse all month cards after pressing list button--%>
@@ -112,7 +120,6 @@
             body.style.display = "flex";
             icon.innerHTML = "−";
             localStorage.setItem(storageKey, "expanded");
-            open_toggle.classList.toggle("open");
         } else {
             body.style.display = "none";
           
@@ -174,8 +181,36 @@
 	}
 
 	window.onload = function () {
-		restoreMonthCardStates();
-	};
+    restoreMonthCardStates();
+};
+(function() {
+    var field = document.getElementById("<%= hfViewportWidth.ClientID %>");
+    if (!field) {
+        return;
+    }
+
+    function currentWidth() {
+        return window.innerWidth || document.documentElement.clientWidth || 0;
+    }
+
+    function syncViewportWidth() {
+        field.value = String(currentWidth());
+    }
+
+    syncViewportWidth();
+    window.addEventListener("resize", syncViewportWidth);
+    document.addEventListener("submit", syncViewportWidth, true);
+
+    var isMobile = currentWidth() <= 768;
+    var serverIsMobile = <%= If(IsMobileRequest(), "true", "false") %>;
+
+    if (isMobile !== serverIsMobile && typeof __doPostBack === "function") {
+        syncViewportWidth();
+        __doPostBack("<%= hfViewportWidth.UniqueID %>", "");
+    }
+})();
+
+
 </script>
 
 </asp:Content>

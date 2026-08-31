@@ -66,9 +66,45 @@ Public Class AcademicCalendar
             SetDefaultMonthFromExcel()
             LoadPage()
             UpdateActiveFilter()
+        ElseIf IsViewportPostBack() Then
+            LoadPage()
         End If
 
     End Sub
+    Public Function IsMobileRequest() As Boolean
+        Dim width As Integer
+
+        If Integer.TryParse(hfViewportWidth.Value, width) Then
+
+            Return width <= 768
+        End If
+        Return IsMobileUserAgent(Request.UserAgent)
+    End Function
+
+    Private Function IsViewportPostBack() As Boolean
+        Dim eventTarget As String = Request("__EVENTTARGET")
+        If String.IsNullOrEmpty(eventTarget) Then
+            Return False
+        End If
+        Return String.Equals(eventTarget, hfViewportWidth.UniqueID, StringComparison.OrdinalIgnoreCase)
+    End Function
+
+    Private Function IsMobileUserAgent(userAgent As String) As Boolean
+        If String.IsNullOrEmpty(userAgent) Then
+            Return False
+        End If
+        Dim ua As String = userAgent.ToLowerInvariant()
+        Return ua.Contains("iphone") OrElse
+           ua.Contains("ipod") OrElse
+           ua.Contains("ipad") OrElse
+           ua.Contains("android") OrElse
+           ua.Contains("mobile") OrElse
+           ua.Contains("iemobile") OrElse
+           ua.Contains("windows phone") OrElse
+           ua.Contains("blackberry") OrElse
+           ua.Contains("opera mini") OrElse
+           ua.Contains("webos")
+    End Function
     Private Function GetCalendarSubscriptionUrl() As String
 
         Dim requestUrl As Uri = Request.Url
@@ -359,23 +395,40 @@ Public Class AcademicCalendar
     End Function
 
     Private Sub LoadPage()
-
         Try
 
             lblError.Text = ""
             lblError.Visible = False
 
-            pnlListView.Visible = CurrentViewMode = "List"
-            pnlCalendarView.Visible = CurrentViewMode = "Calendar"
+            If IsMobileRequest() Then
 
-            btnListView.CssClass = If(CurrentViewMode = "List", "view-btn view-btn-active", "view-btn")
-            btnCalendarView.CssClass = If(CurrentViewMode = "Calendar", "view-btn view-btn-active", "view-btn")
+                pnlListView.Visible = True
+                pnlCalendarView.Visible = False
+                pnlListView.CssClass = "list-view-panel is-active-view"
+                pnlCalendarView.CssClass = "calendar-view-panel"
 
-            If CurrentViewMode = "List" Then
+                btnListView.CssClass = "view-btn list-view-btn view-btn-active"
+                btnCalendarView.CssClass = "view-btn calendar-view-btn"
+
                 LoadListView()
-            Else
-                LoadCalendarView()
+
+                Return
+
             End If
+
+            ' Keep both panels in the HTML. CSS is-active-view shows one and hides the other.
+            ' Visible=False removes the calendar from the page, so the tab looks blank.
+            pnlListView.Visible = True
+            pnlCalendarView.Visible = True
+
+            pnlListView.CssClass = If(CurrentViewMode = "List", "list-view-panel is-active-view", "list-view-panel")
+            pnlCalendarView.CssClass = If(CurrentViewMode = "Calendar", "calendar-view-panel is-active-view", "calendar-view-panel")
+
+            btnListView.CssClass = If(CurrentViewMode = "List", "view-btn list-view-btn view-btn-active", "view-btn list-view-btn")
+            btnCalendarView.CssClass = If(CurrentViewMode = "Calendar", "view-btn calendar-view-btn view-btn-active", "view-btn calendar-view-btn")
+
+            LoadListView()
+            LoadCalendarView()
 
         Catch ex As Exception
 
@@ -383,7 +436,6 @@ Public Class AcademicCalendar
             lblError.Visible = True
 
         End Try
-        UpdateActiveFilter()
 
     End Sub
 
@@ -424,7 +476,9 @@ Public Class AcademicCalendar
 
         Dim html As New StringBuilder()
         Dim currentMonthKey As String = ""
-
+        If eventsTable.Rows.Count > 0 Then
+            html.Append("<div class='monthly-lists'>")
+        End If
         For Each row As DataRow In eventsTable.Rows
 
             Dim startDate As Date = Convert.ToDateTime(row("StartDate"))
@@ -457,7 +511,6 @@ Public Class AcademicCalendar
                 Dim defaultIcon As String = If(isCurrentMonth, "−", "+")
                 Dim defaultState As String = If(isCurrentMonth, "expanded", "collapsed")
                 Dim isCurrentMonthText As String = If(isCurrentMonth, "yes", "no")
-                html.Append("<div class='monthly-lists'>")
                 html.Append("<div class='monthly-list-card' onclick=""toggleMonthCard('" & bodyId & "', '" & iconId & "')"">")
 
                 html.Append("<div class='monthly-list-header'>")
@@ -796,8 +849,15 @@ Public Class AcademicCalendar
 
     Protected Sub btnCalendarView_Click(sender As Object, e As EventArgs) Handles btnCalendarView.Click
 
+        If IsMobileRequest() Then
+            CurrentViewMode = "List"
+            LoadPage()
+            Return
+        End If
+
         CurrentViewMode = "Calendar"
         LoadPage()
+
 
 
     End Sub

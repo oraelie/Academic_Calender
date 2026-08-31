@@ -159,6 +159,15 @@ main {
 			background: #016952;
 			color: white;
 		}
+.list-view-panel,
+.calendar-view-panel {
+	display: none;
+}
+
+	.list-view-panel.is-active-view,
+	.calendar-view-panel.is-active-view {
+		display: block;
+	}
 	/* ================= OUTLOOK BUTTONS ================= */
 
 	.outlook-download-box {
@@ -715,4 +724,29 @@ main {
 			top: -17%;
 			right: -24%;
 		}
+		.view-switch,
+		.calendar-view-btn {
+			display: none !important;
+		}
+
+		.list-view-panel {
+			display: block !important;
+		}
+
+		.calendar-view-panel {
+			display: none !important;
+		}
+	}
+.app-popup {
+	position: fixed;
+	inset: 0;
+	z-index: 1000;
+	display: none;
+	align-items: center;
+	justify-content: center;
+	padding: 1.5rem;
+}
+
+	.app-popup.is-open {
+		display: flex;
 	}
