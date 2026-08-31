@@ -34,6 +34,15 @@
 .xs-none {
 	display: block;
 }
+html,
+body {
+	width: 100%;
+	max-width: 100%;
+	overflow-x: hidden;
+}
+* {
+	box-sizing: border-box;
+}
 
 body {
 	/*background-image: url('../Images/back_grd.png');*/
@@ -699,5 +708,11 @@ main {
 
 		.calendar-event {
 			font-size: 11px;
+		}
+		.page-hero::before {
+			width: 350px;
+			height: 350px;
+			top: -17%;
+			right: -24%;
 		}
 	}
