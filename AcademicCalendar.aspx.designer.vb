@@ -201,13 +201,4 @@ Partial Public Class AcademicCalendar
     '''To modify move field declaration from designer file to code-behind file.
     '''</remarks>
     Protected WithEvents litCalendar As Global.System.Web.UI.WebControls.Literal
-
-    '''<summary>
-    '''litPopupMessage control.
-    '''</summary>
-    '''<remarks>
-    '''Auto-generated field.
-    '''To modify move field declaration from designer file to code-behind file.
-    '''</remarks>
-    Protected WithEvents litPopupMessage As Global.System.Web.UI.WebControls.Literal
 End Class

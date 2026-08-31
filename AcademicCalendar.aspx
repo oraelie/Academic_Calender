@@ -77,14 +77,6 @@
 
         </asp:Panel>
 		
-    <div class="app-popup-backdrop" onclick="closeAppPopup()"></div>
-    <div class="app-popup-card" role="dialog" aria-modal="true" aria-labelledby="appPopupMessage">
-        <p id="appPopupMessage" class="app-popup-message">
-            <asp:Literal ID="litPopupMessage" runat="server"></asp:Literal>
-        </p>
-        <button type="button" class="app-popup-btn" onclick="closeAppPopup()">OK</button>
-    </div>
-</asp:Panel>
     </div>
 
     <%--script that collapse all month cards after pressing list button--%>
