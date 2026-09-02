@@ -721,8 +721,14 @@ Public Class AcademicCalendar
                     dayClass = "other-month"
                 End If
 
+
                 If currentDate.Date = Date.Today.Date Then
-                    html.Append("<td class='today-date'>")
+                    If dayClass <> "" Then
+                        dayClass &= " "
+                    End If
+                    dayClass &= "today-date"
+
+                    html.Append("<td class='" & dayClass & "'>")
                     html.Append("<div class='day-number'>")
                     html.Append("<span class='today-number'>" & currentDate.Day.ToString() & "</span>")
                     html.Append("</div>")
@@ -732,7 +738,6 @@ Public Class AcademicCalendar
                     html.Append("<div class='day-number'>")
                     html.Append(currentDate.Day.ToString())
                     html.Append("</div>")
-
                 End If
 
                 For Each row As DataRow In eventsTable.Rows

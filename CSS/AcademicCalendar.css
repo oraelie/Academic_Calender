@@ -523,12 +523,18 @@ main {
 .calendar-table td.other-month {
 	background: none;
 	opacity: 0.4;
-	background: none;
 }
 
-.today-date {
-	background: #00896a!important;
+.calendar-table td.today-date {
+	background: #ebebeb;
 }
+.calendar-table td.today-date.other-month {
+	background: none;
+}
+	.calendar-table td.today-date .today-number {
+		color: #10233f;
+	}
+
 	.today-date .today-number {
 		color: #FFF;
 	}
