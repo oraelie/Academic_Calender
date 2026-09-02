@@ -65,10 +65,46 @@ Public Class AcademicCalendar
 
             SetDefaultMonthFromExcel()
             LoadPage()
-
+            UpdateActiveFilter()
+        ElseIf IsViewportPostBack() Then
+            LoadPage()
         End If
 
     End Sub
+    Public Function IsMobileRequest() As Boolean
+        Dim width As Integer
+
+        If Integer.TryParse(hfViewportWidth.Value, width) Then
+
+            Return width <= 768
+        End If
+        Return IsMobileUserAgent(Request.UserAgent)
+    End Function
+
+    Private Function IsViewportPostBack() As Boolean
+        Dim eventTarget As String = Request("__EVENTTARGET")
+        If String.IsNullOrEmpty(eventTarget) Then
+            Return False
+        End If
+        Return String.Equals(eventTarget, hfViewportWidth.UniqueID, StringComparison.OrdinalIgnoreCase)
+    End Function
+
+    Private Function IsMobileUserAgent(userAgent As String) As Boolean
+        If String.IsNullOrEmpty(userAgent) Then
+            Return False
+        End If
+        Dim ua As String = userAgent.ToLowerInvariant()
+        Return ua.Contains("iphone") OrElse
+           ua.Contains("ipod") OrElse
+           ua.Contains("ipad") OrElse
+           ua.Contains("android") OrElse
+           ua.Contains("mobile") OrElse
+           ua.Contains("iemobile") OrElse
+           ua.Contains("windows phone") OrElse
+           ua.Contains("blackberry") OrElse
+           ua.Contains("opera mini") OrElse
+           ua.Contains("webos")
+    End Function
     Private Function GetCalendarSubscriptionUrl() As String
 
         Dim requestUrl As Uri = Request.Url
@@ -359,23 +395,40 @@ Public Class AcademicCalendar
     End Function
 
     Private Sub LoadPage()
-
         Try
 
             lblError.Text = ""
             lblError.Visible = False
 
-            pnlListView.Visible = CurrentViewMode = "List"
-            pnlCalendarView.Visible = CurrentViewMode = "Calendar"
+            If IsMobileRequest() Then
 
-            btnListView.CssClass = If(CurrentViewMode = "List", "view-btn view-btn-active", "view-btn")
-            btnCalendarView.CssClass = If(CurrentViewMode = "Calendar", "view-btn view-btn-active", "view-btn")
+                pnlListView.Visible = True
+                pnlCalendarView.Visible = False
+                pnlListView.CssClass = "list-view-panel is-active-view"
+                pnlCalendarView.CssClass = "calendar-view-panel"
 
-            If CurrentViewMode = "List" Then
+                btnListView.CssClass = "view-btn list-view-btn view-btn-active"
+                btnCalendarView.CssClass = "view-btn calendar-view-btn"
+
                 LoadListView()
-            Else
-                LoadCalendarView()
+
+                Return
+
             End If
+
+            ' Keep both panels in the HTML. CSS is-active-view shows one and hides the other.
+            ' Visible=False removes the calendar from the page, so the tab looks blank.
+            pnlListView.Visible = True
+            pnlCalendarView.Visible = True
+
+            pnlListView.CssClass = If(CurrentViewMode = "List", "list-view-panel is-active-view", "list-view-panel")
+            pnlCalendarView.CssClass = If(CurrentViewMode = "Calendar", "calendar-view-panel is-active-view", "calendar-view-panel")
+
+            btnListView.CssClass = If(CurrentViewMode = "List", "view-btn list-view-btn view-btn-active", "view-btn list-view-btn")
+            btnCalendarView.CssClass = If(CurrentViewMode = "Calendar", "view-btn calendar-view-btn view-btn-active", "view-btn calendar-view-btn")
+
+            LoadListView()
+            LoadCalendarView()
 
         Catch ex As Exception
 
@@ -423,7 +476,9 @@ Public Class AcademicCalendar
 
         Dim html As New StringBuilder()
         Dim currentMonthKey As String = ""
-
+        If eventsTable.Rows.Count > 0 Then
+            html.Append("<div class='monthly-lists'>")
+        End If
         For Each row As DataRow In eventsTable.Rows
 
             Dim startDate As Date = Convert.ToDateTime(row("StartDate"))
@@ -456,8 +511,7 @@ Public Class AcademicCalendar
                 Dim defaultIcon As String = If(isCurrentMonth, "−", "+")
                 Dim defaultState As String = If(isCurrentMonth, "expanded", "collapsed")
                 Dim isCurrentMonthText As String = If(isCurrentMonth, "yes", "no")
-
-                html.Append("<div class='monthly-list-card'>")
+                html.Append("<div class='monthly-list-card' onclick=""toggleMonthCard('" & bodyId & "', '" & iconId & "')"">")
 
                 html.Append("<div class='monthly-list-header'>")
                 html.Append("<div class='monthly-header-title'>")
@@ -465,7 +519,7 @@ Public Class AcademicCalendar
                 html.Append("<span class='monthly-year'>" & startDate.ToString("yyyy") & "</span>")
                 html.Append("</div>")
 
-                html.Append("<button type='button' class='collapse-btn' onclick=""toggleMonthCard('" & bodyId & "', '" & iconId & "')"">")
+                html.Append("<button type='button' class='collapse-btn' >")
                 html.Append("<span id='" & iconId & "'>" & defaultIcon & "</span>")
                 html.Append("</button>")
 
@@ -480,9 +534,8 @@ Public Class AcademicCalendar
             html.Append("<div class='monthly-date'>")
             html.Append(FormatListDate(startDate, endDate))
             html.Append("</div>")
-
             html.Append("<div class='monthly-dot-cell'>")
-            html.Append("<span class='dot " & GetDotClass(category) & "'></span>")
+
             html.Append("</div>")
 
             html.Append("<div class='monthly-title'>")
@@ -496,6 +549,7 @@ Public Class AcademicCalendar
 
             html.Append("<div class='monthly-category'>")
             html.Append("<span class='category-badge " & GetCategoryBadgeClass(category) & "'>")
+            html.Append("<span class='dot " & GetDotClass(category) & "'></span>")
             html.Append(GetCategoryLabel(category))
             html.Append("</span>")
             html.Append("</div>")
@@ -507,6 +561,7 @@ Public Class AcademicCalendar
         If currentMonthKey <> "" Then
             html.Append("</div>")
             html.Append("</div>")
+            html.Append("</div>")
         End If
 
         Return html.ToString()
@@ -514,15 +569,28 @@ Public Class AcademicCalendar
     End Function
     Private Function FormatListDate(startDate As Date, endDate As Date) As String
 
+        Dim startHtml As String =
+            "<div class='date start-date'>" &
+        "<span class='event-day'>" & startDate.ToString("ddd") & "</span>" &
+          "<span class='event-date'>" & startDate.ToString("dd") & "</span>" &
+        "<span class='event-month'>" & startDate.ToString("MMM") & "</span>" & "</div>"
+
+
         If startDate = endDate Then
-            Return startDate.ToString("ddd - MMM d")
+            Return startHtml
         End If
 
-        If startDate.Month = endDate.Month AndAlso startDate.Year = endDate.Year Then
-            Return startDate.ToString("ddd - MMM d") & "–" & endDate.ToString("ddd - d")
-        End If
 
-        Return startDate.ToString("ddd - MMM d") & "–" & endDate.ToString("ddd - MMM d")
+        Dim endHtml As String =
+             "<div class='date end-date'>" &
+        "<span class='event-day'>" & endDate.ToString("ddd") & "</span>" &
+        "<span class='event-date'>" & endDate.ToString("dd") & "</span>" &
+        "<span class='event-month'>" & endDate.ToString("MMM") & "</span>" & "</div>"
+
+
+        Return startHtml &
+           "<span class='event-date-separator'>–</span>" &
+           endHtml
 
     End Function
 
@@ -557,19 +625,19 @@ Public Class AcademicCalendar
         Select Case category.ToLower()
 
             Case "exams"
-                Return "EXAM"
+                Return "exam"
 
             Case "deadlines"
-                Return "DEADLINE"
+                Return "deadline"
 
             Case "registration"
-                Return "REGISTRATION"
+                Return "registration"
 
             Case "holidays"
-                Return "HOLIDAY"
+                Return "holiday"
 
             Case "academic"
-                Return "ACADEMIC"
+                Return "academic"
 
             Case Else
                 Return category.ToUpper()
@@ -645,7 +713,7 @@ Public Class AcademicCalendar
 
             For day As Integer = 1 To 7
 
-                html.Append("<td>")
+
 
                 Dim dayClass As String = ""
 
@@ -653,18 +721,23 @@ Public Class AcademicCalendar
                     dayClass = "other-month"
                 End If
 
-                If currentDate.Date = Date.Today.Date Then
 
+                If currentDate.Date = Date.Today.Date Then
+                    If dayClass <> "" Then
+                        dayClass &= " "
+                    End If
+                    dayClass &= "today-date"
+
+                    html.Append("<td class='" & dayClass & "'>")
                     html.Append("<div class='day-number'>")
                     html.Append("<span class='today-number'>" & currentDate.Day.ToString() & "</span>")
                     html.Append("</div>")
 
                 Else
-
-                    html.Append("<div class='day-number " & dayClass & "'>")
+                    html.Append("<td class='" & dayClass & "'>")
+                    html.Append("<div class='day-number'>")
                     html.Append(currentDate.Day.ToString())
                     html.Append("</div>")
-
                 End If
 
                 For Each row As DataRow In eventsTable.Rows
@@ -776,12 +849,21 @@ Public Class AcademicCalendar
         CurrentViewMode = "List"
         LoadPage()
 
+
     End Sub
 
     Protected Sub btnCalendarView_Click(sender As Object, e As EventArgs) Handles btnCalendarView.Click
 
+        If IsMobileRequest() Then
+            CurrentViewMode = "List"
+            LoadPage()
+            Return
+        End If
+
         CurrentViewMode = "Calendar"
         LoadPage()
+
+
 
     End Sub
 
@@ -790,6 +872,7 @@ Public Class AcademicCalendar
         CurrentMonth = CurrentMonth.AddMonths(-1)
         LoadPage()
 
+
     End Sub
 
     Protected Sub btnNextMonth_Click(sender As Object, e As EventArgs) Handles btnNextMonth.Click
@@ -797,12 +880,14 @@ Public Class AcademicCalendar
         CurrentMonth = CurrentMonth.AddMonths(1)
         LoadPage()
 
+
     End Sub
 
     Protected Sub lnkAll_Click(sender As Object, e As EventArgs) Handles lnkAll.Click
 
         CurrentCategory = "All"
         LoadPage()
+        UpdateActiveFilter()
 
     End Sub
 
@@ -811,12 +896,14 @@ Public Class AcademicCalendar
         CurrentCategory = "Exams"
         LoadPage()
 
+        UpdateActiveFilter()
     End Sub
 
     Protected Sub lnkDeadlines_Click(sender As Object, e As EventArgs) Handles lnkDeadlines.Click
 
         CurrentCategory = "Deadlines"
         LoadPage()
+        UpdateActiveFilter()
 
     End Sub
 
@@ -824,6 +911,7 @@ Public Class AcademicCalendar
 
         CurrentCategory = "Registration"
         LoadPage()
+        UpdateActiveFilter()
 
     End Sub
 
@@ -831,6 +919,7 @@ Public Class AcademicCalendar
 
         CurrentCategory = "Holidays"
         LoadPage()
+        UpdateActiveFilter()
 
     End Sub
 
@@ -839,99 +928,42 @@ Public Class AcademicCalendar
         CurrentCategory = "Academic"
         LoadPage()
 
+        UpdateActiveFilter()
     End Sub
+    Private Sub UpdateActiveFilter()
 
-    Protected Sub btnDownloadICS_Click(sender As Object, e As EventArgs) Handles btnDownloadICS.Click
+        ' Reset all buttons
+        lnkAll.CssClass = "filter-link"
+        lnkExams.CssClass = "filter-link"
+        lnkDeadlines.CssClass = "filter-link"
+        lnkRegistration.CssClass = "filter-link"
+        lnkHolidays.CssClass = "filter-link"
+        lnkAcademic.CssClass = "filter-link"
 
-        Try
+        ' Add active based on CurrentCategory
+        Select Case CurrentCategory
 
-            Dim dt As DataTable = ReadExcelEvents()
-            Dim icsContent As String = BuildICSContent(dt)
-            Dim fileBytes As Byte() = Encoding.UTF8.GetBytes(icsContent)
+            Case "All"
+                lnkAll.CssClass &= " active"
 
-            Response.Clear()
-            Response.Buffer = True
-            Response.ContentType = "text/calendar"
-            Response.ContentEncoding = Encoding.UTF8
-            Response.AddHeader("Content-Disposition", "attachment; filename=AcademicCalendar.ics")
-            Response.AddHeader("Content-Length", fileBytes.Length.ToString())
-            Response.BinaryWrite(fileBytes)
-            Response.Flush()
+            Case "Exams"
+                lnkExams.CssClass &= " active"
 
-            Context.ApplicationInstance.CompleteRequest()
+            Case "Deadlines"
+                lnkDeadlines.CssClass &= " active"
 
-        Catch ex As Exception
+            Case "Registration"
+                lnkRegistration.CssClass &= " active"
 
-            lblError.Text = "Error creating Outlook calendar file: " & ex.Message
-            lblError.Visible = True
+            Case "Holidays"
+                lnkHolidays.CssClass &= " active"
 
-        End Try
+            Case "Academic"
+                lnkAcademic.CssClass &= " active"
+
+        End Select
 
     End Sub
-
-    Private Function BuildICSContent(eventsTable As DataTable) As String
-
-        Dim icsContent As New StringBuilder()
-
-        icsContent.AppendLine("BEGIN:VCALENDAR")
-        icsContent.AppendLine("VERSION:2.0")
-        icsContent.AppendLine("PRODID:-//Academic Calendar Project//Academic Calendar//EN")
-        icsContent.AppendLine("CALSCALE:GREGORIAN")
-        icsContent.AppendLine("METHOD:PUBLISH")
-        icsContent.AppendLine("X-WR-CALNAME:Academic Calendar")
-        icsContent.AppendLine("X-WR-TIMEZONE:Asia/Beirut")
-
-        For Each row As DataRow In eventsTable.Rows
-
-            Dim eventTitle As String = row("EventTitle").ToString()
-            Dim eventDescription As String = row("EventDescription").ToString()
-            Dim eventLocation As String = row("Location").ToString()
-            Dim category As String = row("Category").ToString()
-
-            Dim startDate As Date = Convert.ToDateTime(row("StartDate"))
-            Dim endDate As Date = Convert.ToDateTime(row("EndDate"))
-
-            Dim startTime As String = row("StartTime").ToString()
-            Dim endTime As String = row("EndTime").ToString()
-
-            Dim uniqueId As String =
-                startDate.ToString("yyyyMMdd") & "-" &
-                CleanUidText(eventTitle) & "@academiccalendar"
-
-            icsContent.AppendLine("BEGIN:VEVENT")
-            icsContent.AppendLine("UID:" & uniqueId)
-            icsContent.AppendLine("DTSTAMP:" & DateTime.UtcNow.ToString("yyyyMMddTHHmmssZ"))
-
-            If startTime <> "" AndAlso endTime <> "" Then
-
-                Dim startDateTime As DateTime = startDate.Date.Add(TimeSpan.Parse(startTime))
-                Dim endDateTime As DateTime = endDate.Date.Add(TimeSpan.Parse(endTime))
-
-                icsContent.AppendLine("DTSTART:" & startDateTime.ToUniversalTime().ToString("yyyyMMddTHHmmssZ"))
-                icsContent.AppendLine("DTEND:" & endDateTime.ToUniversalTime().ToString("yyyyMMddTHHmmssZ"))
-
-            Else
-
-                Dim icsEndDate As Date = endDate.AddDays(1)
-
-                icsContent.AppendLine("DTSTART;VALUE=DATE:" & startDate.ToString("yyyyMMdd"))
-                icsContent.AppendLine("DTEND;VALUE=DATE:" & icsEndDate.ToString("yyyyMMdd"))
-
-            End If
-
-            icsContent.AppendLine("SUMMARY:" & EscapeICS(eventTitle))
-            icsContent.AppendLine("LOCATION:" & EscapeICS(eventLocation))
-            icsContent.AppendLine("DESCRIPTION:" & EscapeICS(eventDescription))
-            icsContent.AppendLine("CATEGORIES:" & EscapeICS(category))
-            icsContent.AppendLine("END:VEVENT")
-
-        Next
-
-        icsContent.AppendLine("END:VCALENDAR")
-
-        Return icsContent.ToString()
-
-    End Function
 
     Private Function FormatTextWithLineBreaks(value As String) As String
 

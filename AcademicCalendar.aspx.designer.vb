@@ -14,6 +14,15 @@ Option Explicit On
 Partial Public Class AcademicCalendar
 
 	'''<summary>
+	'''hfViewportWidth control.
+	'''</summary>
+	'''<remarks>
+	'''Auto-generated field.
+	'''To modify move field declaration from designer file to code-behind file.
+	'''</remarks>
+	Protected WithEvents hfViewportWidth As Global.System.Web.UI.WebControls.HiddenField
+
+	'''<summary>
 	'''btnListView control.
 	'''</summary>
 	'''<remarks>
@@ -30,15 +39,6 @@ Partial Public Class AcademicCalendar
 	'''To modify move field declaration from designer file to code-behind file.
 	'''</remarks>
 	Protected WithEvents btnCalendarView As Global.System.Web.UI.WebControls.Button
-
-	'''<summary>
-	'''btnDownloadICS control.
-	'''</summary>
-	'''<remarks>
-	'''Auto-generated field.
-	'''To modify move field declaration from designer file to code-behind file.
-	'''</remarks>
-	Protected WithEvents btnDownloadICS As Global.System.Web.UI.WebControls.Button
 
 	'''<summary>
 	'''lnkSubscribeOutlook control.

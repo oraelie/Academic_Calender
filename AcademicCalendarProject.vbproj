@@ -108,9 +108,12 @@
     <Content Include="CSS\AcademicCalendar.css" />
     <Content Include="Global.asax" />
     <Content Include="Images\back_grd.png" />
+    <Content Include="Images\ULS-logo-mobile.png" />
     <Content Include="Images\Sagesse-1.png" />
-    <Content Include="Images\Sagesse.png" />
+    <Content Include="Images\Sagesse2.png" />
     <Content Include="Images\sagesse1.jpg" />
+    <Content Include="Images\Sagesse.png" />
+    <Content Include="Images\ULS-logo-vertical.png" />
     <Content Include="Web.config" />
   </ItemGroup>
   <ItemGroup>
@@ -168,6 +171,10 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="App_Data\AcademicCalendar.xlsm" />
+    <Content Include="fonts\DINPro-Bold.otf" />
+    <Content Include="fonts\DINPro-Medium.otf" />
+    <Content Include="fonts\DINPro-Regular.otf" />
+    <Content Include="fonts\DINPro-Light.otf" />
     <None Include="My Project\Application.myapp">
       <Generator>MyApplicationCodeGenerator</Generator>
       <LastGenOutput>Application.Designer.vb</LastGenOutput>
