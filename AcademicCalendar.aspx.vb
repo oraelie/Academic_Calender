@@ -107,20 +107,14 @@ Public Class AcademicCalendar
     End Function
     Private Function GetCalendarSubscriptionUrl() As String
 
-        Dim requestUrl As Uri = Request.Url
-        Dim baseUrl As String = requestUrl.GetLeftPart(UriPartial.Authority)
+        Dim serverAddress As String = "AcademicCalendar.uls.edu.lb"
+        Dim serverPort As String = "443"
 
-        Dim feedUrl As String = baseUrl & ResolveUrl("~/AcademicCalendarFeed.aspx")
-
-        If feedUrl.StartsWith("https://", StringComparison.OrdinalIgnoreCase) Then
-            Return "webcal://" & feedUrl.Substring("https://".Length)
+        If serverPort = "443" Then
+            Return "webcals://" & serverAddress & ResolveUrl("~/AcademicCalendarFeed.aspx")
         End If
 
-        If feedUrl.StartsWith("http://", StringComparison.OrdinalIgnoreCase) Then
-            Return "webcal://" & feedUrl.Substring("http://".Length)
-        End If
-
-        Return feedUrl
+        Return "webcal://" & serverAddress & ":" & serverPort & ResolveUrl("~/AcademicCalendarFeed.aspx")
 
     End Function
 
