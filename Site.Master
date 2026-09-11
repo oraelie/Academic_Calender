@@ -7,19 +7,22 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
-    <title><%: Page.Title %> - Academic Calendar Project</title>
+   <title><%: Page.Title %></title>
+
+    <link rel="icon" type="image/x-icon" href="<%= ResolveUrl("~/Images/Sagesse.ico") %>" />
+    <link rel="shortcut icon" type="image/x-icon" href="<%= ResolveUrl("~/Images/Sagesse.ico") %>" />
 
     <asp:ContentPlaceHolder ID="HeadContent" runat="server">
+    </asp:ContentPlaceHolder>
+
+    <asp:ContentPlaceHolder ID="HeaderContent" runat="server">
     </asp:ContentPlaceHolder>
 </head>
 
 <body>
     <form id="form1" runat="server">
-    <header class="page-hero">
-    <asp:ContentPlaceHolder ID="HeaderContent" runat="server"></asp:ContentPlaceHolder>
-    </header>
+
         <main>
-        
             <asp:ContentPlaceHolder ID="MainContent" runat="server">
             </asp:ContentPlaceHolder>
         </main>

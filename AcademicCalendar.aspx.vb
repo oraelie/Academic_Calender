@@ -58,6 +58,7 @@ Public Class AcademicCalendar
     Protected Sub Page_Load(ByVal sender As Object, ByVal e As EventArgs) Handles Me.Load
         Try
             lnkSubscribeOutlook.NavigateUrl = GetCalendarSubscriptionUrl()
+            lnkDownloadICS.NavigateUrl = GetCalendarDownloadUrl()
 
             If Not IsPostBack Then
 
@@ -131,6 +132,15 @@ Public Class AcademicCalendar
         End If
 
         Return feedUrl
+
+    End Function
+
+    Private Function GetCalendarDownloadUrl() As String
+
+        Dim requestUrl As Uri = Request.Url
+        Dim baseUrl As String = requestUrl.GetLeftPart(UriPartial.Authority)
+
+        Return baseUrl & ResolveUrl("~/AcademicCalendarFeed.aspx") & "?download=1"
 
     End Function
 

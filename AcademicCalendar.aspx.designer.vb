@@ -50,6 +50,15 @@ Partial Public Class AcademicCalendar
 	Protected WithEvents lnkSubscribeOutlook As Global.System.Web.UI.WebControls.HyperLink
 
 	'''<summary>
+	'''lnkDownloadICS control.
+	'''</summary>
+	'''<remarks>
+	'''Auto-generated field.
+	'''To modify move field declaration from designer file to code-behind file.
+	'''</remarks>
+	Protected WithEvents lnkDownloadICS As Global.System.Web.UI.WebControls.HyperLink
+
+	'''<summary>
 	'''lnkAll control.
 	'''</summary>
 	'''<remarks>

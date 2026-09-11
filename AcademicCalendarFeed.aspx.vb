@@ -28,12 +28,13 @@ Public Class AcademicCalendarFeed
             Response.ContentType = "text/calendar"
             Response.ContentEncoding = Encoding.UTF8
 
-            ' ================================================================
-            ' FIX: Change "attachment" to "inline" for Outlook subscription
-            ' This makes Outlook treat it as a live calendar subscription
-            ' with working reminders and auto-update
-            ' ================================================================
-            Response.AddHeader("Content-Disposition", "inline; filename=AcademicCalendar.ics")
+            ' Keep inline for Outlook subscription.
+            ' Use attachment only when the download button calls ?download=1.
+            If String.Equals(Request.QueryString("download"), "1", StringComparison.OrdinalIgnoreCase) Then
+                Response.AddHeader("Content-Disposition", "attachment; filename=AcademicCalendar.ics")
+            Else
+                Response.AddHeader("Content-Disposition", "inline; filename=AcademicCalendar.ics")
+            End If
 
             ' Cache control for auto-update
             Response.AddHeader("Cache-Control", "no-cache, no-store, must-revalidate, max-age=0")
