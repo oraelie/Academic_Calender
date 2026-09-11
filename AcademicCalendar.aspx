@@ -9,7 +9,6 @@
 				<h1>Academic Calendar</h1>
 				<p>View academic events, deadlines, exams, registration dates, and holidays</p>
 			</div>
-		 <!--<img src="<%= ResolveUrl("~/Images/Sagesse.png") %>" class="page-logo" alt="Université La Sagesse Logo" />-->
 		 <img src="<%= ResolveUrl("~/Images/ULS-logo-vertical.png") %>" class="page-logo xs-none" alt="Université La Sagesse Logo" />
 		 <img src="<%= ResolveUrl("~/Images/ULS-logo-mobile.png") %>" class="page-logo xs-block" alt="Université La Sagesse Logo" />
 	 </div>
@@ -23,17 +22,31 @@
 				<asp:Button ID="btnCalendarView" runat="server" Text="Calendar" CssClass="view-btn calendar-view-btn" />
 			</div>
 			<div class="outlook-download-box">
-					<asp:HyperLink
-						 ID="lnkSubscribeOutlook"
-						runat="server"
-						CssClass="outlook-subscribe-link">
-						Subscribe in Outlook Calendar
-						<span class="btn-icon" aria-hidden="true">→</span>
-					</asp:HyperLink>
+				<asp:HyperLink
+					ID="lnkSubscribeOutlook"
+					runat="server"
+					CssClass="outlook-subscribe-link"
+					ToolTip="Subscribe to automatically receive updates when the calendar changes">
+					📅 Subscribe in Outlook Calendar
+					<span class="update-badge">Auto-update</span>
+					<span class="btn-icon" aria-hidden="true">→</span>
+				</asp:HyperLink>
 			</div>
 		</div>
         
+        <!-- TIME ZONE NOTICE -->
+        <!--div class="timezone-notice">
+            <span class="timezone-icon">🕐</span>
+            <span class="timezone-label">All times are displayed in Beirut Time (UTC+2/UTC+3)</span>
+            <span class="timezone-detail">• Outlook will automatically convert to your local time zone</span>
+        </div> -->
 
+        <!-- AUTO-UPDATE STATUS 
+        <div class="update-status">
+            <span class="status-dot live"></span>
+            <span>Auto-updates enabled • Calendar refreshes every hour</span>
+        </div>-->
+        
         <div class="filter-box">
             <asp:LinkButton ID="lnkAll" runat="server" CssClass="filter-link"> <span class="dot dot-all"></span>All </asp:LinkButton>
             <asp:LinkButton ID="lnkExams" runat="server" CssClass="filter-link"> <span class="dot dot-exams"></span>Exams </asp:LinkButton>
@@ -46,59 +59,29 @@
         <asp:Label ID="lblError" runat="server" CssClass="error-message"></asp:Label>
 
         <asp:Panel ID="pnlListView" runat="server" CssClass="list-view-panel is-active-view">
-
             <asp:Literal ID="litListEvents" runat="server"></asp:Literal>
-
             <asp:Label ID="lblListMessage" runat="server" CssClass="message"></asp:Label>
-
         </asp:Panel>
 
         <asp:Panel ID="pnlCalendarView" runat="server" CssClass="calendar-view-panel">
-
             <div class="calendar-card">
-
                 <div class="calendar-nav">
                     <asp:Button ID="btnPrevMonth" runat="server" Text="‹" CssClass="nav-btn" />
-
                     <div class="calendar-date">
                         <span class="calendar-month-title">
                             <asp:Literal ID="litCalendarMonth" runat="server"></asp:Literal>
                         </span>
-
                         <span class="calendar-year">
                             <asp:Literal ID="litCalendarYear" runat="server"></asp:Literal>
                         </span>
                     </div>
-
                     <asp:Button ID="btnNextMonth" runat="server" Text="›" CssClass="nav-btn" />
                 </div>
-
                 <asp:Literal ID="litCalendar" runat="server"></asp:Literal>
-
             </div>
-
         </asp:Panel>
-		
     </div>
 
-    <%--script that collapse all month cards after pressing list button--%>
-
-    <%--<script type="text/javascript">
-        function toggleMonthCard(bodyId, iconId) {
-            var body = document.getElementById(bodyId);
-            var icon = document.getElementById(iconId);
-
-            if (body.style.display === "none") {
-                body.style.display = "block";
-                icon.innerHTML = "−";
-            } else {
-                body.style.display = "none";
-                icon.innerHTML = "+";
-            }
-        }
-	</script>--%>
-
-<%--keeping current month expanded by default and other months collapsed by default--%>
 <script type="text/javascript">
 	function toggleMonthCard(bodyId, iconId) {
 		var body = document.getElementById(bodyId);
@@ -116,8 +99,7 @@
             localStorage.setItem(storageKey, "expanded");
         } else {
             body.style.display = "none";
-          
-			icon.innerHTML = "+";
+            icon.innerHTML = "+";
 			localStorage.setItem(storageKey, "collapsed");
 		}
 	}
@@ -145,10 +127,6 @@
 			var defaultState = body.getAttribute("data-default-state");
 			var isCurrentMonth = body.getAttribute("data-current-month");
 
-			/*
-			   Current month should be expanded by default.
-			   We ignore old saved collapsed state for the current month.
-			*/
 			if (isCurrentMonth === "yes") {
 				body.style.display = "flex";
 				icon.innerHTML = "−";
@@ -175,36 +153,34 @@
 	}
 
 	window.onload = function () {
-    restoreMonthCardStates();
-};
-(function() {
-    var field = document.getElementById("<%= hfViewportWidth.ClientID %>");
-    if (!field) {
-        return;
-    }
+        restoreMonthCardStates();
+    };
 
-    function currentWidth() {
-        return window.innerWidth || document.documentElement.clientWidth || 0;
-    }
+    (function() {
+        var field = document.getElementById("<%= hfViewportWidth.ClientID %>");
+        if (!field) {
+            return;
+        }
 
-    function syncViewportWidth() {
-        field.value = String(currentWidth());
-    }
+        function currentWidth() {
+            return window.innerWidth || document.documentElement.clientWidth || 0;
+        }
 
-    syncViewportWidth();
-    window.addEventListener("resize", syncViewportWidth);
-    document.addEventListener("submit", syncViewportWidth, true);
+        function syncViewportWidth() {
+            field.value = String(currentWidth());
+        }
 
-    var isMobile = currentWidth() <= 768;
-    var serverIsMobile = "<%= If(IsMobileRequest(), "true", "false") %>" === "true";
-
-    if (isMobile !== serverIsMobile && typeof __doPostBack === "function") {
         syncViewportWidth();
-        __doPostBack("<%= hfViewportWidth.UniqueID %>", "");
-    }
-})();
+        window.addEventListener("resize", syncViewportWidth);
+        document.addEventListener("submit", syncViewportWidth, true);
 
+        var isMobile = currentWidth() <= 768;
+        var serverIsMobile = "<%= If(IsMobileRequest(), "true", "false") %>" === "true";
 
+       // if (isMobile !== serverIsMobile && typeof __doPostBack === "function") {
+       //     syncViewportWidth();
+       //       __doPostBack("= hfViewportWidth.UniqueID ", "");
+		//}
+	})();
 </script>
-
 </asp:Content>

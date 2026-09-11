@@ -9,7 +9,7 @@ Public Class AcademicCalendar
 
     Private ReadOnly Property ExcelFilePath As String
         Get
-            Return Server.MapPath("~/App_Data/AcademicCalendar.xlsm")
+            Return Server.MapPath("~/App_Data/AcademicCalendar.xlsx")
         End Get
     End Property
 
@@ -54,23 +54,32 @@ Public Class AcademicCalendar
             ViewState("CurrentMonth") = New Date(value.Year, value.Month, 1)
         End Set
     End Property
+
     Protected Sub Page_Load(ByVal sender As Object, ByVal e As EventArgs) Handles Me.Load
+        Try
+            lnkSubscribeOutlook.NavigateUrl = GetCalendarSubscriptionUrl()
 
-        lnkSubscribeOutlook.NavigateUrl = GetCalendarSubscriptionUrl()
+            If Not IsPostBack Then
 
-        If Not IsPostBack Then
+                CurrentViewMode = "List"
+                CurrentCategory = "All"
 
-            CurrentViewMode = "List"
-            CurrentCategory = "All"
+                SetDefaultMonthFromExcel()
+                LoadPage()
+                UpdateActiveFilter()
+            ElseIf IsViewportPostBack() Then
+                LoadPage()
+            End If
+            '#########Deleted this catch after test########### 
 
-            SetDefaultMonthFromExcel()
-            LoadPage()
-            UpdateActiveFilter()
-        ElseIf IsViewportPostBack() Then
-            LoadPage()
-        End If
-
+        Catch ex As Exception
+            ' Show the error on the page
+            lblError.Text = "ERROR: " & ex.Message & "<br />" & ex.StackTrace
+            lblError.Visible = True
+            lblError.CssClass = "error-message"
+        End Try
     End Sub
+
     Public Function IsMobileRequest() As Boolean
         Dim width As Integer
 
@@ -105,16 +114,23 @@ Public Class AcademicCalendar
            ua.Contains("opera mini") OrElse
            ua.Contains("webos")
     End Function
+
     Private Function GetCalendarSubscriptionUrl() As String
 
-        Dim serverAddress As String = "AcademicCalendar.uls.edu.lb"
-        Dim serverPort As String = "443"
+        Dim requestUrl As Uri = Request.Url
+        Dim baseUrl As String = requestUrl.GetLeftPart(UriPartial.Authority)
 
-        If serverPort = "443" Then
-            Return "webcals://" & serverAddress & ResolveUrl("~/AcademicCalendarFeed.aspx")
+        Dim feedUrl As String = baseUrl & ResolveUrl("~/AcademicCalendarFeed.aspx")
+
+        If feedUrl.StartsWith("https://", StringComparison.OrdinalIgnoreCase) Then
+            Return "webcal://" & feedUrl.Substring("https://".Length)
         End If
 
-        Return "webcal://" & serverAddress & ":" & serverPort & ResolveUrl("~/AcademicCalendarFeed.aspx")
+        If feedUrl.StartsWith("http://", StringComparison.OrdinalIgnoreCase) Then
+            Return "webcal://" & feedUrl.Substring("http://".Length)
+        End If
+
+        Return feedUrl
 
     End Function
 
@@ -158,7 +174,7 @@ Public Class AcademicCalendar
         cleanTable.Columns.Add("IsActive", GetType(String))
 
         If Not File.Exists(ExcelFilePath) Then
-            Throw New FileNotFoundException("Excel file not found. Please put AcademicCalendar.xlsm inside App_Data folder.")
+            Throw New FileNotFoundException("Excel file not found. Please put AcademicCalendar.xlsx inside App_Data folder.")
         End If
 
         Using stream As FileStream = File.Open(ExcelFilePath, FileMode.Open, FileAccess.Read, FileShare.ReadWrite)
@@ -183,7 +199,6 @@ Public Class AcademicCalendar
                     Throw New Exception("Sheet1 was not found in the Excel file.")
                 End If
 
-
                 ValidateRequiredColumns(excelTable)
 
                 For Each row As DataRow In excelTable.Rows
@@ -198,12 +213,14 @@ Public Class AcademicCalendar
                         Throw New Exception("StartDay is empty for event: " & eventTitle)
                     End If
 
+                    ' Keep the IsActive check to respect "No" status
                     Dim isActiveValue As String = "Yes"
 
                     If Not IsEmpty(row("IsActive")) Then
                         isActiveValue = row("IsActive").ToString().Trim()
                     End If
 
+                    ' Skip events marked as "No"
                     If isActiveValue.ToLower() <> "yes" Then
                         Continue For
                     End If
@@ -301,6 +318,7 @@ Public Class AcademicCalendar
                value.ToString().Trim() = ""
 
     End Function
+
     Private Function ParseExcelDate(value As Object, fieldName As String, eventTitle As String) As Date
 
         If value Is Nothing OrElse value Is DBNull.Value OrElse value.ToString().Trim() = "" Then
@@ -343,6 +361,7 @@ Public Class AcademicCalendar
         Throw New Exception("Invalid date in " & fieldName & " for event: " & eventTitle & ". Use dd-mm-yyyy, example: 16-08-2026.")
 
     End Function
+
     Private Function ParseExcelTimeText(value As Object, fieldName As String, eventTitle As String) As String
 
         If value Is Nothing OrElse value Is DBNull.Value OrElse value.ToString().Trim() = "" Then
@@ -561,6 +580,7 @@ Public Class AcademicCalendar
         Return html.ToString()
 
     End Function
+
     Private Function FormatListDate(startDate As Date, endDate As Date) As String
 
         Dim startHtml As String =
@@ -924,6 +944,7 @@ Public Class AcademicCalendar
 
         UpdateActiveFilter()
     End Sub
+
     Private Sub UpdateActiveFilter()
 
         ' Reset all buttons

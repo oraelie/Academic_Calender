@@ -32,6 +32,15 @@ Partial Public Class SiteMaster
 	Protected WithEvents form1 As Global.System.Web.UI.HtmlControls.HtmlForm
 
 	'''<summary>
+	'''HeaderContent control.
+	'''</summary>
+	'''<remarks>
+	'''Auto-generated field.
+	'''To modify move field declaration from designer file to code-behind file.
+	'''</remarks>
+	Protected WithEvents HeaderContent As Global.System.Web.UI.WebControls.ContentPlaceHolder
+
+	'''<summary>
 	'''MainContent control.
 	'''</summary>
 	'''<remarks>

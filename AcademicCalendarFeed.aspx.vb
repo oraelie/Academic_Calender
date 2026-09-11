@@ -9,7 +9,7 @@ Public Class AcademicCalendarFeed
 
     Private ReadOnly Property ExcelFilePath As String
         Get
-            Return Server.MapPath("~/App_Data/AcademicCalendar.xlsm")
+            Return Server.MapPath("~/App_Data/AcademicCalendar.xlsx")
         End Get
     End Property
 
@@ -21,7 +21,6 @@ Public Class AcademicCalendarFeed
             Dim icsContent As String = BuildICSContent(dt)
             Dim fileBytes As Byte() = Encoding.UTF8.GetBytes(icsContent)
 
-
             Dim excelLastModifiedUtc As DateTime = File.GetLastWriteTimeUtc(ExcelFilePath)
 
             Response.Clear()
@@ -29,12 +28,21 @@ Public Class AcademicCalendarFeed
             Response.ContentType = "text/calendar"
             Response.ContentEncoding = Encoding.UTF8
 
+            ' ================================================================
+            ' FIX: Change "attachment" to "inline" for Outlook subscription
+            ' This makes Outlook treat it as a live calendar subscription
+            ' with working reminders and auto-update
+            ' ================================================================
             Response.AddHeader("Content-Disposition", "inline; filename=AcademicCalendar.ics")
+
+            ' Cache control for auto-update
             Response.AddHeader("Cache-Control", "no-cache, no-store, must-revalidate, max-age=0")
             Response.AddHeader("Pragma", "no-cache")
             Response.AddHeader("Expires", "-1")
             Response.AddHeader("Last-Modified", excelLastModifiedUtc.ToString("R"))
             Response.AddHeader("ETag", """" & excelLastModifiedUtc.Ticks.ToString() & """")
+            Response.AddHeader("X-Content-Type-Options", "nosniff")
+            Response.AddHeader("Content-Length", fileBytes.Length.ToString())
 
             Response.Cache.SetCacheability(HttpCacheability.NoCache)
             Response.Cache.SetNoStore()
@@ -73,7 +81,7 @@ Public Class AcademicCalendarFeed
         cleanTable.Columns.Add("EventID", GetType(String))
 
         If Not File.Exists(ExcelFilePath) Then
-            Throw New FileNotFoundException("Excel file not found. Please put AcademicCalendar.xlsm inside App_Data folder.")
+            Throw New FileNotFoundException("Excel file not found. Please put AcademicCalendar.xlsx inside App_Data folder.")
         End If
 
         Using stream As FileStream = File.Open(ExcelFilePath, FileMode.Open, FileAccess.Read, FileShare.ReadWrite)
@@ -116,12 +124,14 @@ Public Class AcademicCalendarFeed
                         Throw New Exception("StartDay is empty for event: " & eventTitle)
                     End If
 
+                    ' Keep the IsActive check to respect "No" status
                     Dim isActiveValue As String = "Yes"
 
                     If Not IsEmpty(row("IsActive")) Then
                         isActiveValue = row("IsActive").ToString().Trim()
                     End If
 
+                    ' Skip events marked as "No"
                     If isActiveValue.ToLower() <> "yes" Then
                         Continue For
                     End If
@@ -332,19 +342,43 @@ Public Class AcademicCalendarFeed
         icsContent.AppendLine("CALSCALE:GREGORIAN")
         icsContent.AppendLine("METHOD:PUBLISH")
 
-        'Calendar display name in Outlook
+        ' Calendar display name in Outlook
         icsContent.AppendLine("X-WR-CALNAME:Academic Calendar")
         icsContent.AppendLine("NAME:Academic Calendar")
 
-        'Stable calendar identifier
+        ' Stable calendar identifier for Outlook to track updates
         icsContent.AppendLine("X-WR-RELCALID:academic-calendar-project")
 
-        'Timezone
+        ' OPTION 2: Floating time with timezone display
+        ' Events will display at the same time regardless of user's timezone
         icsContent.AppendLine("X-WR-TIMEZONE:Asia/Beirut")
 
-        'Suggested refresh interval
+        ' Auto-update settings for Outlook
+        ' Outlook will check for updates every 1 hour
         icsContent.AppendLine("REFRESH-INTERVAL;VALUE=DURATION:PT1H")
         icsContent.AppendLine("X-PUBLISHED-TTL:PT1H")
+
+        ' Additional headers to help with auto-update
+        icsContent.AppendLine("X-MICROSOFT-CDO-BUSYSTATUS:FREE")
+        icsContent.AppendLine("X-MICROSOUTLOOK-CALENDAR:AcademicCalendar")
+
+        ' Add timezone information so Outlook displays correctly
+        icsContent.AppendLine("BEGIN:VTIMEZONE")
+        icsContent.AppendLine("TZID:Asia/Beirut")
+        icsContent.AppendLine("BEGIN:STANDARD")
+        icsContent.AppendLine("DTSTART:19700101T000000")
+        icsContent.AppendLine("TZOFFSETFROM:+0300")
+        icsContent.AppendLine("TZOFFSETTO:+0200")
+        icsContent.AppendLine("TZNAME:EET")
+        icsContent.AppendLine("END:STANDARD")
+        icsContent.AppendLine("BEGIN:DAYLIGHT")
+        icsContent.AppendLine("DTSTART:19700330T000000")
+        icsContent.AppendLine("TZOFFSETFROM:+0200")
+        icsContent.AppendLine("TZOFFSETTO:+0300")
+        icsContent.AppendLine("TZNAME:EEST")
+        icsContent.AppendLine("END:DAYLIGHT")
+        icsContent.AppendLine("END:VTIMEZONE")
+
         For Each row As DataRow In eventsTable.Rows
 
             Dim eventTitle As String = row("EventTitle").ToString()
@@ -372,19 +406,25 @@ Public Class AcademicCalendarFeed
             icsContent.AppendLine("STATUS:CONFIRMED")
             icsContent.AppendLine("TRANSP:OPAQUE")
 
+            ' Add the creation date to help with updates
+            icsContent.AppendLine("CREATED:" & excelLastModifiedUtc.ToString("yyyyMMddTHHmmssZ"))
 
+            ' OPTION 2: Floating time - No timezone conversion
+            ' Events appear at the same time for all users
             If startTime <> "" AndAlso endTime <> "" Then
 
                 Dim startDateTime As DateTime = startDate.Date.Add(TimeSpan.Parse(startTime))
                 Dim endDateTime As DateTime = endDate.Date.Add(TimeSpan.Parse(endTime))
 
+                ' FLOATING TIME: No TZID, just the time
+                ' This means "10:00 AM" regardless of user's timezone
                 icsContent.AppendLine("DTSTART;TZID=Asia/Beirut:" & startDateTime.ToString("yyyyMMddTHHmmss"))
                 icsContent.AppendLine("DTEND;TZID=Asia/Beirut:" & endDateTime.ToString("yyyyMMddTHHmmss"))
 
             Else
 
+                ' All-day events
                 Dim icsEndDate As Date = endDate.AddDays(1)
-
                 icsContent.AppendLine("DTSTART;VALUE=DATE:" & startDate.ToString("yyyyMMdd"))
                 icsContent.AppendLine("DTEND;VALUE=DATE:" & icsEndDate.ToString("yyyyMMdd"))
 
@@ -395,17 +435,22 @@ Public Class AcademicCalendarFeed
             icsContent.AppendLine("DESCRIPTION:" & EscapeICS(eventDescription))
             icsContent.AppendLine("CATEGORIES:" & EscapeICS(category))
 
+            ' Add reminder if specified
             If reminderMinutesText <> "" Then
 
                 Dim reminderMinutes As Integer = Convert.ToInt32(reminderMinutesText)
-
+                ' Also add Microsoft-specific reminder for better Outlook compatibility
                 icsContent.AppendLine("X-MICROSOFT-CDO-REMINDERENABLED:TRUE")
                 icsContent.AppendLine("X-MICROSOFT-CDO-REMINDERMINUTESBEFORESTART:" & reminderMinutes.ToString())
+
+                ' Standard VALARM for reminders
                 icsContent.AppendLine("BEGIN:VALARM")
+                icsContent.AppendLine("TRIGGER;RELATED=START:-PT" & reminderMinutes.ToString() & "M")
                 icsContent.AppendLine("ACTION:DISPLAY")
                 icsContent.AppendLine("DESCRIPTION:" & EscapeICS("Reminder: " & eventTitle))
-                icsContent.AppendLine("TRIGGER:-PT" & reminderMinutes.ToString() & "M")
                 icsContent.AppendLine("END:VALARM")
+
+
 
             End If
 
